@@ -1,0 +1,51 @@
+@use '../../../styles/variables.scss' as variables;
+
+main{
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+	height: 100vh;
+
+	section{
+		height: 100%;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.main-section{
+		gap: 8px;
+
+		flex-grow: 0.5;
+		background-color: variables.$light-gray-bg;
+
+		h1{
+			font-size: 5rem;
+			color: rgb(2, 97, 75);
+		}
+	}
+
+	.form-section{
+		flex-grow: 0.5;
+		padding: 3rem;
+
+		h2{
+			margin-bottom: 3rem;
+		}
+
+		button{
+			width: 15rem;
+			padding: 12px 24px;
+			box-shadow: 0px 8px 12px rgba(148.23004603385925, 64.33935597538948, 255, 0.20000000298023224);
+			border-radius: 8px;
+			font-size: 16px;
+			font-weight: 500;
+			border: none;
+			background-color: rgb(2, 97, 75);
+			color: white;
+			cursor: pointer;
+		}
+	}
+}
