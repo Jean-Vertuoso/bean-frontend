@@ -1,0 +1,35 @@
+@use ".././../../styles/variables.scss" as variables;
+
+.input-wrapper{
+	color: variables.$secondary-color;
+	font-size: 16px;
+	text-align: start;
+	width: 100%;
+	::placeholder{
+		opacity: 70%;
+	}
+
+	.input-content{
+		display: flex;
+		border-radius: 8px;
+		padding: 12px 0 12px 0;
+
+		input{
+			border: none;
+			font-size: 18px;
+			color: variables.$secondary-color;
+			border-radius: 8px 0 0 8px;
+			background-color: variables.$background-green;
+			padding: 12px 8px 12px 20px;
+			width: 100%;
+		}
+
+		.icon{
+			border-radius: 0 8px 8px 0;
+
+			padding: 12px;
+			background-color: variables.$primary-color;
+			height: 3rem;
+		}
+	}
+}
