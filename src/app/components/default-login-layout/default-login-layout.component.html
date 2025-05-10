@@ -1,11 +1,13 @@
 <main>
   <section class="main-section">
     <h1>Vintor</h1>
-    <img/>
   </section>
   <section class="form-section">
     <h2>{{ title }}</h2>
 	<ng-content></ng-content>
-	<button>{{ primaryBtnText }}</button>
+	<button
+		class="btn-primary"
+		(click)="submit()"
+		[disabled]="disablePrimaryBtn">{{ primaryBtnText }}</button>
   </section>
 </main>
