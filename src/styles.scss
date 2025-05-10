@@ -1,7 +1,17 @@
 /* You can add global styles to this file, and also import other style files */
+@use 'ngx-toastr/toastr';
+
 *{
 	margin: 0;
 	padding: 0;
 	box-sizing: border-box;
 	font-family: 'Roboto', Helvetica, sans-serif;
+}
+
+html,body{
+	height: 100%;
+}
+
+input, button{
+	letter-spacing: 0.8px;
 }
