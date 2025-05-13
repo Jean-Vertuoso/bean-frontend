@@ -1,0 +1,35 @@
+@use '../../../styles/variables.scss' as variables;
+
+.button-wrapper{
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+
+	.navbar-btn {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		border-radius: 3px;
+		text-decoration: none;
+		background-color: variables.$background-gray;
+		color: variables.$secondary-color;
+		padding: 10px;
+		width: 130px;
+		white-space: nowrap;
+		text-align: center;
+		gap: 3px;
+
+		img{
+			width: 20px;
+			height: 20px;
+		}
+	}
+}
+.button-wrapper:hover{
+	text-decoration: underline;
+	text-decoration-color: variables.$primary-color;
+	text-decoration-thickness: 2px;
+	text-underline-offset: 5px;
+}
