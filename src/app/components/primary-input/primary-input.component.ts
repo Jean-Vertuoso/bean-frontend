@@ -5,6 +5,7 @@ type InputTypes = "text" | "email" | "password";
 
 @Component({
   selector: 'app-primary-input',
+  standalone: true,
   imports: [
 	ReactiveFormsModule
   ],

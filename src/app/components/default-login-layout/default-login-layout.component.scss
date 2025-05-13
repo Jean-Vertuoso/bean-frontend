@@ -20,22 +20,23 @@ main{
 		background-color: variables.$background-green;
 
 		h1{
-			font-size: 5rem;
+			font-size: 100px;
 			color: variables.$primary-color;
+			user-select: none;
 		}
 	}
 
 	.form-section{
 		width: 50%;
 		background-color: variables.$background-gray;
-		gap: 2rem;
+		gap: 30px;
 
 		h2{
 			color: variables.$secondary-color;
 		}
 
 		button{
-			width: 40%;
+			width: 280px;
 			padding: 12px 24px;
 			box-shadow: 0px 8px 12px rgba(148.23004603385925, 64.33935597538948, 255, 0.20000000298023224);
 			border-radius: 8px;
@@ -45,6 +46,7 @@ main{
 			background-color: variables.$primary-color;
 			color: white;
 			cursor: pointer;
+			user-select: none;
 
 			&:disabled{
 				opacity: 0.8;

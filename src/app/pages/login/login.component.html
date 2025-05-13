@@ -1,5 +1,4 @@
 <app-default-login-layout
-	title="Acesse a sua conta"
 	primaryBtnText="Acessar"
 	(submit)="submit()"
 	[disablePrimaryBtn]="!loginForm.valid"
@@ -10,17 +9,21 @@
 			inputName="email"
 			type="email"
 			label="Email"
-			placeholder="email@example.com">
-			<img class="icon-email" src="svg/email-icon.svg" alt="Ícone de email"/>
+			placeholder="email@example.com"
+			title="Email">
+			<img class="icon-email" draggable="false" src="svg/email-icon.svg" alt="Ícone de email"/>
 		</app-primary-input>
 
 		<app-primary-input
 			formControlName="password"
 			inputName="password"
 			type="password"
-			label="Senha">
-			<img class="icon-password" src="svg/password-icon.svg" alt="Ícone de senha"/>
+			label="Senha"
+			title="Senha">
+			<img class="icon-password" draggable="false" src="svg/password-icon.svg" alt="Ícone de senha"/>
 		</app-primary-input>
-		<span>Esqueci minha senha</span>
+		<span>
+			Esqueci minha senha
+		</span>
 	</form>
 </app-default-login-layout>

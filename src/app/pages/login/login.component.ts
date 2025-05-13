@@ -3,8 +3,12 @@ import { DefaultLoginLayoutComponent } from './../../components/default-login-la
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { PrimaryInputComponent } from '../../components/primary-input/primary-input.component';
-import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+
+interface LoginForm{
+	email: FormControl,
+	password: FormControl
+}
 
 @Component({
   selector: 'app-login',
@@ -20,10 +24,9 @@ import { ToastrService } from 'ngx-toastr';
   styleUrl: './login.component.scss'
 })
 export class LoginComponent {
-	loginForm!: FormGroup;
+	loginForm!: FormGroup<LoginForm>;
 
 	constructor(
-		private router: Router,
 		private loginService: LoginService,
 		private toastService: ToastrService
 	){
