@@ -10,13 +10,73 @@ nav{
 	background-color: variables.$primary-color;
 	position: fixed;
 
-	h1{
-		font-size: 50px;
-		color: variables.$background-gray;
+	.button-home{
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		user-select: none;
+		cursor: pointer;
+
+		a {
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+			border: 2px outset black;
+			border-radius: 3px;
+			text-decoration: none;
+			background-color: variables.$background-gray;
+			color: variables.$primary-color;
+			padding: 10px;
+			width: 130px;
+			white-space: nowrap;
+			text-align: center;
+			gap: 3px;
+
+			img{
+				width: 20px;
+				height: 20px;
+			}
+
+			label{
+				cursor: pointer;
+				letter-spacing: 0.8px;
+				font-size: 13px;
+			}
+		}
+
+		a:active{
+			border-style: inset;
+		}
+	}
+
+	.title-wrapper{
+		display: flex;
+		align-items: center;
+		gap: 20px;
+
+		h1{
+			font-size: 50px;
+			color: variables.$background-gray;
+			user-select: none;
+		}
+
+		img{
+			width: 65px;
+			height: 65px;
+		}
 	}
 }
 
 .nav-wrapper{
 	display: flex;
 	gap: 5px;
+}
+
+.button-home:hover{
+	text-decoration: underline;
+	text-decoration-color: variables.$primary-color;
+	text-decoration-thickness: 2px;
+	text-underline-offset: 5px;
 }
