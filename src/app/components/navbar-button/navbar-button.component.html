@@ -1,6 +1,7 @@
-<div class="button-wrapper">
-	<a href="{{ link }}" class="navbar-btn">
+<div class="dropdown-wrapper">
+	<button (click)="toggleDropdown()" class="dropdown-toggle">
 		<img class="icon-email" src="{{ src }}" alt="Ícone de email"/>
-		<i  class="{{ icon }}"></i> {{ label }}
-	</a>
+		<label for="">{{ label }}</label>
+	</button>
+	<app-dropdown *ngIf="open" [contentTpl]="contentTpl"></app-dropdown>
 </div>

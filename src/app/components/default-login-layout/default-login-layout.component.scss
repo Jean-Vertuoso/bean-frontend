@@ -19,10 +19,21 @@ main{
 		width: 50%;
 		background-color: variables.$background-green;
 
-		h1{
-			font-size: 100px;
-			color: variables.$primary-color;
-			user-select: none;
+		.title-wrapper{
+			display: flex;
+			align-items: center;
+			gap: 20px;
+
+			h1{
+				font-size: 100px;
+				color: variables.$primary-color;
+				user-select: none;
+			}
+
+			img{
+				width: 100px;
+				height: 100px;
+			}
 		}
 	}
 

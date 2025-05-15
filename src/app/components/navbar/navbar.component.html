@@ -1,28 +1,56 @@
 <nav>
 	<div class="nav-wrapper">
+
+		<div class="button-home">
+			<a routerLink="/home"
+				class="home-button">
+				<img class="icon-email" src="svg/home-icon.svg" alt="Ícone de email"/>
+				<label for="">Página inicial</label>
+			</a>
+		</div>
+
 		<app-navbar-button
 			label="Clientes"
-			link="/client"
-			src="svg/user-icon.svg">
+			src="svg/client-icon.svg">
+				<ng-template #dropdownContent>
+					<app-dropdown-item>
+
+					</app-dropdown-item>
+					<a routerLink="/clientes/pesquisar" class="dropdown-item">Pesquisar</a>
+					<a routerLink="/clientes/gerenciar" class="dropdown-item">Gerenciar</a>
+				</ng-template>
 		</app-navbar-button>
+
 		<app-navbar-button
+			routerLink="/sale"
 			label="Nova Venda"
 			link="/sale"
 			src="svg/shopping-cart-icon.svg">
 		</app-navbar-button>
+
 		<app-navbar-button
+			routerLink="/product"
 			label="Produtos"
 			link="/product"
 			src="svg/product-icon.svg">
+			<ng-template #dropdownContent>
+				<a routerLink="/produto/cadastro" class="dropdown-item"></a>
+				<a routerLink="/produto/cadastro" class="dropdown-item"></a>
+				<a routerLink="/produto/cadastro" class="dropdown-item"></a>
+			</ng-template>
 		</app-navbar-button>
+
 	</div>
 
-	<h1>Vintor</h1>
+	<div class="title-wrapper">
+    	<h1>Bean</h1>
+		<img src="svg/bear-icon.svg" alt="">
+	</div>
 
 	<div class="nav-logout">
 		<app-navbar-button
+			routerLink="/login"
 			label="Sair"
-			link="/login"
 			src="svg/logout-icon.svg">
 		</app-navbar-button>
 	</div>

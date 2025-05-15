@@ -1,18 +1,19 @@
 @use '../../../styles/variables.scss' as variables;
 
-.dropdown-wrapper{
+.dropdown-item-wrapper{
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
-	font-weight: 450;
 	user-select: none;
+	cursor: pointer;
 
-	.dropdown-toggle {
+	a {
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
 		align-items: center;
+		border: 2px outset black;
 		border-radius: 3px;
 		text-decoration: none;
 		background-color: variables.$background-gray;
@@ -22,7 +23,6 @@
 		white-space: nowrap;
 		text-align: center;
 		gap: 3px;
-		cursor: pointer;
 
 		img{
 			width: 20px;
@@ -31,10 +31,17 @@
 
 		label{
 			cursor: pointer;
+			letter-spacing: 0.8px;
+			font-size: 13px;
 		}
 	}
+
+	a:active{
+		border-style: inset;
+	}
 }
-.dropdown-wrapper:hover{
+
+.dropdown-item-wrapper:hover{
 	text-decoration: underline;
 	text-decoration-color: variables.$primary-color;
 	text-decoration-thickness: 2px;
