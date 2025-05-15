@@ -1,3 +1,4 @@
+import { HomeComponent } from './pages/home/home.component';
 import { ProductComponent } from './pages/product/product.component';
 import { SaleComponent } from './pages/sale/sale.component';
 import { ClientComponent } from './pages/client/client.component';
@@ -12,6 +13,7 @@ export const routes: Routes = [
 		path: '',
     	component: MainLayoutComponent,
 		children: [
+			{ path: 'home', component: HomeComponent},
 			{ path: 'user', component: UserComponent},
 			{ path: 'client', component: ClientComponent},
 			{ path: 'sale', component: SaleComponent},

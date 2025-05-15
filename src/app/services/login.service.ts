@@ -15,7 +15,7 @@ export class LoginService {
 	return this.httpClient.post(this.apiUrl, {email, password}).pipe(
 		tap((value) => {
 			console.log(document.cookie);
-			this.router.navigate(['/user']);
+			this.router.navigate(['/home']);
 		})
 	);
   }
