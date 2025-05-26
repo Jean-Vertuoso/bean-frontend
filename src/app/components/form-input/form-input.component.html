@@ -1,0 +1,12 @@
+<div
+	class="form-input-wrapper"
+	[ngClass]="{ 'grow-one': growone, 'grow-two': growtwo }">
+	<label class="label-text" [for]="inputDocType" *ngIf="type !== 'radio'">{{ labelText }}</label>
+	<label class="label-radio" [for]="inputDocType" *ngIf="type === 'radio'">{{ labelRadio }}</label>
+	<input
+		[id]="inputDocType"
+		[name]="formControlName"
+		[type]="type"
+		[placeholder]="placeholder"
+		[ngClass]="{ 'radio-wrapper': type === 'radio' }"/>{{ inputText }}
+</div>

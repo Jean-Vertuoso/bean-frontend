@@ -1,7 +1,8 @@
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { Component, Input, TemplateRef, ContentChild } from '@angular/core';
+import { Component, Input, TemplateRef, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { DropdownComponent } from "../dropdown/dropdown.component";
+import { filter, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-navbar-button',
@@ -12,26 +13,30 @@ import { DropdownComponent } from "../dropdown/dropdown.component";
   templateUrl: './navbar-button.component.html',
   styleUrl: './navbar-button.component.scss'
 })
-export class NavbarButtonComponent {
+export class NavbarButtonComponent implements OnDestroy {
 
-	constructor(private router: Router){}
+	@Input() label: string = "";
+	@Input() src: string = "";
+	@Input() contentTpl!: TemplateRef<any>;
+	@Input() open = false;
+	@Output() toggle = new EventEmitter<void>();
+	private routerSubscription: Subscription;
 
-	@Input() label!: string;
-	@Input() src?: string;
-	@Input() options: { label: string; href: string }[] = [];
-	@Input() route!: string;
-
-	open = false;
-
-	toggleDropdown() {
-		this.open = !this.open;
+	constructor(private router: Router) {
+		this.routerSubscription = this.router.events.pipe(
+			filter(event => event instanceof NavigationEnd)
+		).subscribe(() => {
+			if(this.open){
+				this.toggle.emit();
+			}
+		});
 	}
 
-	handleClick(){
-		if (this.route) {
-			this.router.navigate([this.route]);
-		}
+	ngOnDestroy() {
+		this.routerSubscription.unsubscribe();
 	}
 
-	@ContentChild('dropdownContent', {static: true}) contentTpl!: TemplateRef<any>;
+	onToggle(){
+		this.toggle.emit();
+	}
 }

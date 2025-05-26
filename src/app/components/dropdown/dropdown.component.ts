@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, TemplateRef } from '@angular/core';
+import { Component, EventEmitter, Input, Output, TemplateRef } from '@angular/core';
 
 @Component({
   selector: 'app-dropdown',
@@ -9,6 +9,5 @@ import { Component, Input, TemplateRef } from '@angular/core';
   styleUrl: './dropdown.component.scss'
 })
 export class DropdownComponent {
-  //@Input() options: { label: string; href: string }[] = [];
-  @Input({ required: true }) contentTpl!: TemplateRef<any>;
+	@Input({ required: true }) contentTpl!: TemplateRef<any>;
 }
