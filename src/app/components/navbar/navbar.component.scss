@@ -1,70 +1,70 @@
 @use '../../../styles/variables.scss' as variables;
 
 nav{
-	display: flex;
-	justify-content: space-between;
 	align-items: center;
-	width: 100%;
-	height: 75px;
-	padding: 5px;
 	background-color: variables.$primary-color;
+	display: flex;
+	height: 75px;
+	justify-content: space-between;
+	padding: 5px;
 	position: fixed;
+	width: 100%;
 
 	.button-home{
+		align-items: center;
+		cursor: pointer;
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
-		align-items: center;
 		user-select: none;
-		cursor: pointer;
 
 		a {
+			align-items: center;
+			background-color: variables.$background-gray;
+			border: 2px outset variables.$primary-color;
+			border-radius: 3px;
+			color: variables.$primary-color;
 			display: flex;
 			flex-direction: column;
-			justify-content: center;
-			align-items: center;
-			border: 2px outset black;
-			border-radius: 3px;
-			text-decoration: none;
-			background-color: variables.$background-gray;
-			color: variables.$primary-color;
-			padding: 10px;
-			width: 130px;
-			white-space: nowrap;
-			text-align: center;
 			gap: 3px;
+			justify-content: center;
+			padding: 10px;
+			text-align: center;
+			text-decoration: none;
+			white-space: nowrap;
+			width: 130px;
 
 			img{
-				width: 20px;
 				height: 20px;
+				width: 20px;
 			}
 
 			label{
 				cursor: pointer;
-				letter-spacing: 0.8px;
 				font-size: 13px;
+				letter-spacing: 0.8px;
 			}
-		}
 
-		a:active{
-			border-style: inset;
+			&:active{
+				border-style: inset;
+			}
 		}
 	}
 
 	.title-wrapper{
-		display: flex;
 		align-items: center;
-		gap: 20px;
+		display: flex;
+		gap: 10px;
 
 		h1{
-			font-size: 50px;
 			color: variables.$background-gray;
+			font-size: 50px;
 			user-select: none;
 		}
 
 		img{
-			width: 65px;
 			height: 65px;
+			width: 65px;
 		}
 	}
 }

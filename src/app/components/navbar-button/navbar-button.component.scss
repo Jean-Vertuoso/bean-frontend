@@ -1,42 +1,49 @@
 @use '../../../styles/variables.scss' as variables;
 
 .dropdown-wrapper{
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
 	align-items: center;
+	display: inline-block;
+	flex-direction: column;
 	font-weight: 450;
+	justify-content: center;
+	position: relative;
 	user-select: none;
 
 	.dropdown-toggle {
+		align-items: center;
+		background-color: variables.$background-gray;
+		border: 2px outset variables.$primary-color;
+		border-radius: 3px;
+		color: variables.$primary-color;
+		cursor: pointer;
 		display: flex;
 		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-		border-radius: 3px;
-		text-decoration: none;
-		background-color: variables.$background-gray;
-		color: variables.$primary-color;
-		padding: 10px;
-		width: 130px;
-		white-space: nowrap;
-		text-align: center;
 		gap: 3px;
-		cursor: pointer;
+		justify-content: center;
+		padding: 10px;
+		text-align: center;
+		text-decoration: none;
+		white-space: nowrap;
+		width: 130px;
 
 		img{
-			width: 20px;
 			height: 20px;
+			width: 20px;
 		}
 
 		label{
 			cursor: pointer;
 		}
+
+		&:active{
+			border-style: inset;
+		}
 	}
-}
-.dropdown-wrapper:hover{
-	text-decoration: underline;
-	text-decoration-color: variables.$primary-color;
-	text-decoration-thickness: 2px;
-	text-underline-offset: 5px;
+
+	&:hover{
+		text-decoration: underline;
+		text-decoration-color: variables.$primary-color;
+		text-decoration-thickness: 2px;
+		text-underline-offset: 5px;
+	}
 }

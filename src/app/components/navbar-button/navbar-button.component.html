@@ -1,7 +1,7 @@
 <div class="dropdown-wrapper">
-	<button (click)="toggleDropdown()" class="dropdown-toggle">
-		<img class="icon-email" src="{{ src }}" alt="Ícone de email"/>
+	<button (click)="onToggle()" class="dropdown-toggle">
+		<img [src]="src" [alt]=""/>
 		<label for="">{{ label }}</label>
 	</button>
-	<app-dropdown *ngIf="open" [contentTpl]="contentTpl"></app-dropdown>
+	<app-dropdown *ngIf="open" [contentTpl]="contentTpl" (itemClicked)="toggle.emit()"></app-dropdown>
 </div>

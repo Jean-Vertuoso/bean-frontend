@@ -1,0 +1,68 @@
+<app-default-form-layout
+	title="Cadastro de cliente">
+
+	<form  class="form-wrapper">
+		<app-form-input
+			labelText="Nome"
+			type="text"
+			[growone]="true"
+			[formControlName]="formControlName"
+		></app-form-input>
+
+		<app-form-input
+			labelText="Data de nascimento"
+			type="date"
+			[formControlName]="formControlName"
+		></app-form-input>
+
+		<div class="doc-type-wrapper">
+
+			<label for="inputDocType">Tipo do documento</label>
+
+			<div>
+				<app-form-input
+					inputDocType="cpf-number"
+					type="radio"
+					labelRadio="CPF"
+					formControlName="docType"
+					[formControlName]="formControlName"
+				></app-form-input>
+
+				<app-form-input
+					inputDocType="cnpj-number"
+					type="radio"
+					labelRadio="CNPJ"
+					formControlName="docType"
+					[formControlName]="formControlName"
+				></app-form-input>
+			</div>
+
+		</div>
+
+		<app-form-input
+			labelText="Número do documento"
+			type="text"
+			[formControlName]="formControlName"
+		></app-form-input>
+
+		<app-form-input
+			labelText="Email"
+			type="text"
+			[growtwo]="true"
+			[formControlName]="formControlName"
+		></app-form-input>
+
+		<app-form-input
+			labelText="Telefone principal"
+			type="text"
+			[formControlName]="formControlName"
+		></app-form-input>
+
+		<app-form-input
+			labelText="Celular principal"
+			type="text"
+			[formControlName]="formControlName"
+		></app-form-input>
+	</form>
+
+</app-default-form-layout>

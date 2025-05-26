@@ -1,0 +1,37 @@
+@use '../../../styles/variables.scss' as variables;
+
+section{
+	padding: 50px;
+	border-radius: 10px;
+	background-color: whitesmoke;
+
+	h2{
+		font-size: 40px;
+		color: variables.$primary-color;
+		font-variant: small-caps;
+	}
+}
+
+.form-actions {
+	display: flex;
+	width: 100%;
+	justify-content: flex-end;
+	gap: 1rem;
+}
+
+button {
+	padding: 15px;
+	border: none;
+	border-radius: 6px;
+	background-color: variables.$primary-color;
+	color: white;
+	font-weight: 400;
+	cursor: pointer;
+	width: 100px;
+	font-size: 16px;
+
+	&.secondary {
+		background-color: variables.$secondary-color;
+		color: variables.$background-gray;
+	}
+}

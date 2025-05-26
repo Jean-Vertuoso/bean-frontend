@@ -11,33 +11,62 @@
 
 		<app-navbar-button
 			label="Clientes"
-			src="svg/client-icon.svg">
-				<ng-template #dropdownContent>
-					<app-dropdown-item>
-
+			src="svg/client-icon.svg"
+			[contentTpl]="dropdownClients"
+			[open]="isOpen('clients')"
+			(toggle)="toggleDropdown('clients')">
+				<ng-template #dropdownClients>
+					<app-dropdown-item
+						routerLink="/client/new"
+						src="svg/add-user-icon.svg"
+						label="Cadastrar cliente">
 					</app-dropdown-item>
-					<a routerLink="/clientes/pesquisar" class="dropdown-item">Pesquisar</a>
-					<a routerLink="/clientes/gerenciar" class="dropdown-item">Gerenciar</a>
+					<app-dropdown-item
+						routerLink="/client/find"
+						src="svg/search-user-icon.svg"
+						label="Pesquisar cliente">
+					</app-dropdown-item>
 				</ng-template>
 		</app-navbar-button>
 
 		<app-navbar-button
-			routerLink="/sale"
-			label="Nova Venda"
-			link="/sale"
-			src="svg/shopping-cart-icon.svg">
+			label="Vendas"
+			src="svg/shopping-cart-icon.svg"
+			[contentTpl]="dropdownSales"
+			[open]="isOpen('sales')"
+			(toggle)="toggleDropdown('sales')">
+				<ng-template #dropdownSales>
+					<app-dropdown-item
+						routerLink="/sale/new"
+						src="svg/new-sale-icon.svg"
+						label="Nova venda">
+					</app-dropdown-item>
+					<app-dropdown-item
+						routerLink="/sale/find"
+						src="svg/search-sale-icon.svg"
+						label="Pesquisar venda">
+					</app-dropdown-item>
+				</ng-template>
 		</app-navbar-button>
 
 		<app-navbar-button
-			routerLink="/product"
 			label="Produtos"
-			link="/product"
-			src="svg/product-icon.svg">
-			<ng-template #dropdownContent>
-				<a routerLink="/produto/cadastro" class="dropdown-item"></a>
-				<a routerLink="/produto/cadastro" class="dropdown-item"></a>
-				<a routerLink="/produto/cadastro" class="dropdown-item"></a>
-			</ng-template>
+			src="svg/product-icon.svg"
+			[contentTpl]="dropdownProduct"
+			[open]="isOpen('products')"
+			(toggle)="toggleDropdown('products')">
+				<ng-template #dropdownProduct>
+					<app-dropdown-item
+						routerLink="/product/new"
+						src="svg/product-edit-icon.svg"
+						label="Novo produto">
+					</app-dropdown-item>
+					<app-dropdown-item
+						routerLink="/product/find"
+						src="svg/product-search-icon.svg"
+						label="Pesquisar produto">
+					</app-dropdown-item>
+				</ng-template>
 		</app-navbar-button>
 
 	</div>
