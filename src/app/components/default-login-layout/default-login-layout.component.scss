@@ -2,62 +2,62 @@
 
 main{
 	section{
-		height: 100%;
+		align-items: center;
 		display: flex;
 		flex-direction: column;
-		align-items: center;
+		height: 100%;
 		justify-content: center;
 	}
 
+	align-items: center;
 	display: flex;
 	flex-direction: row;
-	align-items: center;
-	justify-content: space-between;
 	height: 100vh;
+	justify-content: space-between;
 
 	.main-section{
-		width: 50%;
 		background-color: variables.$background-green;
+		width: 50%;
 
 		.title-wrapper{
-			display: flex;
 			align-items: center;
+			display: flex;
 			gap: 20px;
 
 			h1{
-				font-size: 100px;
 				color: variables.$primary-color;
+				font-size: 100px;
 				user-select: none;
 			}
 
 			img{
-				width: 100px;
 				height: 100px;
+				width: 100px;
 			}
 		}
 	}
 
 	.form-section{
-		width: 50%;
 		background-color: variables.$background-gray;
 		gap: 30px;
+		width: 50%;
 
 		h2{
 			color: variables.$secondary-color;
 		}
 
 		button{
-			width: 280px;
-			padding: 12px 24px;
-			box-shadow: 0px 8px 12px rgba(148.23004603385925, 64.33935597538948, 255, 0.20000000298023224);
-			border-radius: 8px;
-			font-size: 16px;
-			font-weight: 500;
-			border: none;
 			background-color: variables.$primary-color;
+			border: none;
+			border-radius: 8px;
+			box-shadow: 0px 8px 12px rgba(148.23004603385925, 64.33935597538948, 255, 0.20000000298023224);
 			color: white;
 			cursor: pointer;
+			font-size: 16px;
+			font-weight: 500;
+			padding: 12px 24px;
 			user-select: none;
+			width: 280px;
 
 			&:disabled{
 				opacity: 0.8;

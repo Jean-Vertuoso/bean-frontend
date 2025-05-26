@@ -1,12 +1,15 @@
 import { HomeComponent } from './pages/home/home.component';
-import { ProductComponent } from './pages/product/product.component';
-import { SaleComponent } from './pages/sale/sale.component';
-import { ClientComponent } from './pages/client/client.component';
 import { MainLayoutComponent } from './layout/main-layout/main-layout.component';
 import { Routes } from '@angular/router';
 import { UserComponent } from './pages/user/user.component';
 import { AuthLayoutComponent } from './layout/auth-layout/auth-layout.component';
 import { LoginComponent } from './pages/login/login.component';
+import { NewProductComponent } from './pages/product/new-product/new-product.component';
+import { FindProductComponent } from './pages/product/find-product/find-product.component';
+import { NewClientComponent } from './pages/client/new-client/new-client.component';
+import { FindClientComponent } from './pages/client/find-client/find-client.component';
+import { NewSaleComponent } from './pages/sale/new-sale/new-sale.component';
+import { FindSaleComponent } from './pages/sale/find-sale/find-sale.component';
 
 export const routes: Routes = [
 	{
@@ -15,9 +18,12 @@ export const routes: Routes = [
 		children: [
 			{ path: 'home', component: HomeComponent},
 			{ path: 'user', component: UserComponent},
-			{ path: 'client', component: ClientComponent},
-			{ path: 'sale', component: SaleComponent},
-			{ path: 'product', component: ProductComponent },
+			{ path: 'client/new', component: NewClientComponent},
+			{ path: 'client/find', component: FindClientComponent},
+			{ path: 'sale/new', component: NewSaleComponent},
+			{ path: 'sale/find', component: FindSaleComponent},
+			{ path: 'product/new', component: NewProductComponent },
+			{ path: 'product/find', component: FindProductComponent },
 		]
 	},
 	{
