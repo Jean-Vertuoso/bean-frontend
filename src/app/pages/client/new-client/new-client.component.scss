@@ -4,10 +4,9 @@
 	display: flex;
 	flex-wrap: wrap;
 	gap: 20px;
-	height: 200px;
+	height: auto;
 	justify-content: space-between;
-	max-width: 900px;
-	margin: 2rem auto;
+	max-width: 1000px;
 }
 
 .form-row {
@@ -34,4 +33,10 @@ label {
 	input{
 		width: 50px;
 	}
+}
+
+.phone-wrapper{
+	display: flex;
+	align-items: center;
+	gap: 20px;
 }
