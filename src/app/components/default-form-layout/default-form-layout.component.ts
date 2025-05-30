@@ -1,4 +1,5 @@
-import { Component, Input } from '@angular/core';
+import { NewClientComponent } from './../../pages/client/new-client/new-client.component';
+import { Component, ContentChild, EventEmitter, Input, Output } from '@angular/core';
 import { FormInputComponent } from "../form-input/form-input.component";
 
 @Component({
@@ -10,8 +11,9 @@ import { FormInputComponent } from "../form-input/form-input.component";
 export class DefaultFormLayoutComponent {
 	@Input() formControlName: string = '';
 	@Input() title: string = '';
+	@Output() submitClicked = new EventEmitter<void>();
 
-	submit() {
-		throw new Error('Method not implemented.');
+	onSubmitClick() {
+		this.submitClicked.emit();
 	}
 }
