@@ -1,5 +1,5 @@
 <div class="dropdown-wrapper">
-	<button (click)="onToggle()" class="dropdown-toggle">
+	<button (click)="onToggle()" class="dropdown-toggle" [class.open]="open">
 		<img [src]="src" [alt]=""/>
 		<label for="">{{ label }}</label>
 	</button>
