@@ -30,7 +30,18 @@ export class NewClientComponent {
 	form = new FormGroup({
 		name: new FormControl(''),
 		birthDate: new FormControl(''),
-		docType: new FormControl('')
+		docType: new FormControl(''),
+		documentNumber: new FormControl(''),
+		email: new FormControl(''),
+		areaCodePhone: new FormControl(''),
+		mainPhone: new FormControl(''),
+		areaCodeMobile: new FormControl(''),
+		mainMobile: new FormControl(''),
+		postalCode: new FormControl(''),
+		street: new FormControl(''),
+		number: new FormControl(''),
+		neighborhood: new FormControl(''),
+		city: new FormControl(''),
 	});
 
 	getControl(controlName: string): FormControl{

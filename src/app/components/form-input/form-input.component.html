@@ -4,10 +4,8 @@
 	<label class="label-text" for="name" *ngIf="type !== 'radio'">{{ labelText }}</label>
 	<label class="label-radio" for="name" *ngIf="type === 'radio'">{{ labelRadio }}</label>
 	<input
-		(change)="type === 'radio' ? onChange($event) : null"
-		[checked]="type === 'radio' && control.value === value"
 		[formControl]="control"
-		[attr.name]="name"
+		[name]="name"
 		[ngClass]="{ 'radio-wrapper': type === 'radio' }"
 		[placeholder]="placeholder"
 		[type]="type"

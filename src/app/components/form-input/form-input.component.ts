@@ -15,7 +15,7 @@ export class FormInputComponent {
 	@Input() control: FormControl = new FormControl('');
 	@Input() labelText: string = '';
 	@Input() labelRadio: string = '';
-	@Input() type: string = 'text';
+	@Input() type: string = '';
 	@Input() placeholder: string = '';
 	@Input() inputText: string = '';
 	@Input() growone: boolean = false;
