@@ -21,7 +21,6 @@
 			<label for="docType">Tipo do documento</label>
 			<div>
 				<app-form-input
-					[control]="getControl('docType')"
 					name="docType"
 					type="radio"
 					labelRadio="CPF"
@@ -29,7 +28,6 @@
 				></app-form-input>
 
 				<app-form-input
-					[control]="getControl('docType')"
 					name="docType"
 					type="radio"
 					labelRadio="RG"
@@ -37,7 +35,6 @@
 				></app-form-input>
 
 				<app-form-input
-					[control]="getControl('docType')"
 					name="docType"
 					type="radio"
 					labelRadio="CNPJ"
@@ -49,12 +46,14 @@
 		<app-form-input
 			labelText="Número do documento"
 			type="text"
+			[control]="getControl('documentNumber')"
 		></app-form-input>
 
 		<app-form-input
 			labelText="Email"
 			type="text"
 			[growthree]="true"
+			[control]="getControl('email')"
 		></app-form-input>
 
 		<div class="phone-wrapper">
@@ -62,11 +61,13 @@
 				labelText="DDD"
 				type="text"
 				[growone]="true"
+				[control]="getControl('areaCodePhone')"
 			></app-form-input>
 
 			<app-form-input
 				labelText="Telefone principal"
 				type="text"
+				[control]="getControl('mainPhone')"
 			></app-form-input>
 
 		</div>
@@ -76,10 +77,12 @@
 				labelText="DDD"
 				type="text"
 				[growone]="true"
+				[control]="getControl('areaCodeMobile')"
 			></app-form-input>
 
 			<app-form-input
 				labelText="Celular principal"
+				[control]="getControl('mainMobile')"
 				type="text"
 			></app-form-input>
 		</div>
@@ -87,34 +90,35 @@
 		<app-form-input
 			labelText="CEP"
 			type="text"
+			[control]="getControl('postalCode')"
 		></app-form-input>
 
 		<app-form-input
 			labelText="Endereço"
 			type="text"
 			[growfour]="true"
+			[control]="getControl('street')"
 		></app-form-input>
 
 		<app-form-input
 			labelText="Número"
 			type="text"
-			[growone]="true"
-		></app-form-input>
-
-		<app-form-input
-			labelText="Complemento"
-			type="text"
+			[growtwo]="true"
+			[control]="getControl('number')"
 		></app-form-input>
 
 		<app-form-input
 			labelText="Bairro"
 			type="text"
 			[growthree]="true"
+			[control]="getControl('neighborhood')"
 		></app-form-input>
 
 		<app-form-input
 			labelText="Cidade"
 			type="text"
+			[growthree]="true"
+			[control]="getControl('city')"
 		></app-form-input>
 
 		<app-form-uf-select
