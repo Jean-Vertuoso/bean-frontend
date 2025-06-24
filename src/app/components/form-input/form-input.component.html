@@ -1,14 +1,32 @@
 <div
-	class="form-input-wrapper"
-	[ngClass]="{ 'grow-one': growone, 'grow-two': growtwo, 'grow-three': growthree, 'grow-four': growfour }">
-	<label class="label-text" for="name" *ngIf="type !== 'radio'">{{ labelText }}</label>
-	<label class="label-radio" for="name" *ngIf="type === 'radio'">{{ labelRadio }}</label>
-	<input
-		[formControl]="control"
-		[name]="name"
-		[ngClass]="{ 'radio-wrapper': type === 'radio' }"
-		[placeholder]="placeholder"
-		[type]="type"
-		[value]="value"/>{{ inputText }}
+  class="form-input-wrapper"
+  [class.grow-one]="growone"
+  [class.grow-two]="growtwo"
+  [class.grow-three]="growthree"
+  [class.grow-four]="growfour"
+>
+  @if (type !== 'radio') {
+    <label class="label-text">{{ labelText }}</label>
+    <input
+      [formControl]="control"
+      [name]="name"
+      [placeholder]="placeholder"
+      [type]="type"
+      [value]="value"
+      (input)="onChange($event)"
+    />
+  }
 
+  @if (type === 'radio') {
+    <label class="label-radio">{{ labelRadio }}</label>
+    <input
+      type="radio"
+      [name]="name"
+      [value]="value"
+      [checked]="isChecked()"
+      (change)="onRadioChange()"
+    />
+  }
+
+  {{ inputText }}
 </div>

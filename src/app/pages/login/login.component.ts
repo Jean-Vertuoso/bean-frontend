@@ -1,45 +1,53 @@
-import { LoginService } from './../../services/login.service';
-import { DefaultLoginLayoutComponent } from './../../components/default-login-layout/default-login-layout.component';
-import { Component } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { PrimaryInputComponent } from '../../components/primary-input/primary-input.component';
+import { PrimaryInputComponent } from './../../components/primary-input/primary-input.component';
+import { Component, inject } from '@angular/core';
+import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { AuthService } from '../../services/auth.service';
 import { ToastrService } from 'ngx-toastr';
-
-interface LoginForm{
-	email: FormControl,
-	password: FormControl
-}
+import { Router } from '@angular/router';
+import { DefaultLoginLayoutComponent } from "../../components/default-login-layout/default-login-layout.component";
 
 @Component({
   selector: 'app-login',
-  imports: [
-    DefaultLoginLayoutComponent,
-	ReactiveFormsModule,
-	PrimaryInputComponent
-  ],
-  providers: [
-	LoginService
-  ],
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule, DefaultLoginLayoutComponent, PrimaryInputComponent],
   templateUrl: './login.component.html',
-  styleUrl: './login.component.scss'
+  styleUrls: ['./login.component.scss']
 })
 export class LoginComponent {
-	loginForm!: FormGroup<LoginForm>;
 
-	constructor(
-		private loginService: LoginService,
-		private toastService: ToastrService
-	){
-		this.loginForm = new FormGroup({
-			email: new FormControl('', [Validators.required, Validators.email]),
-			password: new FormControl('', [Validators.required, Validators.minLength(8)])
-		})
-	}
+  private authService = inject(AuthService);
+  private toastr = inject(ToastrService);
+  private router = inject(Router);
 
-	submit(){
-		this.loginService.login(this.loginForm.value.email, this.loginForm.value.password).subscribe({
-			next: () => this.toastService.success("Login efetuado com sucesso"),
-			error: () => this.toastService.error("Erro inesperado! Tente novamente mais tarde.")
-		});
-	}
+  loginForm = new FormGroup({
+    email: new FormControl<string>('', {
+      nonNullable: true,
+      validators: [Validators.required, Validators.email]
+    }),
+    password: new FormControl<string>('', {
+      nonNullable: true,
+      validators: [Validators.required, Validators.minLength(8)]
+    })
+  });
+
+  submit() {
+    if (this.loginForm.invalid) {
+      this.toastr.error('Preencha todos os campos corretamente.');
+      return;
+    }
+
+    const { email, password } = this.loginForm.getRawValue();
+
+    this.authService.login(email, password).subscribe({
+      next: () => {
+        this.toastr.success('Login efetuado com sucesso!');
+        this.router.navigate(['/home']);
+      },
+      error: () => {
+        this.toastr.error('Email ou senha inválidos!');
+        this.loginForm.reset();
+      }
+    });
+  }
 }
