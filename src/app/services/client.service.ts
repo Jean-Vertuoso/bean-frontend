@@ -17,7 +17,7 @@ export interface Address {
   postalCode: string;
 }
 
-export interface ClienteRequest {
+export interface ClientRequest {
   name: string;
   birthDate: string;
   documentType: string;
@@ -28,14 +28,15 @@ export interface ClienteRequest {
 }
 
 @Injectable({
-  providedIn: 'root'
+	providedIn: 'root'
 })
-export class ClienteService {
 
-  private readonly http = inject(HttpClient);
-  private readonly apiUrl = 'http://localhost:8080/clients';
+export class ClientService {
 
-  cadastrar(cliente: ClienteRequest): Observable<any> {
-    return this.http.post<any>(this.apiUrl, cliente);
-  }
+	private readonly http = inject(HttpClient);
+	private readonly apiUrl = 'http://localhost:8080/clients';
+
+	register(client: ClientRequest): Observable<any> {
+		return this.http.post<any>(this.apiUrl, client);
+	}
 }

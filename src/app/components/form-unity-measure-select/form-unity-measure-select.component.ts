@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, EventEmitter, HostListener, Input, Output } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormControl, FormsModule } from '@angular/forms';
 
 @Component({
 	standalone: true,
@@ -14,34 +14,40 @@ import { FormsModule } from '@angular/forms';
 })
 export class FormUnityMeasureSelectComponent {
 	@Input() model: string = '';
+	@Input() control!: FormControl;
   	@Output() modelChange = new EventEmitter<any>();
 
 	open = false;
 
-	unidadesMedida = [
-		{ nome: 'Centímetro', abreviacao: 'cm' },
-		{ nome: 'Grama', abreviacao: 'g' },
-		{ nome: 'Quilograma', abreviacao: 'Kg' },
-		{ nome: 'Litro', abreviacao: 'L' },
-		{ nome: 'Metro', abreviacao: 'M' },
-		{ nome: 'Mililitro', abreviacao: 'ml' },
-		{ nome: 'Unidade', abreviacao: 'un' },
+	measureUnities = [
+		{ name: 'Centímetro', value: 'CENTIMETER' },
+		{ name: 'Grama', value: 'GRAM' },
+		{ name: 'Quilograma', value: 'KILOGRAM' },
+		{ name: 'Litro', value: 'LITER' },
+		{ name: 'Metro', value: 'METER' },
+		{ name: 'Mililitro', value: 'MILLILITER' },
+		{ name: 'Unidade', value: 'UNIT' },
 	];
 
-	get nomeUnidadeSelecionada(): string {
-    	const unidadeMedida = this.unidadesMedida.find(unidadeMedida => unidadeMedida.nome === this.model);
-    	return unidadeMedida ? unidadeMedida.nome : 'Selecione';
-  	}
+	get unityNameSelected(): string {
+		const measureUnity = this.measureUnities.find(mu => mu.value === this.control.value);
+		return measureUnity ? measureUnity.name : 'Selecione';
+	}
+
 
 	toggle() {
 		this.open = !this.open;
 	}
 
-	selectUnidade(unidadeMedidaNome: string) {
-		this.model = unidadeMedidaNome;
-		this.modelChange.emit(unidadeMedidaNome);
+	unitySelect(measureUnityName: string) {
+		this.model = measureUnityName;
+		this.control.setValue(
+			this.measureUnities.find(mu => mu.name === measureUnityName)?.value ?? ''
+		);
+		this.modelChange.emit(measureUnityName);
 		this.open = false;
 	}
+
 
 	constructor(private elementRef: ElementRef) {}
 
