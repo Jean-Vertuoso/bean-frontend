@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
+import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 import {
   FormControl,
   FormGroup,
@@ -8,7 +9,7 @@ import {
 } from '@angular/forms';
 import { DefaultFormLayoutComponent } from '../../../components/default-form-layout/default-form-layout.component';
 import { FormInputComponent } from '../../../components/form-input/form-input.component';
-import { ClienteService, ClienteRequest } from '../../../services/client.service';
+import { ProductService, ProductRequest } from '../../../services/product.service';
 import { EditButtonComponent } from "../../../components/edit-button/edit-button.component";
 import { FormUnityMeasureSelectComponent } from "../../../components/form-unity-measure-select/form-unity-measure-select.component";
 import { FormPackagingTypeSelectComponent } from "../../../components/form-packaging-type-select/form-packaging-type-select.component";
@@ -24,39 +25,36 @@ import { FormPackagingTypeSelectComponent } from "../../../components/form-packa
     EditButtonComponent,
     FormUnityMeasureSelectComponent,
     FormPackagingTypeSelectComponent
-],
+  ],
+  providers: [
+    provideNgxMask()
+  ],
   templateUrl: './new-product.component.html',
   styleUrl: './new-product.component.scss',
 })
 export class NewProductComponent {
-  ufSelecionada = '';
 
   form = new FormGroup({
     name: new FormControl('', Validators.required),
-    birthDate: new FormControl('', Validators.required),
-    documentType: new FormControl('', Validators.required),
-    documentNumber: new FormControl('', Validators.required),
-    email: new FormControl('', [Validators.required, Validators.email]),
-
-    areaCodePhone: new FormControl(''),
-    mainPhone: new FormControl(''),
-    areaCodeMobile: new FormControl(''),
-    mainMobile: new FormControl(''),
-
-    street: new FormControl('', Validators.required),
-    number: new FormControl('', Validators.required),
-    neighborhood: new FormControl('', Validators.required),
-    city: new FormControl('', Validators.required),
-    postalCode: new FormControl('', Validators.required),
+    brand: new FormControl('', Validators.required),
+    price: new FormControl('', Validators.required),
+    barCode: new FormControl('', Validators.required),
+    imgUrl: new FormControl(''),
+    packagingType: new FormControl('', Validators.required),
+    unitOfMeasure: new FormControl('', Validators.required),
   });
 
-  constructor(private clienteService: ClienteService) {}
+  constructor(private productService: ProductService) {}
 
   getControl(controlName: string): FormControl {
     return this.form.get(controlName) as FormControl;
   }
 
   onSubmit() {
+	console.log(this.form.value); // veja os valores
+	console.log(this.form.valid); // veja se é false
+	console.log(this.form.errors); // veja se há erros
+
     if (this.form.invalid) {
       alert('Preencha todos os campos obrigatórios!');
       return;
@@ -64,46 +62,32 @@ export class NewProductComponent {
 
     const formValue = this.form.value;
 
-    const cliente: ClienteRequest = {
+    const rawPrice = formValue.price?.toString() ?? '';
+    const formattedPrice = parseFloat(
+      rawPrice.replace(/\./g, '').replace(',', '.')
+    );
+
+    const product: ProductRequest = {
       name: formValue.name ?? '',
-      birthDate: formValue.birthDate ?? '',
-      documentType: formValue.documentType ?? '',
-      documentNumber: formValue.documentNumber ?? '',
-      email: formValue.email ?? '',
-      phones: [
-        {
-          areaCode: formValue.areaCodePhone ?? '',
-          number: formValue.mainPhone ?? '',
-        },
-        {
-          areaCode: formValue.areaCodeMobile ?? '',
-          number: formValue.mainMobile ?? '',
-        },
-      ].filter((phone) => phone.areaCode && phone.number),
-      addresses: [
-        {
-          street: formValue.street ?? '',
-          number: formValue.number ?? '',
-          neighborhood: formValue.neighborhood ?? '',
-          city: formValue.city ?? '',
-          state: this.ufSelecionada,
-          postalCode: formValue.postalCode ?? '',
-        },
-      ],
+      brand: formValue.brand ?? '',
+      price: formattedPrice,
+      barCode: formValue.barCode ?? '',
+      imgUrl: formValue.imgUrl ?? '',
+      packagingType: formValue.packagingType ?? '',
+      unitOfMeasure: formValue.unitOfMeasure ?? '',
     };
 
-    console.log('JSON enviado:', cliente);
+    console.log('JSON enviado:', product);
 
-    this.clienteService.cadastrar(cliente).subscribe({
+    this.productService.register(product).subscribe({
       next: (res) => {
-        console.log('Cliente cadastrado:', res);
-        alert('Cliente cadastrado com sucesso!');
+        console.log('Produto cadastrado:', res);
+        alert('Produto cadastrado com sucesso!');
         this.form.reset();
-        this.ufSelecionada = '';
       },
       error: (err) => {
-        console.error('Erro ao cadastrar cliente:', err);
-        alert('Erro ao cadastrar cliente');
+        console.error('Erro ao cadastrar produto:', err);
+        alert('Erro ao cadastrar produto');
       },
     });
   }
