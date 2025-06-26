@@ -1,4 +1,6 @@
-$background-green: (217, 235, 231);
+@use "sass:color";
+//$background-green: rgb(222, 236, 225);
+$background-green: #c5e3d8;
 $background-gray: whitesmoke;
 $primary-color: #02614b;
 $secondary-color: rgb(60, 60, 60);

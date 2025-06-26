@@ -1,0 +1,32 @@
+@use '../../../../styles/variables.scss' as variables;
+
+.form-wrapper {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 20px;
+	height: auto;
+	justify-content: space-between;
+	max-width: 1000px;
+}
+
+.form-row {
+	display: flex;
+	flex-direction: column;
+}
+
+label {
+	font-weight: 600;
+	margin-bottom: 0.3rem;
+}
+
+.product-name{
+	width: 60%;
+}
+
+.product-price{
+	display: flex;
+	flex-direction: row;
+	align-items: flex-end;
+	gap: 5px;
+}
+

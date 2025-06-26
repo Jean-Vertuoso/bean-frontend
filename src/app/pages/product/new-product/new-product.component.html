@@ -1,1 +1,54 @@
-<p>new-product works!</p>
+<app-default-form-layout
+  title="Cadastro de produto"
+  (submitClicked)="onSubmit()"
+>
+	<form class="form-wrapper" [formGroup]="form">
+		<div class="product-name">
+			<app-form-input
+			labelText="Nome do produto"
+			type="text"
+			[control]="getControl('name')"
+			/>
+		</div>
+
+		<app-form-input
+		labelText="Marca do produto"
+		type="text"
+		[growthree]="true"
+		[control]="getControl('documentNumber')"
+		/>
+
+		<div class="product-price">
+			<app-form-input
+				labelText="Preço atual"
+				type="number"
+				step="0.01"
+				min="0"
+				inputmode="decimal"
+				placeholder="0.00"
+				[growtwo]="true"
+				[control]="getControl('email')"
+			/>
+			<app-edit-button></app-edit-button>
+
+		</div>
+
+		<app-form-unity-measure-select></app-form-unity-measure-select>
+
+		<app-form-packaging-type-select></app-form-packaging-type-select>
+
+		<app-form-input
+			labelText="Código de barras"
+			type="number"
+			[growthree]="true"
+			[control]="getControl('postalCode')"
+		/>
+
+		<app-form-input
+			labelText="Insira o link ou carregue a imagem"
+			type="text"
+			[growfour]="true"
+			[control]="getControl('street')"
+		/>
+  </form>
+</app-default-form-layout>
