@@ -9,7 +9,7 @@ import {
 import { DefaultFormLayoutComponent } from '../../../components/default-form-layout/default-form-layout.component';
 import { FormInputComponent } from '../../../components/form-input/form-input.component';
 import { FormUfSelectComponent } from '../../../components/form-uf-select/form-uf-select.component';
-import { ClienteService, ClienteRequest } from '../../../services/client.service';
+import { ClientService, ClientRequest } from '../../../services/client.service';
 
 @Component({
   standalone: true,
@@ -25,7 +25,7 @@ import { ClienteService, ClienteRequest } from '../../../services/client.service
   styleUrl: './new-client.component.scss',
 })
 export class NewClientComponent {
-  ufSelecionada = '';
+  ufSelected = '';
 
   form = new FormGroup({
     name: new FormControl('', Validators.required),
@@ -46,7 +46,7 @@ export class NewClientComponent {
     postalCode: new FormControl('', Validators.required),
   });
 
-  constructor(private clienteService: ClienteService) {}
+  constructor(private clientService: ClientService) {}
 
   getControl(controlName: string): FormControl {
     return this.form.get(controlName) as FormControl;
@@ -60,7 +60,7 @@ export class NewClientComponent {
 
     const formValue = this.form.value;
 
-    const cliente: ClienteRequest = {
+    const client: ClientRequest = {
       name: formValue.name ?? '',
       birthDate: formValue.birthDate ?? '',
       documentType: formValue.documentType ?? '',
@@ -82,20 +82,20 @@ export class NewClientComponent {
           number: formValue.number ?? '',
           neighborhood: formValue.neighborhood ?? '',
           city: formValue.city ?? '',
-          state: this.ufSelecionada,
+          state: this.ufSelected,
           postalCode: formValue.postalCode ?? '',
         },
       ],
     };
 
-    console.log('JSON enviado:', cliente);
+    console.log('JSON enviado:', client);
 
-    this.clienteService.cadastrar(cliente).subscribe({
+    this.clientService.register(client).subscribe({
       next: (res) => {
         console.log('Cliente cadastrado:', res);
         alert('Cliente cadastrado com sucesso!');
         this.form.reset();
-        this.ufSelecionada = '';
+        this.ufSelected = '';
       },
       error: (err) => {
         console.error('Erro ao cadastrar cliente:', err);

@@ -1,17 +1,17 @@
 <div class="dropdown-container">
 	<label for="">Tipo do pacote</label>
 	<div class="selected" (click)="toggle()">
-		{{ packagingNameSelected }}
+		{{ packagingTypeSelected }}
 		<span class="arrow" [class.open]="open">&#9662;</span>
 	</div>
 
 	<ul class="dropdown-list" *ngIf="open">
 		<li
 			*ngFor="let packagingType of packagingTypes"
-			(click)="selectPackage(packagingType.nome)"
-			[class.selected]="packagingType.nome === model"
+			(click)="packageSelect(packagingType.name)"
+			[class.selected]="packagingType.name === model"
 		>
-			{{ packagingType.nome }}
+			{{ packagingType.name }}
 		</li>
 	</ul>
 </div>

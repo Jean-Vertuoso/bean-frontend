@@ -3,6 +3,14 @@
   (submitClicked)="onSubmit()"
 >
 	<form class="form-wrapper" [formGroup]="form">
+
+		<app-form-input
+			labelText="Código de barras"
+			type="number"
+			[growthree]="true"
+			[control]="getControl('barCode')"
+		/>
+
 		<div class="product-name">
 			<app-form-input
 			labelText="Nome do produto"
@@ -15,40 +23,32 @@
 		labelText="Marca do produto"
 		type="text"
 		[growthree]="true"
-		[control]="getControl('documentNumber')"
+		[control]="getControl('brand')"
 		/>
 
 		<div class="product-price">
 			<app-form-input
 				labelText="Preço atual"
-				type="number"
-				step="0.01"
-				min="0"
-				inputmode="decimal"
-				placeholder="0.00"
-				[growtwo]="true"
-				[control]="getControl('email')"
+				type="text"
+				placeholder="0,00"
+				mask="separator.2"
+				thousandSeparator="."
+				decimalMarker=","
+				[control]="getControl('price')"
 			/>
 			<app-edit-button></app-edit-button>
 
 		</div>
 
-		<app-form-unity-measure-select></app-form-unity-measure-select>
+		<app-form-unity-measure-select [control]="getControl('unitOfMeasure')"></app-form-unity-measure-select>
 
-		<app-form-packaging-type-select></app-form-packaging-type-select>
-
-		<app-form-input
-			labelText="Código de barras"
-			type="number"
-			[growthree]="true"
-			[control]="getControl('postalCode')"
-		/>
+		<app-form-packaging-type-select [control]="getControl('packagingType')"></app-form-packaging-type-select>
 
 		<app-form-input
 			labelText="Insira o link ou carregue a imagem"
 			type="text"
 			[growfour]="true"
-			[control]="getControl('street')"
+			[control]="getControl('imgUrl')"
 		/>
   </form>
 </app-default-form-layout>
