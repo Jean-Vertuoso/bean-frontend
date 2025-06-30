@@ -1,4 +1,5 @@
 @use '../../../../styles/variables.scss' as variables;
+@use "sass:color";
 
 .form-wrapper {
 	display: flex;
@@ -19,8 +20,20 @@ label {
 	margin-bottom: 0.3rem;
 }
 
+.measure-packaging{
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+}
+
 .product-name{
 	width: 60%;
+}
+
+.product-imagem-url{
+	display: flex;
+	align-items: flex-start;
+	gap: 10px;
 }
 
 .product-price{
@@ -30,3 +43,28 @@ label {
 	gap: 5px;
 }
 
+.product-image{
+	display: flex;
+	flex-direction: row;
+	align-items: flex-end;
+	gap: 5px;
+}
+
+.image-preview-card{
+	max-width: 149px;
+	width: 149px;
+	height: 149px;
+	border-radius: 6px;
+	padding: 6px;
+	background-color: color.scale(variables.$background-gray, $lightness: -2%);
+	box-shadow: 0px 2px 5px rgba(127, 153, 133, 0.329);
+
+	img{
+		width: 100%;
+		border-radius: 4px;
+	}
+}
+
+.image-preview-card.has-image{
+	border: 1px solid #02614b;
+}
