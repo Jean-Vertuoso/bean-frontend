@@ -1,0 +1,18 @@
+<div class="dropdown-container">
+  <label for="">Categorias</label>
+  <div class="selected" (click)="toggle()">
+    {{ selectedNames }}
+    <span class="arrow" [class.open]="open">&#9662;</span>
+  </div>
+
+  <ul class="dropdown-list" *ngIf="open">
+    <li *ngFor="let category of categories">
+      <label class="checkbox-label">
+        <input type="checkbox"
+               [checked]="isSelected(category.id)"
+               (change)="toggleSelection(category.id)" />
+        {{ category.name }}
+      </label>
+    </li>
+  </ul>
+</div>
