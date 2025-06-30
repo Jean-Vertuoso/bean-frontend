@@ -1,6 +1,6 @@
 <app-default-form-layout
-  title="Cadastro de produto"
-  (submitClicked)="onSubmit()"
+	title="Cadastro de produto"
+	(submitClicked)="onSubmit()"
 >
 	<form class="form-wrapper" [formGroup]="form">
 
@@ -13,18 +13,25 @@
 
 		<div class="product-name">
 			<app-form-input
-			labelText="Nome do produto"
-			type="text"
-			[control]="getControl('name')"
+				labelText="Nome do produto"
+				type="text"
+				[control]="getControl('name')"
 			/>
 		</div>
 
 		<app-form-input
-		labelText="Marca do produto"
-		type="text"
-		[growthree]="true"
-		[control]="getControl('brand')"
+			labelText="Marca do produto"
+			type="text"
+			[growthree]="true"
+			[control]="getControl('brand')"
 		/>
+
+		<app-form-category-select
+			[control]="getControl('categoryIds')!"
+			[categories]="availableCategories"
+			(selectedIdsChange)="onCategoriesChange($event)">
+		</app-form-category-select>
+
 
 		<div class="product-price">
 			<app-form-input
@@ -36,19 +43,52 @@
 				decimalMarker=","
 				[control]="getControl('price')"
 			/>
-			<app-edit-button></app-edit-button>
 
+			<app-form-utility-button
+				src="svg/edit-icon.svg"
+			>
+			</app-form-utility-button>
 		</div>
 
-		<app-form-unity-measure-select [control]="getControl('unitOfMeasure')"></app-form-unity-measure-select>
+		<div class="measure-packaging">
+			<app-form-unity-measure-select
+				[control]="getControl('unitOfMeasure')">
+			</app-form-unity-measure-select>
 
-		<app-form-packaging-type-select [control]="getControl('packagingType')"></app-form-packaging-type-select>
+			<app-form-packaging-type-select
+				[control]="getControl('packagingType')">
+			</app-form-packaging-type-select>
+		</div>
 
-		<app-form-input
-			labelText="Insira o link ou carregue a imagem"
-			type="text"
-			[growfour]="true"
-			[control]="getControl('imgUrl')"
-		/>
-  </form>
+		<div class="product-imagem-url">
+			<div class="product-image">
+				<app-form-input
+					labelText="Insira o link ou carregue a imagem"
+					type="text"
+					[growfour]="true"
+					[control]="getControl('imgUrl')"
+					(input)="onImageUrlChange()"
+				></app-form-input>
+
+				<input type="file" #fileInput accept="image/*" hidden (change)="onFileSelected($event)" />
+
+				<app-form-utility-button
+					src="svg/find-file-icon.svg"
+					(click)="fileInput.click()">
+				</app-form-utility-button>
+
+				<app-form-utility-button
+					class="cancelBtn"
+					src="svg/cancel-icon.svg"
+					(click)="clearImage()">
+				</app-form-utility-button>
+			</div>
+
+			<div class="image-preview-card" [ngClass]="{'has-image': previewImage()}">
+				<img [src]="previewImage()" />
+			</div>
+		</div>
+
+	</form>
+
 </app-default-form-layout>

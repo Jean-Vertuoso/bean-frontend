@@ -11,6 +11,7 @@ export interface ProductRequest {
 	imgUrl: string | null;
 	packagingType: string;
 	unitOfMeasure: string;
+	categoryIds: number[];
 }
 
 @Injectable({
@@ -18,11 +19,14 @@ export interface ProductRequest {
 })
 
 export class ProductService {
-
 	private readonly http = inject(HttpClient);
 	private readonly apiUrl = 'http://localhost:8080/products';
 
 	register(product: ProductRequest): Observable<any> {
 		return this.http.post<any>(this.apiUrl, product);
+	}
+
+	registerUpload(formData: FormData): Observable<any> {
+		return this.http.post<any>(`${this.apiUrl}/upload`, formData);
 	}
 }
