@@ -12,13 +12,13 @@ import { FormUtilitySelectComponent } from "../../../components/form-utility-sel
 	standalone: true,
 	selector: 'app-new-product',
 	imports: [
-    CommonModule,
-    DefaultFormLayoutComponent,
-    FormInputComponent,
-    ReactiveFormsModule,
-    FormUtilityButtonComponent,
-    FormUtilitySelectComponent
-],
+		CommonModule,
+		DefaultFormLayoutComponent,
+		FormInputComponent,
+		ReactiveFormsModule,
+		FormUtilityButtonComponent,
+		FormUtilitySelectComponent
+	],
 	providers: [
 		provideNgxMask()
 	],

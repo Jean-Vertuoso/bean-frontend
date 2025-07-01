@@ -1,11 +1,50 @@
-import { Component } from '@angular/core';
+import { Component, signal, computed } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ProductService, ProductResponse } from '../../../services/product.service';
 
 @Component({
-  selector: 'app-find-product',
-  imports: [],
-  templateUrl: './find-product.component.html',
-  styleUrl: './find-product.component.scss'
+	standalone: true,
+	selector: 'app-find-product',
+	templateUrl: './find-product.component.html',
+	styleUrls: ['./find-product.component.scss'],
+	imports: [CommonModule],
 })
 export class FindProductComponent {
+	products = signal<ProductResponse[]>([]);
+	selectedProduct: ProductResponse | null = null;
+	searchTerm = signal<string>('');
 
+	// Computed para filtrar produtos conforme searchTerm
+	filteredProducts = computed(() => {
+		const term = this.searchTerm().toLowerCase();
+		if (!term) return this.products();
+		return this.products().filter(p =>
+			p.name.toLowerCase().includes(term) ||
+			p.brand.toLowerCase().includes(term)
+		);
+	});
+
+	constructor(private productService: ProductService) {
+		this.loadProducts();
+	}
+
+	loadProducts() {
+		this.productService.getAll().subscribe({
+			next: (data) => this.products.set(data),
+			error: () => alert('Erro ao carregar produtos'),
+		});
+	}
+
+	openDetails(product: ProductResponse) {
+		this.selectedProduct = product;
+	}
+
+	closeDetails() {
+		this.selectedProduct = null;
+	}
+
+	addToSale(product: ProductResponse) {
+		// Aqui você coloca a lógica para adicionar à venda
+		alert(`Produto "${product.name}" adicionado à venda!`);
+	}
 }
