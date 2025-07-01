@@ -1,6 +1,5 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { inject } from '@angular/core';
 import { Observable } from 'rxjs';
 
 export interface ProductRequest {
@@ -14,10 +13,16 @@ export interface ProductRequest {
 	categoryIds: number[];
 }
 
-@Injectable({
-	providedIn: 'root'
-})
+export interface ProductResponse {
+	name: string;
+	brand: string;
+	price: number;
+	imgUrl?: string | null;
+}
 
+@Injectable({
+	providedIn: 'root',
+})
 export class ProductService {
 	private readonly http = inject(HttpClient);
 	private readonly apiUrl = 'http://localhost:8080/products';
@@ -28,5 +33,9 @@ export class ProductService {
 
 	registerUpload(formData: FormData): Observable<any> {
 		return this.http.post<any>(`${this.apiUrl}/upload`, formData);
+	}
+
+	getAll(): Observable<ProductResponse[]> {
+		return this.http.get<ProductResponse[]>(this.apiUrl);
 	}
 }

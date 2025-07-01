@@ -1,6 +1,16 @@
 .content {
 	display: flex;
 	justify-content: center;
-	align-items: center;
+	align-items: flex-start;
 	height: 100vh;
+	padding: 20px;
+	box-sizing: border-box;
+	overflow-y: scroll;
+	scrollbar-width: none;
+	-ms-overflow-style: none;
+
+	&::-webkit-scrollbar {
+		display: none;
+	}
+
 }

@@ -1,1 +1,47 @@
-<p>find-product works!</p>
+<div class="product-list-container">
+	<h2>Listagem de produtos</h2>
+
+	<div class="search-bar">
+		<input
+			type="text"
+			class="search-input"
+			[value]="searchTerm()"
+			(input)="searchTerm.set($any($event.target).value)"
+			placeholder="Pesquisar produtos..."
+		/>
+	</div>
+
+	<div class="product-cards">
+		<div class="product-card" *ngFor="let product of filteredProducts()">
+			<div class="product-image">
+				<img [src]="product.imgUrl || 'assets/no-image.png'" alt="{{product.name}}" />
+			</div>
+
+			<div class="product-info">
+				<div class="product-brand">{{ product.brand }}</div>
+				<div class="product-name">{{ product.name }}</div>
+			</div>
+
+			<div class="product-footer">
+				<div class="product-price">
+					R$ {{ product.price | number:'1.2-2' }}
+				</div>
+				<div class="button-group">
+					<button class="details-button" (click)="openDetails(product)">Detalhes</button>
+					<button class="add-sale-button" (click)="addToSale(product)">Adicionar à venda</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal-backdrop" *ngIf="selectedProduct">
+		<div class="modal-content">
+			<h3>Detalhes do Produto</h3>
+			<button class="modal-close" (click)="closeDetails()">X</button>
+
+			<p><strong>Marca:</strong> {{ selectedProduct.brand }}</p>
+			<p><strong>Nome:</strong> {{ selectedProduct.name }}</p>
+			<p><strong>Preço:</strong> R$ {{ selectedProduct.price | number:'1.2-2' }}</p>
+		</div>
+	</div>
+</div>
