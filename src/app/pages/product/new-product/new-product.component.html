@@ -26,12 +26,12 @@
 			[control]="getControl('brand')"
 		/>
 
-		<app-form-category-select
-			[control]="getControl('categoryIds')!"
-			[categories]="availableCategories"
-			(selectedIdsChange)="onCategoriesChange($event)">
-		</app-form-category-select>
-
+		<app-form-utility-select
+			label="Categorias"
+			[options]="availableCategories"
+			[control]="getControl('categoryIds')"
+			[multiple]="true">
+		</app-form-utility-select>
 
 		<div class="product-price">
 			<app-form-input
@@ -51,13 +51,18 @@
 		</div>
 
 		<div class="measure-packaging">
-			<app-form-unity-measure-select
+			<app-form-utility-select
+				label="Unidade de medida"
+				[options]="measureUnities"
 				[control]="getControl('unitOfMeasure')">
-			</app-form-unity-measure-select>
+			</app-form-utility-select>
 
-			<app-form-packaging-type-select
+			<app-form-utility-select
+				label="Tipo do pacote"
+				[options]="packagingTypes"
 				[control]="getControl('packagingType')">
-			</app-form-packaging-type-select>
+			</app-form-utility-select>
+
 		</div>
 
 		<div class="product-imagem-url">

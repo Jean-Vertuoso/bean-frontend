@@ -6,23 +6,19 @@ import { DefaultFormLayoutComponent } from '../../../components/default-form-lay
 import { FormInputComponent } from '../../../components/form-input/form-input.component';
 import { ProductService, ProductRequest } from '../../../services/product.service';
 import { FormUtilityButtonComponent } from "../../../components/form-utility-button/form-utility-button.component";
-import { FormUnityMeasureSelectComponent } from "../../../components/form-unity-measure-select/form-unity-measure-select.component";
-import { FormPackagingTypeSelectComponent } from "../../../components/form-packaging-type-select/form-packaging-type-select.component";
-import { FormCategorySelectComponent } from '../../../components/form-category-select/form-category-select.component';
+import { FormUtilitySelectComponent } from "../../../components/form-utility-select/form-utility-select.component";
 
 @Component({
 	standalone: true,
 	selector: 'app-new-product',
 	imports: [
-		CommonModule,
-		DefaultFormLayoutComponent,
-		FormInputComponent,
-		ReactiveFormsModule,
-		FormUtilityButtonComponent,
-		FormUnityMeasureSelectComponent,
-		FormPackagingTypeSelectComponent,
-		FormCategorySelectComponent
-	],
+    CommonModule,
+    DefaultFormLayoutComponent,
+    FormInputComponent,
+    ReactiveFormsModule,
+    FormUtilityButtonComponent,
+    FormUtilitySelectComponent
+],
 	providers: [
 		provideNgxMask()
 	],
@@ -43,17 +39,36 @@ export class NewProductComponent {
 		isUrl: new FormControl(true)
 	});
 
-
 	availableCategories = [
-		{ id: 1, name: 'Alimentos' },
-		{ id: 2, name: 'Ferramentas' },
-		{ id: 3, name: 'Fertilizantes' },
-		{ id: 4, name: 'Rações para aves' },
-		{ id: 5, name: 'Rações para cães' },
-		{ id: 6, name: 'Rações para equinos' },
-		{ id: 7, name: 'Rações para gatos' },
-		{ id: 8, name: 'Sementes' },
-		{ id: 9, name: 'Solúveis' }
+		{ label: 'Alimentos', value: 1},
+		{ label: 'Ferramentas', value: 2},
+		{ label: 'Fertilizantes', value: 3},
+		{ label: 'Rações para,  aves', value: 4},
+		{ label: 'Rações para,  cães', value: 5},
+		{ label: 'Rações para,  equinos', value: 6},
+		{ label: 'Rações para,  gatos', value: 7},
+		{ label: 'Sementes', value: 8},
+		{ label: 'Solúveis', value: 9}
+	];
+
+	measureUnities = [
+		{ label: 'Centímetro', value: 'CENTIMETER' },
+		{ label: 'Grama', value: 'GRAM' },
+		{ label: 'Quilograma', value: 'KILOGRAM' },
+		{ label: 'Litro', value: 'LITER' },
+		{ label: 'Metro', value: 'METER' },
+		{ label: 'Mililitro', value: 'MILLILITER' },
+		{ label: 'Unidade', value: 'UNIT' },
+	];
+
+	packagingTypes = [
+		{ label: 'Caixa', value: 'BOX' },
+		{ label: 'Dúzia', value: 'DOZEN' },
+		{ label: 'Frasco', value: 'BOTTLE' },
+		{ label: 'Lata', value: 'CAN' },
+		{ label: 'Pacote', value: 'PACKAGE' },
+		{ label: 'Par', value: 'PAIR' },
+		{ label: 'Saco', value: 'BAG' },
 	];
 
 	previewImage = signal<string | null>(null);

@@ -118,6 +118,10 @@
       [control]="getControl('city')"
     />
 
-    <app-form-uf-select [(model)]="ufSelected" />
+	<app-form-utility-select
+		label="UF"
+		[options]="ufs"
+		[control]="getControl('uf')">
+	</app-form-utility-select>
   </form>
 </app-default-form-layout>
