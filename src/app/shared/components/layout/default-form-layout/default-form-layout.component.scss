@@ -1,0 +1,53 @@
+@use '../../../../../styles/variables.scss' as variables;
+@use "sass:color";
+
+section{
+	border-radius: 10px;
+	box-sizing: border-box;
+	color: variables.$primary-color;
+	display: flex;
+	flex-direction: column;
+	padding: 70px;
+	gap: 40px;
+	height: 100%;
+	margin-top: 120px;
+
+	h2{
+		font-size: 40px;
+		color: variables.$primary-color;
+		font-variant: small-caps;
+	}
+}
+
+.form-actions {
+	display: flex;
+	width: 100%;
+	justify-content: flex-end;
+	gap: 1rem;
+}
+
+
+button {
+	padding: 15px;
+	border: none;
+	border-radius: 6px;
+	background-color: color.scale(variables.$primary-color, $lightness: 5%);
+	color: white;
+	font-weight: 400;
+	cursor: pointer;
+	width: 100px;
+	font-size: 16px;
+
+	&:hover{
+		background-color: variables.$primary-color;
+	}
+
+	&.secondary {
+		background-color: color.scale(variables.$secondary-color, $lightness: 5%);
+		color: variables.$background-gray;
+	}
+
+	&.secondary:hover {
+		background-color: variables.$secondary-color;
+	}
+}

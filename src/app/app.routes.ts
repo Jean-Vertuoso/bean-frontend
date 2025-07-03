@@ -1,21 +1,21 @@
-import { HomeComponent } from './pages/home/home.component';
-import { MainLayoutComponent } from './layout/main-layout/main-layout.component';
+import { AuthGuardService } from './core/guards/auth-guard.service';
+import { HomeComponent } from './home/home.component';
+import { MainLayoutComponent } from './shared/components/layout/main-layout/main-layout.component';
 import { Routes } from '@angular/router';
-import { AuthLayoutComponent } from './layout/auth-layout/auth-layout.component';
-import { LoginComponent } from './pages/login/login.component';
-import { NewProductComponent } from './pages/product/new-product/new-product.component';
-import { FindProductComponent } from './pages/product/find-product/find-product.component';
-import { NewClientComponent } from './pages/client/new-client/new-client.component';
-import { FindClientComponent } from './pages/client/find-client/find-client.component';
-import { NewSaleComponent } from './pages/sale/new-sale/new-sale.component';
-import { FindSaleComponent } from './pages/sale/find-sale/find-sale.component';
-import { AuthGuard } from './services/auth-guard.service';
+import { AuthLayoutComponent } from './shared/components/layout/auth-layout/auth-layout.component';
+import { LoginComponent } from './features/auth/login/login.component';
+import { NewProductComponent } from './features/product/new-product/new-product.component';
+import { FindProductComponent } from './features/product/find-product/find-product.component';
+import { NewClientComponent } from './features/client/new-client/new-client.component';
+import { FindClientComponent } from './features/client/find-client/find-client.component';
+import { NewSaleComponent } from './features/sale/new-sale/new-sale.component';
+import { FindSaleComponent } from './features/sale/find-sale/find-sale.component';
 
 export const routes: Routes = [
 	{
 		path: '',
     	component: MainLayoutComponent,
-		canActivate: [AuthGuard],
+		canActivate: [AuthGuardService],
 		children: [
 			{ path: 'home', component: HomeComponent},
 			{ path: 'client/new', component: NewClientComponent},
