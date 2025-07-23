@@ -1,38 +1,71 @@
+import { Component, forwardRef, Input } from '@angular/core';
+import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
-  standalone: true,
-  selector: 'app-form-input',
-  imports: [CommonModule, ReactiveFormsModule],
-  templateUrl: './form-input.component.html',
-  styleUrl: './form-input.component.scss',
+	selector: 'app-form-input',
+	standalone: true,
+	imports: [CommonModule],
+	providers: [
+		{
+			provide: NG_VALUE_ACCESSOR,
+			useExisting: forwardRef(() => FormInputComponent),
+			multi: true
+		}
+	],
+	templateUrl: './form-input.component.html',
+	styleUrls: ['./form-input.component.scss']
 })
-export class FormInputComponent {
-  @Input() control: FormControl = new FormControl('');
-  @Input() labelText: string = '';
-  @Input() labelRadio: string = '';
-  @Input() type: string = '';
-  @Input() placeholder: string = '';
-  @Input() inputText: string = '';
-  @Input() growone: boolean = false;
-  @Input() growtwo: boolean = false;
-  @Input() growthree: boolean = false;
-  @Input() growfour: boolean = false;
-  @Input() name: string = '';
-  @Input() value: string = '';
+export class FormInputComponent implements ControlValueAccessor {
+	@Input() labelText: string = '';
+	@Input() labelRadio: string = '';
+	@Input() type: string = 'text';
+	@Input() placeholder: string = '';
+	@Input() inputText: string = '';
+	@Input() growone: boolean = false;
+	@Input() growtwo: boolean = false;
+	@Input() growthree: boolean = false;
+	@Input() growfour: boolean = false;
+	@Input() name: string = '';
+	@Input() value: any = '';
 
-  onChange(event: Event) {
-    const target = event.target as HTMLInputElement;
-    this.control.setValue(target.value);
-  }
+	innerValue: any = '';
+	disabled: boolean = false;
 
-  onRadioChange() {
-    this.control.setValue(this.value);
-  }
+	onChange: (value: any) => void = () => {};
+	onTouched: () => void = () => {};
 
-  isChecked(): boolean {
-    return this.control.value === this.value;
-  }
+	writeValue(value: any): void {
+		this.innerValue = value;
+	}
+
+	registerOnChange(fn: any): void {
+		this.onChange = fn;
+	}
+
+	registerOnTouched(fn: any): void {
+		this.onTouched = fn;
+	}
+
+	setDisabledState?(isDisabled: boolean): void {
+		this.disabled = isDisabled;
+	}
+
+	onInputChange(event: Event): void {
+		const target = event.target as HTMLInputElement;
+		this.innerValue = target.value;
+		this.onChange(this.innerValue);
+		this.onTouched();
+	}
+
+	onRadioChange(event: Event): void {
+		const target = event.target as HTMLInputElement;
+		this.innerValue = target.value;
+		this.onChange(this.innerValue);
+		this.onTouched();
+	}
+
+	isChecked(): boolean {
+		return this.innerValue === this.value;
+	}
 }

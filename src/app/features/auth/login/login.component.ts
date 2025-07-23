@@ -8,46 +8,52 @@ import { Router } from '@angular/router';
 import { DefaultLoginLayoutComponent } from "../../../shared/components/layout/default-login-layout/default-login-layout.component";
 
 @Component({
-  selector: 'app-login',
-  standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, DefaultLoginLayoutComponent, PrimaryInputComponent],
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+	selector: 'app-login',
+	standalone: true,
+	imports: [
+		CommonModule,
+		ReactiveFormsModule,
+		DefaultLoginLayoutComponent,
+		PrimaryInputComponent
+	],
+	templateUrl: './login.component.html',
+	styleUrls: ['./login.component.scss']
 })
+
 export class LoginComponent {
 
-  private authService = inject(AuthService);
-  private toastr = inject(ToastrService);
-  private router = inject(Router);
+	private authService = inject(AuthService);
+	private toastr = inject(ToastrService);
+	private router = inject(Router);
 
-  loginForm = new FormGroup({
-    email: new FormControl<string>('', {
-      nonNullable: true,
-      validators: [Validators.required, Validators.email]
-    }),
-    password: new FormControl<string>('', {
-      nonNullable: true,
-      validators: [Validators.required, Validators.minLength(8)]
-    })
-  });
+	loginForm = new FormGroup({
+		email: new FormControl<string>('', {
+			nonNullable: true,
+			validators: [Validators.required, Validators.email]
+		}),
+		password: new FormControl<string>('', {
+			nonNullable: true,
+			validators: [Validators.required, Validators.minLength(8)]
+		})
+	});
 
-  submit() {
-    if (this.loginForm.invalid) {
-      this.toastr.error('Preencha todos os campos corretamente.');
-      return;
-    }
+	submit() {
+		if (this.loginForm.invalid) {
+			this.toastr.error('Preencha todos os campos corretamente.');
+			return;
+		}
 
-    const { email, password } = this.loginForm.getRawValue();
+		const { email, password } = this.loginForm.getRawValue();
 
-    this.authService.login(email, password).subscribe({
-      next: () => {
-        this.toastr.success('Login efetuado com sucesso!');
-        this.router.navigate(['/home']);
-      },
-      error: () => {
-        this.toastr.error('Email ou senha inválidos!');
-        this.loginForm.reset();
-      }
-    });
-  }
+		this.authService.login(email, password).subscribe({
+			next: () => {
+				this.toastr.success('Login efetuado com sucesso!');
+				this.router.navigate(['/home']);
+			},
+			error: () => {
+				this.toastr.error('Email ou senha inválidos!');
+				this.loginForm.reset();
+			}
+		});
+	}
 }

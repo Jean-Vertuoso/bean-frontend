@@ -1,0 +1,561 @@
+@use '../../../../styles/variables.scss' as variables;
+@use "sass:color";
+
+.client-list-container {
+	max-width: 1200px;
+	width: 800px;
+	margin: 120px auto 0;
+	padding: 0 30px;
+
+	h2 {
+		font-weight: 700;
+		font-size: 36px;
+		color: variables.$primary-color;
+		margin-bottom: 20px;
+		font-variant: small-caps;
+	}
+}
+
+.search-bar input {
+	width: 100%;
+	max-width: 400px;
+	padding: 8px 12px;
+	margin-bottom: 20px;
+	border-radius: 2px;
+	border: none;
+	background-color: color.scale(variables.$background-gray, $lightness: -2%);
+	box-shadow: 0px 2px 5px rgba(127, 153, 133, 0.329);
+	font-size: 1rem;
+
+	&:focus {
+		outline: none;
+		box-shadow: 0 0 5px rgba(2, 97, 75, 0.5);
+	}
+}
+
+.client-list {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+}
+
+.client-item {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	background-color: color.scale(variables.$background-gray, $lightness: -2%);
+	padding: 12px 20px;
+	border-radius: 6px;
+	box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+
+	.client-info{
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		gap: 20px;
+	}
+
+	.client-id{
+		font-size: 18px;
+		color: color.scale(variables.$primary-color, $lightness: -20%);
+	}
+
+	.client-data {
+		display: flex;
+		flex-direction: column;
+
+		.client-name {
+			font-weight: 700;
+			font-size: 1.1rem;
+			color: color.scale(variables.$primary-color, $lightness: -20%);
+		}
+
+		.client-email {
+			font-size: 0.95rem;
+			color: #555;
+		}
+	}
+
+	.edit-button {
+		background-color: color.scale(variables.$primary-color, $lightness: 5%);
+		width: 80px;
+		height: 40px;
+		font-size: 16px;
+		color: white;
+		border: none;
+		border-radius: 4px;
+		padding: 8px 16px;
+		font-weight: 400;
+		cursor: pointer;
+
+		&:hover {
+			background-color: variables.$primary-color;
+		}
+	}
+}
+
+.modal-backdrop {
+	position: fixed;
+	inset: 0;
+	background-color: rgba(0, 0, 0, 0.4);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	z-index: 1000;
+}
+
+.modal-content {
+	display: flex;
+	flex-direction: column;
+	background-color: white;
+	padding: 30px;
+	border-radius: 8px;
+	height: 570px;
+	width: 600px;
+	position: relative;
+
+	form {
+		padding: 5px;
+        flex: 1;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+		justify-content: space-between;
+    }
+
+	h3 {
+		margin-top: 0;
+		margin-bottom: 20px;
+		font-size: 1.3rem;
+		color: color.scale(variables.$primary-color, $lightness: -20%);
+	}
+
+	label {
+		display: block;
+		margin-top: 10px;
+		margin-bottom: 6px;
+		font-weight: 600;
+	}
+
+	.edit-input{
+		display: flex;
+		justify-content: flex-start;
+		align-items: flex-end;
+		margin-bottom: 20px;
+
+		app-form-input{
+			width: 65%;
+
+			label{
+				color: color.scale(variables.$primary-color, $lightness: -20%);
+			}
+		}
+
+		app-form-utility-button{
+			height: 39px;
+		}
+	}
+
+	.doc-type-wrapper{
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		color: variables.$primary-color;
+		gap: 55px;
+		margin-bottom: 20px;
+
+		.doc-types {
+			display: flex;
+			flex-direction: column;
+			justify-content: baseline;
+			align-items: center;
+			gap: 4px;
+
+			div {
+				display: flex;
+				flex-direction: row;
+			}
+
+			label {
+				margin-top: 0;
+			}
+		}
+
+		.doc-number-wrapper {
+			align-items: flex-end;
+			display: flex;
+			flex-direction: row;
+			justify-content: space-between;
+			gap: 10px;
+		}
+
+		input{
+			width: 50px;
+		}
+	}
+
+	.edit-input-phones{
+		display: flex;
+		justify-content: flex-start;
+		align-items: flex-end;
+		margin-bottom: 20px;
+		gap: 10px;
+
+		div{
+			display: flex;
+			gap: 20px;
+		}
+
+		app-form-input{
+			width: 90%;
+
+			label{
+				color: color.scale(variables.$primary-color, $lightness: -20%);
+			}
+		}
+
+		app-form-utility-button{
+			height: 39px;
+		}
+	}
+
+	.modal-actions {
+		margin-top: 20px;
+		display: flex;
+		justify-content: flex-end;
+		padding-top: 10px;
+		border-top: 1px solid #ccc;
+		background-color: white;
+
+		button {
+			background-color: color.scale(variables.$primary-color, $lightness: 5%);
+			color: white;
+			border: none;
+			width: 80px;
+			height: 40px;
+			font-size: 16px;
+			padding: 8px 16px;
+			border-radius: 4px;
+			font-weight: 400;
+			cursor: pointer;
+
+			&:hover {
+				background-color: variables.$primary-color;
+			}
+		}
+	}
+
+	.modal-close {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		position: absolute;
+		top: 10px;
+		right: 16px;
+		width: 30px;
+		height: 30px;
+		border-radius: 6px;
+		text-align: center;
+		background-color: color.scale(variables.$secondary-color, $lightness: 5%);
+		border: none;
+		font-size: 17px;
+		font-family: 'Comic Sans MS', 'Roboto';
+		font-variant: small-caps;
+		cursor: pointer;
+		color: whitesmoke;
+
+		&:hover {
+			background-color: variables.$secondary-color;
+		}
+	}
+}
+
+.tab-header {
+	display: flex;
+	justify-content: space-around;
+	margin-bottom: 20px;
+	border-bottom: 2px solid #ccc;
+}
+
+.tab-button {
+	flex: 1;
+	padding: 10px 0;
+	border: none;
+	background: none;
+	cursor: pointer;
+	font-weight: 600;
+	color: #666;
+	transition: all 0.2s ease;
+
+	&.active {
+		color: variables.$primary-color;
+		border-bottom: 3px solid variables.$primary-color;
+	}
+}
+
+.addresses-container {
+    .address-item {
+        background-color: color.scale(variables.$background-gray, $lightness: -3%);
+        border: none;
+        border-radius: 8px;
+        margin-bottom: 15px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+        overflow: hidden;
+        transition: all 0.3s ease;
+
+        &:hover {
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+        }
+
+        .address-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background-color: color.scale(variables.$background-gray, $lightness: -1%);
+            border-bottom: 1px solid #ddd;
+
+            .address-info {
+                display: flex;
+                flex-direction: column;
+                gap: 4px;
+
+                .address-number {
+                    font-weight: 600;
+                    font-size: 1.05rem;
+                    color: #333;
+                }
+
+                .address-type {
+                    font-size: 0.9rem;
+                    color: #666;
+                    font-style: italic;
+                }
+            }
+
+			.address-actions {
+				display: flex;
+				align-items: center;
+				gap: 10px;
+			}
+        }
+
+        .address-fields {
+            padding: 20px;
+            background-color: white;
+            animation: slideDown 0.3s ease-out;
+
+            .address-row {
+                display: flex;
+                gap: 15px;
+                margin-bottom: 15px;
+
+                &:last-child {
+                    margin-bottom: 0;
+                }
+
+                .address-field {
+                    flex: 1;
+
+                    &.small {
+                        flex: 0 0 120px;
+                    }
+
+                    &.large {
+                        flex: 2;
+                    }
+
+                    label {
+                        display: block;
+                        margin-bottom: 6px;
+                        font-weight: 600;
+                        color: color.scale(variables.$primary-color, $lightness: -20%);
+                        font-size: 0.9rem;
+                    }
+
+                    select {
+                        width: 100%;
+                        padding: 8px 12px;
+                        border: 1px solid #ccc;
+                        border-radius: 4px;
+                        font-size: 1rem;
+                        background-color: white;
+                        color: #333;
+
+                        &:focus {
+                            outline: none;
+                            border-color: variables.$primary-color;
+                            box-shadow: 0 0 0 2px rgba(2, 97, 75, 0.2);
+                        }
+                    }
+
+                    app-form-input {
+                        width: 100%;
+
+                        ::ng-deep label {
+                            color: color.scale(variables.$primary-color, $lightness: -20%);
+                            font-weight: 600;
+                            font-size: 0.9rem;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .add-address-container {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+
+        .add-address-button {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+			background-color: color.scale(variables.$primary-color, $lightness: 5%);
+            border: none;
+            color: whitesmoke;
+            padding: 12px 24px;
+            border-radius: 4px;
+            font-weight: 400;
+			font-size: 16px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+
+			img{
+				height: 25px;
+				width: 25px;
+			}
+
+            &:hover {
+                background-color: variables.$primary-color;
+            }
+
+            &:active {
+                transform: translateY(1px);
+            }
+
+            .add-icon {
+                font-size: 18px;
+                font-weight: bold;
+            }
+        }
+    }
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+        max-height: 0;
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+        max-height: 500px;
+    }
+}
+
+@media (max-width: 768px) {
+    .addresses-container {
+        .address-item {
+            .address-header {
+                padding: 12px 15px;
+
+                .address-info {
+                    .address-number {
+                        font-size: 1rem;
+                    }
+
+                    .address-type {
+                        font-size: 0.85rem;
+                    }
+                }
+
+                .address-actions {
+                    gap: 8px;
+                }
+            }
+
+            .address-fields {
+                padding: 15px;
+
+                .address-row {
+                    flex-direction: column;
+                    gap: 10px;
+
+                    .address-field {
+                        &.small,
+                        &.large {
+                            flex: 1;
+                        }
+                    }
+                }
+            }
+        }
+
+        .add-address-container {
+            .add-address-button {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+            }
+        }
+    }
+}
+
+.modal-content {
+    max-height: 90vh;
+    overflow-y: auto;
+    width: 700px;
+
+    &::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 4px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: color.scale(variables.$primary-color, $lightness: 5%);;
+        border-radius: 4px;
+
+        &:hover {
+            background: variables.$primary-color;
+			cursor: grab;
+        }
+
+		&:active {
+			cursor: grabbing;
+		}
+    }
+
+    .tab-header {
+        border: none;
+
+        .tab-button {
+            position: relative;
+            padding: 12px 0;
+            font-size: 0.95rem;
+
+            &.active {
+                color: variables.$primary-color;
+
+                &::after {
+                    content: '';
+                    position: absolute;
+                    bottom: -2px;
+                    left: 0;
+                    right: 0;
+                    height: 3px;
+                    background-color: variables.$primary-color;
+                    border-radius: 2px 2px 0 0;
+                }
+            }
+        }
+    }
+}
