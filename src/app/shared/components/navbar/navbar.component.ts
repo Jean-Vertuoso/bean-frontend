@@ -1,7 +1,7 @@
 import { RouterModule, Router } from '@angular/router';
 import { Component, Input, TemplateRef } from '@angular/core';
 import { NavbarButtonComponent } from "../buttons/navbar-button/navbar-button.component";
-import { DropdownItemComponent } from "../buttons/dropdown-item/dropdown-item.component";
+import { DropdownItemComponent } from "../dropdown/dropdown-item/dropdown-item.component";
 import { AuthService } from '../../../core/services/auth.service';
 import { TokenService } from '../../../core/services/token.service';
 import { ToastrService } from 'ngx-toastr';

@@ -1,4 +1,5 @@
 @use '../../../../../styles/variables.scss' as variables;
+@use 'sass:color';
 
 .dropdown-item-wrapper{
 	align-items: center;
@@ -11,8 +12,8 @@
 	a {
 		align-items: center;
 		background-color: variables.$background-gray;
-		border: 2px outset variables.$primary-color;
-		border-radius: 3px;
+		border: 1px solid variables.$background-green;
+		border-radius: 2px;
 		color: variables.$primary-color;
 		display: flex;
 		flex-direction: column;
@@ -35,8 +36,12 @@
 			letter-spacing: 0.8px;
 		}
 
+		&:hover {
+			background-color: color.scale(variables.$background-green, $lightness: 85%);
+		}
+
 		&:active{
-			border-style: inset;
+			border: 1px inset variables.$background-green;
 		}
 	}
 

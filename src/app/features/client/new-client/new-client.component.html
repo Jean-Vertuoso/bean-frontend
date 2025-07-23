@@ -1,127 +1,129 @@
 <app-default-form-layout
-  title="Cadastro de cliente"
-  (submitClicked)="onSubmit()"
+	title="Cadastro de cliente"
+	(submitClicked)="onSubmit()"
 >
-  <form class="form-wrapper" [formGroup]="form">
-    <app-form-input
-      labelText="Nome"
-      type="text"
-      [growfour]="true"
-      [control]="getControl('name')"
-    />
+	<form class="form-wrapper" [formGroup]="form">
+		<app-form-input
+			labelText="Nome"
+			type="text"
+			[growfour]="true"
+			formControlName="name"
+		/>
 
-    <app-form-input
-      labelText="Data de nascimento"
-      type="date"
-      [control]="getControl('birthDate')"
-    />
+		<app-form-input
+			labelText="Data de nascimento"
+			type="date"
+			formControlName="birthDate"
+		/>
 
-    <div class="doc-type-wrapper">
-      <label>Tipo do documento</label>
-      <div>
-        <app-form-input
-          name="docType"
-          type="radio"
-          labelRadio="CPF"
-          value="CPF"
-          [control]="getControl('documentType')"
-        />
-        <app-form-input
-          name="docType"
-          type="radio"
-          labelRadio="RG"
-          value="RG"
-          [control]="getControl('documentType')"
-        />
-        <app-form-input
-          name="docType"
-          type="radio"
-          labelRadio="CNPJ"
-          value="CNPJ"
-          [control]="getControl('documentType')"
-        />
-      </div>
-    </div>
+		<div class="doc-type-wrapper">
+			<label>Tipo do documento</label>
+			<div>
+				<app-form-input
+					name="docType"
+					type="radio"
+					labelRadio="CPF"
+					value="CPF"
+					formControlName="documentType"
+				/>
+				<app-form-input
+					name="docType"
+					type="radio"
+					labelRadio="RG"
+					value="RG"
+					formControlName="documentType"
+				/>
+				<app-form-input
+					name="docType"
+					type="radio"
+					labelRadio="CNPJ"
+					value="CNPJ"
+					formControlName="documentType"
+				/>
+			</div>
+		</div>
 
-    <app-form-input
-      labelText="Número do documento"
-      type="text"
-      [control]="getControl('documentNumber')"
-    />
+		<app-form-input
+			labelText="Número do documento"
+			type="text"
+			formControlName="documentNumber"
+		/>
 
-    <app-form-input
-      labelText="Email"
-      type="text"
-      [growthree]="true"
-      [control]="getControl('email')"
-    />
+		<app-form-input
+			labelText="Email"
+			type="text"
+			[growthree]="true"
+			formControlName="email"
+		/>
 
-    <div class="phone-wrapper">
-      <app-form-input
-        labelText="DDD"
-        type="text"
-        [growone]="true"
-        [control]="getControl('areaCodePhone')"
-      />
-      <app-form-input
-        labelText="Telefone principal"
-        type="text"
-        [control]="getControl('mainPhone')"
-      />
-    </div>
+		<div class="phone-wrapper">
+			<app-form-input
+				labelText="DDD"
+				type="text"
+				[growone]="true"
+				formControlName="areaCodePhone"
+			/>
+			<app-form-input
+				labelText="Telefone principal"
+				type="text"
+				formControlName="mainPhone"
+			/>
+		</div>
 
-    <div class="phone-wrapper">
-      <app-form-input
-        labelText="DDD"
-        type="text"
-        [growone]="true"
-        [control]="getControl('areaCodeMobile')"
-      />
-      <app-form-input
-        labelText="Celular principal"
-        type="text"
-        [control]="getControl('mainMobile')"
-      />
-    </div>
+		<div class="phone-wrapper">
+			<app-form-input
+				labelText="DDD"
+				type="text"
+				[growone]="true"
+				formControlName="areaCodeMobile"
+			/>
+			<app-form-input
+				labelText="Celular principal"
+				type="text"
+				formControlName="mainMobile"
+			/>
+		</div>
 
-    <app-form-input
-      labelText="CEP"
-      type="text"
-      [control]="getControl('postalCode')"
-    />
+		<app-form-input
+			labelText="CEP"
+			type="text"
+			[growtwo]="true"
+			formControlName="postalCode"
+		/>
 
-    <app-form-input
-      labelText="Endereço"
-      type="text"
-      [growfour]="true"
-      [control]="getControl('street')"
-    />
+		<app-form-input
+			labelText="Endereço"
+			type="text"
+			[growfour]="true"
+			formControlName="street"
+		/>
 
-    <app-form-input
-      labelText="Número"
-      type="text"
-      [growtwo]="true"
-      [control]="getControl('number')"
-    />
+		<app-form-input
+			labelText="Número"
+			type="text"
+			[growtwo]="true"
+			formControlName="number"
+		/>
 
-    <app-form-input
-      labelText="Bairro"
-      type="text"
-      [growthree]="true"
-      [control]="getControl('neighborhood')"
-    />
+		<app-form-input
+			labelText="Bairro"
+			type="text"
+			[growthree]="true"
+			formControlName="neighborhood"
+		/>
 
-    <app-form-input
-      labelText="Cidade"
-      type="text"
-      [growthree]="true"
-      [control]="getControl('city')"
-    />
+		<app-form-input
+			labelText="Cidade"
+			type="text"
+			[growthree]="true"
+			formControlName="city"
+		/>
 
-	<app-form-utility-select
-		label="UF"
-		[options]="ufs"
-		[control]="getControl('uf')">
-	</app-form-utility-select>
-  </form>
+		<app-form-utility-select
+			label="UF"
+			[options]="ufs"
+			placeholder="Selecione"
+			formControlName="uf"
+		/>
+	</form>
 </app-default-form-layout>

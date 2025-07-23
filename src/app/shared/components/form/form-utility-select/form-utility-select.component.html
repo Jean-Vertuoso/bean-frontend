@@ -1,21 +1,31 @@
 <div class="dropdown-container">
 	<label>{{ label }}</label>
+
 	<div class="selected" (click)="toggle()">
 		{{ displayLabel }}
 		<span class="arrow" [class.open]="open">&#9662;</span>
 	</div>
 
-	<ul class="dropdown-list" *ngIf="open">
-		<li *ngFor="let opt of options" [class.selected]="isSelected(opt.value)">
-			<label *ngIf="multiple" class="checkbox-label">
-				<input type="checkbox"
-					[checked]="isSelected(opt.value)"
-					(change)="onSelect(opt.value)" />
-					{{ opt.label }}
-			</label>
-			<span *ngIf="!multiple" (click)="onSelect(opt.value)">
-				{{ opt.label }}
-			</span>
-		</li>
-	</ul>
+	@if (open) {
+		<ul class="dropdown-list">
+			@for (opt of options; track opt.value) {
+				<li [class.selected]="isSelected(opt.value)">
+					@if (multiple) {
+						<label class="checkbox-label">
+							<input
+								type="checkbox"
+								[checked]="isSelected(opt.value)"
+								(change)="onSelect(opt.value)"
+							/>
+							{{ opt.label }}
+						</label>
+					} @else {
+						<span (click)="onSelect(opt.value)">
+							{{ opt.label }}
+						</span>
+					}
+				</li>
+			}
+		</ul>
+	}
 </div>

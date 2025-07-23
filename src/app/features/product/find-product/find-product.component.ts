@@ -1,6 +1,7 @@
 import { Component, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ProductService, ProductResponse } from '../services/product.service';
+import { ProductService } from '../services/product.service';
+import { ProductResponse } from '../../../shared/models/product.model';
 
 @Component({
 	standalone: true,
