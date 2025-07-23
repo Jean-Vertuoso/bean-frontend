@@ -1,1 +1,334 @@
-<p>find-client works!</p>
+<div class="client-list-container">
+    <h2>Clientes cadastrados</h2>
+
+    <div class="search-bar">
+        <input
+            type="text"
+            placeholder="Pesquisar cliente..."
+            [value]="searchTerm()"
+            (input)="searchTerm.set($any($event.target).value)"
+        />
+    </div>
+
+    <ul class="client-list">
+        @for (client of filteredClients(); track client.id) {
+            <li class="client-item">
+                <div class="client-info">
+                    <div class="client-id">{{ client.id }}</div>
+
+                    <div class="client-data">
+                        <div class="client-name">{{ client.name }}</div>
+                        <div class="client-email">{{ client.email }}</div>
+                    </div>
+                </div>
+                <button class="edit-button" (click)="editClient(client)">Editar</button>
+            </li>
+        }
+    </ul>
+
+    @if (selectedClient()) {
+        <div class="modal-backdrop">
+            <div class="modal-content">
+                <h3>Editar Cliente</h3>
+                <button class="modal-close" (click)="closeModal()">X</button>
+
+                <div class="tab-header">
+                    <button
+                        class="tab-button"
+                        [class.active]="selectedTab() === 'general'"
+                        (click)="setTab('general')"
+                    >
+                        Dados Gerais
+                    </button>
+                    <button
+                        class="tab-button"
+                        [class.active]="selectedTab() === 'address'"
+                        (click)="setTab('address')"
+                    >
+                        Endereço
+                    </button>
+                    <button
+                        class="tab-button"
+                        [class.active]="selectedTab() === 'contacts'"
+                        (click)="setTab('contacts')"
+                    >
+                        Contatos
+                    </button>
+                </div>
+
+                <form (ngSubmit)="saveClient()" #editForm="ngForm">
+                    @if (selectedTab() === 'general') {
+						<div>
+							<div class="edit-input">
+								<app-form-input
+									labelText="Nome"
+									[(ngModel)]="selectedClient()!.name"
+									name="name"
+									type="text"
+									[growfour]="true"
+									[disabled]="!nameFieldEnabled()"
+									required
+								/>
+
+								<app-form-utility-button
+								src="svg/edit-icon.svg"
+								(click)="toggleNameField()"/>
+							</div>
+
+							<div class="edit-input">
+								<app-form-input
+									labelText="Email"
+									[(ngModel)]="selectedClient()!.email"
+									name="email"
+									type="email"
+									[growfour]="true"
+									[disabled]="!emailFieldEnabled()"
+									required
+								/>
+
+								<app-form-utility-button
+									src="svg/edit-icon.svg"
+									(click)="toggleEmailField()"
+								/>
+							</div>
+
+							<div class="doc-type-wrapper">
+								<div class="doc-types">
+									<label>Tipo do documento</label>
+									<div>
+										<app-form-input
+											name="docType"
+											type="radio"
+											labelRadio="CPF"
+											value="CPF"
+										/>
+										<app-form-input
+											name="docType"
+											type="radio"
+											labelRadio="RG"
+											value="RG"
+										/>
+										<app-form-input
+											name="docType"
+											type="radio"
+											labelRadio="CNPJ"
+											value="CNPJ"
+										/>
+									</div>
+								</div>
+
+								<div class="doc-number-wrapper">
+									<app-form-input
+										labelText="Número do documento"
+										[(ngModel)]="selectedClient()!.documentNumber"
+										name="docNumber"
+										type="text"
+										[disabled]="!docNumberFieldEnabled()"
+										required
+									/>
+
+									<app-form-utility-button
+										src="svg/edit-icon.svg"
+										(click)="toggleDocNumberField()"
+									/>
+								</div>
+							</div>
+
+							<app-form-input
+								labelText="Data de nascimento"
+								[(ngModel)]="selectedClient()!.birthDate"
+								name="birthDate"
+								type="date"
+								[growtwo]="true"
+							/>
+						</div>
+                    }
+
+                    @if (selectedTab() === 'address') {
+                        <div class="addresses-container">
+                            @for (address of clientAddresses(); track $index) {
+                                <div class="address-item">
+                                    <div class="address-header">
+                                        <div class="address-info">
+                                            <span class="address-number">Endereço {{ $index + 1 }}</span>
+                                        </div>
+
+                                        <div class="address-actions">
+												@if (isAddressExpanded($index)){
+													<app-form-utility-button
+														type="button"
+														class="expandBtn"
+														src="svg/expand-down-icon.svg"
+														(click)="toggleAddressExpansion($index)"
+													>
+													</app-form-utility-button>
+												} @else {
+													<app-form-utility-button
+														type="button"
+														class="expandBtn"
+														src="svg/expand-right-icon.svg"
+														(click)="toggleAddressExpansion($index)"
+													>
+
+													</app-form-utility-button>
+												}
+
+                                            <app-form-utility-button
+                                                src="svg/cancel-icon.svg"
+												class="cancelBtn"
+                                                (click)="removeAddress($index)"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    @if (isAddressExpanded($index)) {
+                                        <div class="address-fields">
+                                            <div class="address-row">
+												<app-form-input
+													labelText="CEP"
+													[(ngModel)]="address.postalCode"
+													name="postalCode{{ $index }}"
+													type="text"
+													[growtwo]="true"
+													placeholder="00000-000"
+													required
+												/>
+
+												<app-form-input
+													labelText="Endereço"
+													[(ngModel)]="address.street"
+													name="street{{ $index }}"
+													type="text"
+													[growfour]="true"
+													required
+												/>
+                                            </div>
+
+                                            <div class="address-row">
+                                                    <app-form-input
+                                                        labelText="Número"
+                                                        [(ngModel)]="address.number"
+                                                        name="number{{ $index }}"
+                                                        type="text"
+														[growtwo]="true"
+                                                        required
+                                                    />
+
+                                                    <app-form-input
+                                                        labelText="Complemento"
+                                                        [(ngModel)]="address.complement"
+                                                        name="complement{{ $index }}"
+                                                        type="text"
+														[growfour]="true"
+                                                        placeholder="Apto, sala, etc."
+                                                    />
+                                            </div>
+
+                                            <div class="address-row">
+
+												<app-form-input
+													labelText="Bairro"
+													[(ngModel)]="address.neighborhood"
+													name="neighborhood{{ $index }}"
+													type="text"
+													[growthree]="true"
+													required
+												/>
+
+												<app-form-input
+													style="width: 240px"
+													labelText="Cidade"
+													[(ngModel)]="address.city"
+													name="city{{ $index }}"
+													type="text"
+													required
+												/>
+                                            </div>
+
+                                            <div class="address-row">
+												<app-form-input
+													labelText="Estado"
+													[(ngModel)]="address.state"
+													name="state{{ $index }}"
+													type="text"
+													placeholder="SP"
+													maxlength="2"
+													required
+												/>
+											</div>
+                                        </div>
+                                    }
+                                </div>
+                            }
+
+                            @if (clientAddresses().length < 5) {
+                                <div class="add-address-container">
+                                    <button
+                                        type="button"
+                                        class="add-address-button"
+                                        (click)="addAddress()"
+                                    >
+										<img src="svg/add-location-icon.svg" alt="">
+                                        Adicionar Endereço
+                                    </button>
+                                </div>
+                            }
+                        </div>
+                    }
+
+					<div>
+                    @if (selectedTab() === 'contacts') {
+                        @for (phone of selectedClient()!.phones; track $index) {
+                            <div class="edit-input-phones">
+								<div>
+									<app-form-input
+										labelText="DDD"
+										[(ngModel)]="phone.areaCode"
+										name="areaCode{{ $index }}"
+										[growone]="true"
+										[disabled]="!phoneFieldsEnabled()[$index]?.areaCode"
+										required
+										type="text"
+									/>
+
+									<app-form-input
+										labelText="Telefone"
+										[(ngModel)]="phone.number"
+										name="phoneNumber{{ $index }}"
+										[growthree]="true"
+										[disabled]="!phoneFieldsEnabled()[$index]?.number"
+										required
+										type="text"
+									/>
+								</div>
+
+                                <app-form-utility-button
+									src="svg/edit-icon.svg"
+									(click)="togglePhoneFields($index)"
+								/>
+                                <app-form-utility-button
+                                    class="cancelBtn"
+                                    src="svg/cancel-icon.svg"
+                                    (click)="removePhone($index)"
+                                />
+                            </div>
+                        }
+
+                        @if (selectedClient()!.phones.length < 4) {
+                            <div class="add-phone-button">
+                                <app-form-utility-button
+                                    src="svg/add-phone-icon.svg"
+                                    (click)="addPhone()"
+                                />
+                            </div>
+                        }
+                    }
+					</div>
+                    <div class="modal-actions">
+                        <button type="submit" [disabled]="!editForm.form.valid">Salvar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    }
+</div>

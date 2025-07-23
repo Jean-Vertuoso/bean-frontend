@@ -1,7 +1,7 @@
 import { NavigationEnd, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Component, Input, TemplateRef, OnDestroy, Output, EventEmitter } from '@angular/core';
-import { DropdownComponent } from "../dropdown/dropdown.component";
+import { DropdownComponent } from "../../dropdown/dropdown/dropdown.component";
 import { filter, Subscription } from 'rxjs';
 
 @Component({

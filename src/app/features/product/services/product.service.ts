@@ -1,24 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-
-export interface ProductRequest {
-	name: string;
-	brand: string;
-	price: number;
-	barCode: string;
-	imgUrl: string | null;
-	packagingType: string;
-	unitOfMeasure: string;
-	categoryIds: number[];
-}
-
-export interface ProductResponse {
-	name: string;
-	brand: string;
-	price: number;
-	imgUrl?: string | null;
-}
+import { ProductRequest, ProductResponse } from '../../../shared/models/product.model';
 
 @Injectable({
 	providedIn: 'root',

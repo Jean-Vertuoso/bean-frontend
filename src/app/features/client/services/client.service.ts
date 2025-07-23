@@ -1,31 +1,7 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { inject } from '@angular/core';
 import { Observable } from 'rxjs';
-
-export interface Phone {
-  areaCode: string;
-  number: string;
-}
-
-export interface Address {
-  street: string;
-  number: string;
-  neighborhood: string;
-  city: string;
-  state: string;
-  postalCode: string;
-}
-
-export interface ClientRequest {
-  name: string;
-  birthDate: string;
-  documentType: string;
-  documentNumber: string;
-  email: string;
-  phones: Phone[];
-  addresses: Address[];
-}
+import { ClientRequest, ClientResponse, ClientUpdateRequest } from '../../../shared/models/client.model';
 
 @Injectable({
 	providedIn: 'root'
@@ -38,5 +14,13 @@ export class ClientService {
 
 	register(client: ClientRequest): Observable<any> {
 		return this.http.post<any>(this.apiUrl, client);
+	}
+
+	getAll(): Observable<ClientResponse[]> {
+		return this.http.get<ClientResponse[]>(this.apiUrl);
+	}
+
+	update(id: number, client: ClientUpdateRequest): Observable<any> {
+		return this.http.put(`${this.apiUrl}/${id}`, client);
 	}
 }

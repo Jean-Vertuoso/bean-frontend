@@ -8,14 +8,14 @@
 			labelText="Código de barras"
 			type="number"
 			[growthree]="true"
-			[control]="getControl('barCode')"
+			formControlName="barCode"
 		/>
 
 		<div class="product-name">
 			<app-form-input
 				labelText="Nome do produto"
 				type="text"
-				[control]="getControl('name')"
+				formControlName="name"
 			/>
 		</div>
 
@@ -23,13 +23,13 @@
 			labelText="Marca do produto"
 			type="text"
 			[growthree]="true"
-			[control]="getControl('brand')"
+			formControlName="brand"
 		/>
 
 		<app-form-utility-select
 			label="Categorias"
 			[options]="availableCategories"
-			[control]="getControl('categoryIds')"
+			formControlName="categoryIds"
 			[multiple]="true">
 		</app-form-utility-select>
 
@@ -41,7 +41,7 @@
 				mask="separator.2"
 				thousandSeparator="."
 				decimalMarker=","
-				[control]="getControl('price')"
+				formControlName="price"
 			/>
 
 			<app-form-utility-button
@@ -54,13 +54,13 @@
 			<app-form-utility-select
 				label="Unidade de medida"
 				[options]="measureUnities"
-				[control]="getControl('unitOfMeasure')">
+				formControlName="unitOfMeasure">
 			</app-form-utility-select>
 
 			<app-form-utility-select
 				label="Tipo do pacote"
 				[options]="packagingTypes"
-				[control]="getControl('packagingType')">
+				formControlName="packagingType">
 			</app-form-utility-select>
 
 		</div>
@@ -71,7 +71,7 @@
 					labelText="Insira o link ou carregue a imagem"
 					type="text"
 					[growfour]="true"
-					[control]="getControl('imgUrl')"
+					formControlName="imgUrl"
 					(input)="onImageUrlChange()"
 				></app-form-input>
 

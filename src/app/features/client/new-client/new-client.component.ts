@@ -1,10 +1,11 @@
+import { FormInputComponent } from '../../../shared/components/form/form-input/form-input.component';
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { DefaultFormLayoutComponent } from '../../../shared/components/layout/default-form-layout/default-form-layout.component';
-import { FormInputComponent } from '../../../shared/components/form/form-input/form-input.component';
-import { ClientService, ClientRequest } from '../../client/services/client.service';
+import { ClientRequest } from '../../../shared/models/client.model';
 import { FormUtilitySelectComponent } from "../../../shared/components/form/form-utility-select/form-utility-select.component";
+import { ClientService } from '../services/client.service';
 
 @Component({
 	standalone: true,
@@ -74,10 +75,6 @@ export class NewClientComponent {
 	});
 
 	constructor(private clientService: ClientService) {}
-
-	getControl(controlName: string): FormControl {
-		return this.form.get(controlName) as FormControl;
-	}
 
 	onSubmit() {
 		if (this.form.invalid) {

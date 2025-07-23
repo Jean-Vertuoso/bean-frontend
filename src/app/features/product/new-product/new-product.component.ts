@@ -4,7 +4,7 @@ import { provideNgxMask } from 'ngx-mask';
 import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { DefaultFormLayoutComponent } from '../../../shared/components/layout/default-form-layout/default-form-layout.component';
 import { FormInputComponent } from '../../../shared/components/form/form-input/form-input.component';
-import { ProductService, ProductRequest } from '../services/product.service';
+import { ProductService } from '../services/product.service';
 import { FormUtilityButtonComponent } from "../../../shared/components/form/form-utility-button/form-utility-button.component";
 import { FormUtilitySelectComponent } from "../../../shared/components/form/form-utility-select/form-utility-select.component";
 
