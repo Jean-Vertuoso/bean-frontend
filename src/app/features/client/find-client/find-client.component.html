@@ -54,6 +54,13 @@
                     >
                         Contatos
                     </button>
+					<button
+                        class="tab-button"
+                        [class.active]="selectedTab() === 'manageClient'"
+                        (click)="setTab('manageClient')"
+                    >
+                        Gerenciar cliente
+                    </button>
                 </div>
 
                 <form (ngSubmit)="saveClient()" #editForm="ngForm">
@@ -286,7 +293,7 @@
 										[(ngModel)]="phone.areaCode"
 										name="areaCode{{ $index }}"
 										[growone]="true"
-										[disabled]="!phoneFieldsEnabled()[$index]?.areaCode"
+										[disabled]="!isAreaCodeEnabled($index)"
 										required
 										type="text"
 									/>
@@ -296,7 +303,7 @@
 										[(ngModel)]="phone.number"
 										name="phoneNumber{{ $index }}"
 										[growthree]="true"
-										[disabled]="!phoneFieldsEnabled()[$index]?.number"
+										[disabled]="!isNumberEnabled($index)"
 										required
 										type="text"
 									/>
@@ -315,11 +322,15 @@
                         }
 
                         @if (selectedClient()!.phones.length < 4) {
-                            <div class="add-phone-button">
-                                <app-form-utility-button
-                                    src="svg/add-phone-icon.svg"
-                                    (click)="addPhone()"
-                                />
+                            <div class="add-phone-container">
+								<button
+									type="button"
+									class="add-phone-button"
+									(click)="addPhone()"
+								>
+									<img src="svg/add-phone-icon.svg" alt="">
+									Adicionar telefone
+								</button>
                             </div>
                         }
                     }

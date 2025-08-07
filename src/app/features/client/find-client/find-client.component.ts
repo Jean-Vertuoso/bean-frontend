@@ -36,7 +36,7 @@ export class FindClientComponent {
 	phoneFieldsEnabled = signal<Record<number, { areaCode: boolean; number: boolean }>>({});
 	searchTerm = signal('');
 	selectedClient = signal<ClientResponse | null>(null);
-	selectedTab = signal<'general' | 'address' | 'contacts'>('general');
+	selectedTab = signal<'general' | 'address' | 'contacts' | 'manageClient'>('general');
 	expandedAddresses = signal<Set<number>>(new Set());
 	clientAddresses = signal<Address[]>([]);
 
@@ -59,7 +59,7 @@ export class FindClientComponent {
 		});
 	}
 
-	setTab(tab: 'general' | 'address' | 'contacts') {
+	setTab(tab: 'general' | 'address' | 'contacts' | 'manageClient') {
 		this.selectedTab.set(tab);
 	}
 
@@ -119,6 +119,16 @@ export class FindClientComponent {
 			newExpanded.add(i > index ? i - 1 : i);
 		});
 		this.expandedAddresses.set(newExpanded);
+	}
+
+	isAreaCodeEnabled(index: number): boolean {
+		const phoneState = this.phoneFieldsEnabled()?.[index];
+		return phoneState ? phoneState.areaCode : false;
+	}
+
+	isNumberEnabled(index: number): boolean {
+		const phoneState = this.phoneFieldsEnabled()?.[index];
+		return phoneState ? phoneState.number : false;
 	}
 
 	addPhone() {

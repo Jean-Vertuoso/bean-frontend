@@ -1,4 +1,4 @@
-import { Component, forwardRef, Input } from '@angular/core';
+import { Component, forwardRef, Input, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
@@ -28,15 +28,21 @@ export class FormInputComponent implements ControlValueAccessor {
 	@Input() growfour: boolean = false;
 	@Input() name: string = '';
 	@Input() value: any = '';
+	@Input() disabled: boolean = false;
+	@Output() valueChange = new EventEmitter<any>();
+  	@ViewChild('inputEl', { static: true }) inputEl!: ElementRef<HTMLInputElement>;
 
 	innerValue: any = '';
-	disabled: boolean = false;
 
 	onChange: (value: any) => void = () => {};
 	onTouched: () => void = () => {};
 
 	writeValue(value: any): void {
-		this.innerValue = value;
+		if (typeof value === 'number' && this.type === 'number') {
+			this.innerValue = value.toFixed(2);
+		} else {
+			this.innerValue = value;
+		}
 	}
 
 	registerOnChange(fn: any): void {
@@ -53,8 +59,21 @@ export class FormInputComponent implements ControlValueAccessor {
 
 	onInputChange(event: Event): void {
 		const target = event.target as HTMLInputElement;
-		this.innerValue = target.value;
-		this.onChange(this.innerValue);
+		const val = target.value;
+
+		this.innerValue = val;
+
+		let emitValue: any = val;
+
+		if (this.type === 'number') {
+			const normalized = val.replace(',', '.');
+
+			const parsed = parseFloat(normalized);
+			emitValue = isNaN(parsed) ? null : parsed;
+		}
+
+		this.onChange(emitValue);
+		this.valueChange.emit(emitValue);
 		this.onTouched();
 	}
 
@@ -62,10 +81,15 @@ export class FormInputComponent implements ControlValueAccessor {
 		const target = event.target as HTMLInputElement;
 		this.innerValue = target.value;
 		this.onChange(this.innerValue);
+		this.valueChange.emit(this.innerValue);
 		this.onTouched();
 	}
 
 	isChecked(): boolean {
 		return this.innerValue === this.value;
+	}
+
+	focus() {
+		this.inputEl.nativeElement.focus();
 	}
 }

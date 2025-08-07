@@ -16,9 +16,7 @@
 			(blur)="onTouched()"
 			[disabled]="disabled"
 		/>
-	}
-
-	@if (type === 'radio') {
+	} @else {
 		<label class="label-radio">{{ labelRadio }}</label>
 		<input
 			type="radio"

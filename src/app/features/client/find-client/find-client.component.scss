@@ -405,45 +405,45 @@
             }
         }
     }
+}
 
-    .add-address-container {
-        display: flex;
-        justify-content: center;
-        margin-top: 20px;
+.add-address-container, .add-phone-container {
+	display: flex;
+	justify-content: center;
+	margin-top: 20px;
 
-        .add-address-button {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-			background-color: color.scale(variables.$primary-color, $lightness: 5%);
-            border: none;
-            color: whitesmoke;
-            padding: 12px 24px;
-            border-radius: 4px;
-            font-weight: 400;
-			font-size: 16px;
-            cursor: pointer;
-            transition: all 0.2s ease;
+	.add-address-button, .add-phone-button {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		background-color: color.scale(variables.$primary-color, $lightness: 5%);
+		border: none;
+		color: whitesmoke;
+		padding: 12px 24px;
+		border-radius: 4px;
+		font-weight: 400;
+		font-size: 16px;
+		cursor: pointer;
+		transition: all 0.2s ease;
 
-			img{
-				height: 25px;
-				width: 25px;
-			}
+		img{
+			height: 25px;
+			width: 25px;
+		}
 
-            &:hover {
-                background-color: variables.$primary-color;
-            }
+		&:hover {
+			background-color: variables.$primary-color;
+		}
 
-            &:active {
-                transform: translateY(1px);
-            }
+		&:active {
+			transform: translateY(1px);
+		}
 
-            .add-icon {
-                font-size: 18px;
-                font-weight: bold;
-            }
-        }
-    }
+		.add-icon {
+			font-size: 18px;
+			font-weight: bold;
+		}
+	}
 }
 
 @keyframes slideDown {
