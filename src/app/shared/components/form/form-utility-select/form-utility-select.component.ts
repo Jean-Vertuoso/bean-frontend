@@ -1,4 +1,4 @@
-import { Component,	ElementRef,	EventEmitter, forwardRef, HostListener, Input, Output } from '@angular/core';
+import { Component,	ElementRef,	EventEmitter, forwardRef, HostListener, Input, Output, ViewChild } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
@@ -22,12 +22,10 @@ export class FormUtilitySelectComponent implements ControlValueAccessor {
 	@Input() placeholder: string = 'Selecione';
 	@Input() options: { label: string; value: string | number }[] = [];
 	@Input() multiple: boolean = false;
-
 	@Output() modelChange = new EventEmitter<any>();
-
+  	@ViewChild('inputEl', { static: true }) inputEl!: ElementRef<HTMLInputElement>;
 	value: any = this.multiple ? [] : null;
 	open = false;
-
 	onChange = (_: any) => {};
 	onTouched = () => {};
 
@@ -90,4 +88,16 @@ export class FormUtilitySelectComponent implements ControlValueAccessor {
 			this.onTouched();
 		}
 	}
+
+	onKeyDown(event: KeyboardEvent) {
+		if (event.key === 'Enter' || event.key === ' ') {
+			event.preventDefault();
+			this.toggle();
+		}
+	}
+
+	focus() {
+		this.elementRef.nativeElement.querySelector('.selected')?.focus();
+	}
+
 }

@@ -23,4 +23,9 @@ export class ClientService {
 	update(id: number, client: ClientUpdateRequest): Observable<any> {
 		return this.http.put(`${this.apiUrl}/${id}`, client);
 	}
+
+	findByNameContaining(name: string): Observable<ClientResponse[]> {
+		return this.http.get<ClientResponse[]>(`${this.apiUrl}?name=${encodeURIComponent(name)}`);
+	}
+
 }
