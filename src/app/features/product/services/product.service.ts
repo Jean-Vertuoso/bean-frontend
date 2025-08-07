@@ -21,4 +21,8 @@ export class ProductService {
 	getAll(): Observable<ProductResponse[]> {
 		return this.http.get<ProductResponse[]>(this.apiUrl);
 	}
+
+	findByNameContainingIgnoreCaseOrBarCode(nameOrBarCode: string): Observable<ProductResponse[]> {
+		return this.http.get<ProductResponse[]>(`${this.apiUrl}?nameOrBarCode=${encodeURIComponent(nameOrBarCode)}`);
+	}
 }

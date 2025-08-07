@@ -1,1 +1,158 @@
-<p>new-sale works!</p>
+<app-default-form-layout
+	title="Nova venda"
+>
+<div class="new-sale-container">
+    <div class="client-selector">
+		<div class="client-search-wrapper"
+			(focusin)="focusedInput.set('client')"
+			(focusout)="onInputBlur()"
+			tabindex="0">
+				<app-form-input
+					labelText="Cliente"
+					name="client"
+					placeholder="Digite para procurar"
+					[(ngModel)]="clientSearchModelValue"
+					[disabled]="!!selectedClient()"
+					[growfour]="true"
+				/>
+
+				@if (clientSearch() && !selectedClientId() && clientResults().length > 0 && focusedInput() === 'client') {
+					<ul class="autocomplete-list">
+						@for (client of clientResults(); track client.id) {
+							<li (mousedown)="selectClient(client)">
+								{{ client.id }} - {{ client.name }}
+							</li>
+						}
+					</ul>
+				}
+
+				@if (selectedClientId()) {
+					<app-form-utility-button
+						class="cancelBtn"
+						src="svg/cancel-icon.svg"
+						(click)="clearSelectedClient()">
+					</app-form-utility-button>
+				}
+		</div>
+	</div>
+
+	<div class="table-wrapper">
+		<div class="order-items-table">
+			<table>
+				<thead>
+					<tr>
+						<th>Produto</th>
+						<th>Quantidade</th>
+						<th>Preço Unitário</th>
+						<th>Subtotal</th>
+						<th>Ações</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr *ngFor="let item of orderItems(); let i = index">
+						<td class="td-form-input">
+							<div class="input-wrapper"
+								(focusin)="focusedInput.set(i)"
+								(focusout)="onInputBlur()"
+								tabindex="0">
+								<app-form-input
+									[(ngModel)]="productInputs()[i]"
+									(input)="onProductInputChange($any($event.target).value, i)"
+									placeholder="Digite para procurar"
+									[disabled]="orderItems()[i].locked"
+									[growfour]="true"
+									name="productName{{i}}"
+									type="text"
+								/>
+
+								@if (productResults().length > 0 && productSearchIndex() === i && focusedInput() === i) {
+									<ul class="autocomplete-list">
+										@for (product of productResults(); track $index) {
+										<li (mousedown)="selectProduct(i, product)">
+											{{ product.name }} - R$ {{ product.price.toFixed(2) }}
+										</li>
+										}
+									</ul>
+								}
+							</div>
+						</td>
+						<td>
+							<app-form-input
+								[(ngModel)]="item.quantity"
+								type="number"
+								name="quantity{{i}}"
+								[growone]="true"
+								(ngModelChange)="updateSubtotal(i)"
+							/>
+						</td>
+						<td>
+							<app-form-input
+								[(ngModel)]="item.unitPrice"
+								type="number"
+								name="unitPrice{{i}}"
+								[growtwo]="true"
+								(ngModelChange)="updateSubtotal(i)"
+							/>
+						</td>
+						<td class="subtotal-cell">
+							R$ {{ item.subtotal?.toFixed(2) }}
+						</td>
+						<td class="actions-cell">
+							<app-form-utility-button
+								class="cancelBtn"
+								src="svg/cancel-icon.svg"
+								(click)="removeItem(i)"
+							/>
+
+						</td>
+					</tr>
+				</tbody>
+			</table>
+
+			<div class="add-item-container">
+				<button
+					type="button"
+					class="add-item-button"
+					(click)="addItem()"
+				>
+					<img src="svg/add-to-basket-icon.svg" alt="">
+					Adicionar item
+				</button>
+			</div>
+
+		</div>
+
+		<div class="sidebar">
+			<h3>Pagamento</h3>
+
+			<div class="select-wrapper">
+				<app-form-utility-select
+					label="Forma de pagamento"
+					[options]="paymentMethods"
+					[(ngModel)]="paymentMethodValue"
+				></app-form-utility-select>
+
+				<app-form-input
+					labelText="Quantidade de parcelas"
+					matInput
+					type="number"
+					min="1"
+					[value]="installments()"
+					(input)="installments.set($any($event.target).valueAsNumber)"
+					[disabled]="paymentMethod() !== 'credit'">
+				</app-form-input>
+
+				<app-form-input
+					labelText="Desconto"
+					matInput
+					type="number">
+				</app-form-input>
+			</div>
+		</div>
+	</div>
+
+    <div class="footer">
+        <strong>Total: R${{ total.toFixed(2) }}</strong>
+    </div>
+</div>
+</app-default-form-layout>

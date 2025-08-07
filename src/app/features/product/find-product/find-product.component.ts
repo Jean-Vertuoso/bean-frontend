@@ -15,7 +15,6 @@ export class FindProductComponent {
 	selectedProduct: ProductResponse | null = null;
 	searchTerm = signal<string>('');
 
-	// Computed para filtrar produtos conforme searchTerm
 	filteredProducts = computed(() => {
 		const term = this.searchTerm().toLowerCase();
 		if (!term) return this.products();

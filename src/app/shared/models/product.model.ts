@@ -13,5 +13,9 @@ export interface ProductResponse {
 	name: string;
 	brand: string;
 	price: number;
-	imgUrl?: string | null;
+	barCode: string;
+	imgUrl: string | null;
+	packagingType: string;
+	unitOfMeasure: string;
+	categoryIds: number[];
 }
