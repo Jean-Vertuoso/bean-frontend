@@ -7,15 +7,13 @@ section{
 	color: variables.$primary-color;
 	display: flex;
 	flex-direction: column;
-	padding: 70px;
 	gap: 40px;
 	height: 100%;
-	margin-top: 80px;
 
-	h2{
+	.form-title {
 		font-size: 40px;
 		color: variables.$primary-color;
-		font-variant: small-caps;
+		text-align: center;
 	}
 }
 
