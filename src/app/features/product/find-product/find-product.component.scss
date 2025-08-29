@@ -2,25 +2,25 @@
 @use "sass:color";
 
 .product-list-container {
-	max-width: 1200px;
+	display: flex;
+	flex-direction: column;
 	width: 1200px;
-	margin: 120px auto 0;
-	padding: 0 30px;
+	gap: 10px;
+	height: 60vh;
 
 	h2 {
+		text-align: center;
 		font-weight: 700;
 		margin-bottom: 20px;
-		font-size: 40px;
+		font-size: 36px;
 		color: variables.$primary-color;
-		font-variant: small-caps;
 	}
 }
 
 .product-cards {
 	display: flex;
 	flex-wrap: wrap;
-	gap: 20px;
-	justify-content: flex-start;
+	justify-content: space-between;
 }
 
 .product-card {
@@ -28,7 +28,8 @@
 	box-shadow: 0px 2px 5px rgba(127, 153, 133, 0.3);
 	border-radius: 8px;
 	padding: 20px 25px;
-	width: 350px;
+	width: 380px;
+	height: 350px;
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
@@ -60,14 +61,13 @@
 	margin-bottom: 12px;
 
 	.product-brand {
-		font-weight: 600;
+		font-weight: bold;
 		font-size: 0.9rem;
 		color: color.scale(variables.$primary-color, $lightness: -20%);
 		margin-bottom: 5px;
 	}
 
 	.product-name {
-		font-weight: 700;
 		font-size: 1.1rem;
 		color: color.scale(variables.$primary-color, $lightness: -40%);
 	}
@@ -80,18 +80,16 @@
 }
 
 .product-price {
-	font-weight: 700;
-	font-size: 1.2rem;
+	font-size: 28px;
 	color: #02614b;
 }
 
 .details-button, .add-sale-button {
 	background-color: #02614b;
-	width: 100px;
-	height: 49px;
+	width: 120px;
+	height: 55px;
 	border: none;
 	color: white;
-	font-weight: 600;
 	font-size: 16px;
 	padding: 6px 12px;
 	border-radius: 4px;
@@ -152,7 +150,9 @@
 }
 
 .search-bar {
+	display: flex;
 	width: 100%;
+	justify-content: center;
 
 	input{
 		width: 100%;

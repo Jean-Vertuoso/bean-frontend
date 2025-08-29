@@ -147,12 +147,30 @@
 					matInput
 					type="number">
 				</app-form-input>
+
+				<app-form-input
+					class="totalValue"
+					labelText="Valor total"
+					[(ngModel)]="total"
+					[growtwo]="true"
+					[disabled]="true"
+				>
+				{{ 'textoAqui' }}
+				</app-form-input>
+
+				<!--
+				<app-primary-input
+				formControlName="email"
+				inputName="email"
+				type="email"
+				label="Email"
+				placeholder="email@example.com"
+				title="Email">
+				<img class="icon-email" draggable="false" src="svg/email-icon.svg" alt="Ícone de email"/>
+				</app-primary-input>
+			-->
 			</div>
 		</div>
 	</div>
-
-    <div class="footer">
-        <strong>Total: R${{ total.toFixed(2) }}</strong>
-    </div>
 </div>
 </app-default-form-layout>

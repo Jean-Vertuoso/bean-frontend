@@ -4,7 +4,7 @@ import { NavbarButtonComponent } from "../buttons/navbar-button/navbar-button.co
 import { DropdownItemComponent } from "../dropdown/dropdown-item/dropdown-item.component";
 import { AuthService } from '../../../core/services/auth.service';
 import { TokenService } from '../../../core/services/token.service';
-import { ToastrService } from 'ngx-toastr';
+import { ToastService } from '../../../core/services/toast.service';
 
 @Component({
 	selector: 'app-navbar',
@@ -25,7 +25,7 @@ export class NavbarComponent {
 		private authService: AuthService,
 		private tokenService: TokenService,
 		private router: Router,
-		private toastr: ToastrService
+		private toast: ToastService
 	) {}
 
 	toggleDropdown(id: string) {
@@ -41,12 +41,12 @@ export class NavbarComponent {
 			next: () => {
 				this.tokenService.clearAuth();
 				this.router.navigate(['/login']);
-				this.toastr.success('Logout realizado com sucesso!');
+				this.toast.info('Você saiu do sistema.');
 			},
 			error: () => {
 				this.tokenService.clearAuth();
 				this.router.navigate(['/login']);
-				this.toastr.info('Sessão expirada. Faça login novamente.');
+				this.toast.warning('Sessão expirada. Faça login novamente.');
 			}
 		});
 	}

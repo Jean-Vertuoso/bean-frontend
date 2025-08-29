@@ -1,9 +1,9 @@
 import { PrimaryInputComponent } from '../../../shared/components/form/primary-input/primary-input.component';
-import { Component, inject } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../../core/services/auth.service';
-import { ToastrService } from 'ngx-toastr';
+import { ToastService } from '../../../core/services/toast.service';
 import { Router } from '@angular/router';
 import { DefaultLoginLayoutComponent } from "../../../shared/components/layout/default-login-layout/default-login-layout.component";
 
@@ -22,9 +22,15 @@ import { DefaultLoginLayoutComponent } from "../../../shared/components/layout/d
 
 export class LoginComponent {
 
-	private authService = inject(AuthService);
-	private toastr = inject(ToastrService);
-	private router = inject(Router);
+	private authService: AuthService;
+	private toast : ToastService;
+	private router : Router;
+
+	constructor(authService : AuthService, toast : ToastService, router : Router){
+		this.authService = authService;
+		this.toast = toast;
+		this.router = router;
+	}
 
 	loginForm = new FormGroup({
 		email: new FormControl<string>('', {
@@ -39,7 +45,7 @@ export class LoginComponent {
 
 	submit() {
 		if (this.loginForm.invalid) {
-			this.toastr.error('Preencha todos os campos corretamente.');
+			this.toast.error('Preencha todos os campos corretamente.');
 			return;
 		}
 
@@ -47,11 +53,11 @@ export class LoginComponent {
 
 		this.authService.login(email, password).subscribe({
 			next: () => {
-				this.toastr.success('Login efetuado com sucesso!');
+				this.toast.success('Login efetuado com sucesso!');
 				this.router.navigate(['/home']);
 			},
 			error: () => {
-				this.toastr.error('Email ou senha inválidos!');
+				this.toast.error('Email ou senha inválidos!');
 				this.loginForm.reset();
 			}
 		});
