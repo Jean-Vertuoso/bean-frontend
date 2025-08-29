@@ -1,33 +1,85 @@
 @use 'ngx-toastr/toastr';
 @use '@angular/material' as mat;
+@use 'styles/variables.scss';
+@use "sass:color";
+
+@font-face {
+	font-family: 'MMC Regular';
+	src: url('assets/fonts/MMC\ Regular.ttf') format('truetype');
+	font-weight: normal;
+	font-style: normal;
+}
 
 html {
-  @include mat.theme((
-    color: (
-      theme-type: light,
-      primary: mat.$azure-palette,
-      tertiary: mat.$blue-palette,
-    ),
-    typography: Roboto,
-    density: 0,
-  ));
-}/* You can add global styles to this file, and also import other style files */
+	@include mat.theme((
+		color: (
+			theme-type: light,
+			primary: mat.$azure-palette,
+			tertiary: mat.$blue-palette,
+		),
+		typography: Roboto,
+		density: 0,
+	));
+}
 
 *{
 	margin: 0;
 	padding: 0;
 	box-sizing: border-box;
-	font-family: 'Roboto', Helvetica, sans-serif;
+	font-family: 'MMC Regular', sans-serif;
 }
 
-html,body{
+html, body {
 	height: 100%;
 	background-color: whitesmoke;
 }
 
-input, button{
+input, button {
 	letter-spacing: 0.8px;
 }
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html, body {
+	height: 100%;
+}
+
+body {
+	margin: 0;
+}
+
+.swal2-confirm, .swal2-cancel {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: flex-end;
+	gap: 8px;
+	border: none;
+	color: whitesmoke;
+	padding: 12px 24px;
+	border-radius: 4px;
+	font-weight: 400;
+	font-size: 18px;
+	cursor: pointer;
+	transition: all 0.2s ease;
+	width: 150px;
+	height: 50px;
+
+	&:active {
+		transform: translateY(1px);
+	}
+}
+
+.swal2-confirm {
+	background-color: color.scale(variables.$primary-color, $lightness: 5%);
+}
+
+.swal2-confirm:hover {
+	background-color: variables.$primary-color;
+}
+
+.swal2-cancel {
+	background-color: #ef4444 !important;
+}
+
+.swal2-cancel:hover {
+	background-color: #dc2626 !important;
+}

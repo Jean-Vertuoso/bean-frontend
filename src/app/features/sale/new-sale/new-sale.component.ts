@@ -99,11 +99,11 @@ export class NewSaleComponent {
 		});
 	}
 
-	public get total(): number {
-		return this.orderItems().reduce(
+	public get total(): string {
+		return `R$ ${this.orderItems().reduce(
 			(sum, item) => sum + (item.unitPrice ?? 0) * item.quantity,
 			0
-		);
+		).toFixed(2)}`;
 	}
 
 	public get clientSearchModelValue(): string {

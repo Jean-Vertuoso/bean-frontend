@@ -12,8 +12,8 @@ export class ClientService {
 	private readonly http = inject(HttpClient);
 	private readonly apiUrl = 'http://localhost:8080/clients';
 
-	register(client: ClientRequest): Observable<any> {
-		return this.http.post<any>(this.apiUrl, client);
+	register(client: ClientRequest): Observable<object> {
+		return this.http.post<object>(this.apiUrl, client);
 	}
 
 	getAll(): Observable<ClientResponse[]> {
