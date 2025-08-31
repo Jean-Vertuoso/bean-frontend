@@ -1,4 +1,4 @@
-import { Component, forwardRef, Input, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
+import { Component,	forwardRef,	Input, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
@@ -29,8 +29,9 @@ export class FormInputComponent implements ControlValueAccessor {
 	@Input() name: string = '';
 	@Input() value: any = '';
 	@Input() disabled: boolean = false;
+	@Input() autocomplete: string = 'new-password';
 	@Output() valueChange = new EventEmitter<any>();
-  	@ViewChild('inputEl', { static: true }) inputEl!: ElementRef<HTMLInputElement>;
+	@ViewChild('inputEl', { static: true }) inputEl!: ElementRef<HTMLInputElement>;
 
 	innerValue: any = '';
 
@@ -67,7 +68,6 @@ export class FormInputComponent implements ControlValueAccessor {
 
 		if (this.type === 'number') {
 			const normalized = val.replace(',', '.');
-
 			const parsed = parseFloat(normalized);
 			emitValue = isNaN(parsed) ? null : parsed;
 		}
@@ -89,7 +89,18 @@ export class FormInputComponent implements ControlValueAccessor {
 		return this.innerValue === this.value;
 	}
 
-	focus() {
-		this.inputEl.nativeElement.focus();
+	onFocus(): void {
+		if (this.inputEl) {
+			this.inputEl.nativeElement.select();
+		}
+	}
+
+	focus(): void {
+		if (this.inputEl) {
+			this.inputEl.nativeElement.blur();
+			setTimeout(() => {
+				this.inputEl.nativeElement.focus();
+			}, 0);
+		}
 	}
 }

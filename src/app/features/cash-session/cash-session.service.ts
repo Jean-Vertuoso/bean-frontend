@@ -4,23 +4,27 @@ import { map, Observable } from 'rxjs';
 import { CashSessionResponse } from '../../shared/models/cash-session.model';
 
 @Injectable({
-	providedIn: 'root'
+    providedIn: 'root'
 })
-
 export class CashSessionService {
+    private readonly http = inject(HttpClient);
+    private readonly apiUrl = 'http://localhost:8080/cashSessions';
 
-	private readonly http = inject(HttpClient);
-	private readonly apiUrl = 'http://localhost:8080/cashSessions';
+    constructor() { }
 
-	constructor() { }
+    // Abre nova sessão de caixa
+    openCashSession(): Observable<CashSessionResponse> {
+        return this.http.post<CashSessionResponse>(`${this.apiUrl}/new`, null).pipe(
+            map(dto => ({
+                ...dto,
+                openingTimestamp: new Date(dto.openingTimestamp),
+                closingTimestamp: dto.closingTimestamp ? new Date(dto.closingTimestamp) : undefined
+            }))
+        );
+    }
 
-	openCashSession(): Observable<CashSessionResponse> {
-		return this.http.post<CashSessionResponse>(`${this.apiUrl}/new`, null).pipe(
-			map(dto => ({
-				...dto,
-				openingTimestamp: new Date(dto.openingTimestamp),
-				closingTimestamp: dto.closingTimestamp ? new Date(dto.closingTimestamp) : undefined
-			}))
-		);
-	}
+    // Retorna a sessão aberta atual (temporário: tenta criar se não existir)
+    getOrCreateCashSession(): Observable<CashSessionResponse> {
+        return this.openCashSession();
+    }
 }

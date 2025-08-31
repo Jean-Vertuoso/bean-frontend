@@ -1,7 +1,9 @@
 export interface OrderItem {
-	name: string;
-	quantity: number;
-	unitPrice: number;
-	subtotal: number;
-	locked: boolean;
+    productId?: number;
+    name: string;
+    quantity: number;
+    unitPrice: number;
+    subtotal: number;
+    discount?: number;
+    locked: boolean;
 }

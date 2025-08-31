@@ -8,13 +8,16 @@
 	@if (type !== 'radio') {
 		<label class="label-text">{{ labelText }}</label>
 		<input
+			#inputEl
 			[type]="type"
 			[name]="name"
 			[placeholder]="placeholder"
 			[value]="innerValue"
 			(input)="onInputChange($event)"
+			(focus)="onFocus()"
 			(blur)="onTouched()"
 			[disabled]="disabled"
+			[attr.autocomplete]="autocomplete"
 		/>
 	} @else {
 		<label class="label-radio">{{ labelRadio }}</label>

@@ -1,4 +1,5 @@
 export interface ProductRequest {
+	id?: number;
 	name: string;
 	brand: string;
 	price: number;
@@ -10,6 +11,7 @@ export interface ProductRequest {
 }
 
 export interface ProductResponse {
+	id: number;
 	name: string;
 	brand: string;
 	price: number;

@@ -1,5 +1,6 @@
 <app-default-form-layout
 	title="Nova venda"
+	(submitClicked)="onSubmit()"
 >
 <div class="new-sale-container">
     <div class="client-selector">
@@ -14,9 +15,10 @@
 					[(ngModel)]="clientSearchModelValue"
 					[disabled]="!!selectedClient()"
 					[growfour]="true"
+					autocomplete="off"
 				/>
 
-				@if (clientSearch() && !selectedClientId() && clientResults().length > 0 && focusedInput() === 'client') {
+				@if (clientSearchModel() && !selectedClientId() && clientResults().length > 0 && focusedInput() === 'client') {
 					<ul class="autocomplete-list">
 						@for (client of clientResults(); track client.id) {
 							<li (mousedown)="selectClient(client)">
@@ -63,6 +65,7 @@
 									[growfour]="true"
 									name="productName{{i}}"
 									type="text"
+									autocomplete="off"
 								/>
 
 								@if (productResults().length > 0 && productSearchIndex() === i && focusedInput() === i) {
@@ -144,8 +147,11 @@
 
 				<app-form-input
 					labelText="Desconto"
-					matInput
-					type="number">
+					[(ngModel)]="totalDiscount"
+					type="number"
+        			name="totalDiscount"
+        			(ngModelChange)="totalDiscount.set($event)"
+					matInput>
 				</app-form-input>
 
 				<app-form-input
@@ -157,18 +163,6 @@
 				>
 				{{ 'textoAqui' }}
 				</app-form-input>
-
-				<!--
-				<app-primary-input
-				formControlName="email"
-				inputName="email"
-				type="email"
-				label="Email"
-				placeholder="email@example.com"
-				title="Email">
-				<img class="icon-email" draggable="false" src="svg/email-icon.svg" alt="Ícone de email"/>
-				</app-primary-input>
-			-->
 			</div>
 		</div>
 	</div>
