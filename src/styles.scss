@@ -2,6 +2,7 @@
 @use '@angular/material' as mat;
 @use 'styles/variables.scss';
 @use "sass:color";
+@use "ngx-spinner/animations/ball-spin-clockwise.css";
 
 @font-face {
 	font-family: 'MMC Regular';
@@ -29,21 +30,14 @@ html {
 	font-family: 'MMC Regular', sans-serif;
 }
 
-html, body {
+html, body, app-root {
 	height: 100%;
+	min-height: 100%;
 	background-color: whitesmoke;
 }
 
 input, button {
 	letter-spacing: 0.8px;
-}
-
-html, body {
-	height: 100%;
-}
-
-body {
-	margin: 0;
 }
 
 .swal2-confirm, .swal2-cancel {
@@ -82,4 +76,8 @@ body {
 
 .swal2-cancel:hover {
 	background-color: #dc2626 !important;
+}
+
+.swal2-popup-custom {
+    z-index: 99999 !important;
 }

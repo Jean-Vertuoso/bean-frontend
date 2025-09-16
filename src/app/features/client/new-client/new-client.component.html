@@ -1,5 +1,5 @@
 <app-default-form-layout
-	title="Cadastro de cliente"
+	[title]="'Cadastro de cliente'"
 	(submitClicked)="onSubmit()"
 >
 	<form class="form-wrapper" [formGroup]="form" autocomplete="off">
@@ -23,21 +23,21 @@
 					name="docType"
 					type="radio"
 					labelRadio="CPF"
-					value="CPF"
+					[radioValue]="'CPF'"
 					formControlName="documentType"
 				/>
 				<app-form-input
 					name="docType"
 					type="radio"
 					labelRadio="RG"
-					value="RG"
+					[radioValue]="'RG'"
 					formControlName="documentType"
 				/>
 				<app-form-input
 					name="docType"
 					type="radio"
 					labelRadio="CNPJ"
-					value="CNPJ"
+					[radioValue]="'CNPJ'"
 					formControlName="documentType"
 				/>
 			</div>

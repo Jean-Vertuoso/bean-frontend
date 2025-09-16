@@ -2,6 +2,7 @@ import { CashSessionService } from './../features/cash-session/cash-session.serv
 import { Component } from '@angular/core';
 import { ToastService } from '../core/services/toast.service';
 import Swal from 'sweetalert2';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-home',
@@ -20,10 +21,17 @@ export class HomeComponent {
 	}
 
 	public openCashSession() {
-		this.cashSessionService.openCashSession().subscribe({
-			next: () => Swal.fire('Sucesso!', 'Sessão de caixa aberta.', 'success'),
-			error: () => Swal.fire('Erro!', 'Não foi possível abrir a sessão.', 'error')
-		});
+		this.cashSessionService.hasActiveCashSession().pipe(take(1)).subscribe(exists => {
+			if (exists) {
+				Swal.fire('Alerta!', '<strong>Já existe uma sessão ativa.</strong><br>Use a sessão existente ou a finalize para iniciar uma nova sessão.','warning');
+			} else {
+				this.cashSessionService.openCashSession().subscribe({
+					next: () => Swal.fire('Sucesso!', 'Sessão de caixa aberta.', 'success'),
+					error: () => Swal.fire('Erro!', 'Não foi possível abrir a sessão.', 'error')
+				});
+			}
+
+		})
 	}
 
 	public confirmOpenSession() {
@@ -40,5 +48,4 @@ export class HomeComponent {
 			}
 		});
 	}
-
 }

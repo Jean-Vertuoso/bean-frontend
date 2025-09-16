@@ -1,12 +1,12 @@
 <app-default-form-layout
-	title="Cadastro de produto"
+	[title]="'Cadastro de produto'"
 	(submitClicked)="onSubmit()"
 >
 	<form class="form-wrapper" [formGroup]="form">
 
 		<app-form-input
 			labelText="Código de barras"
-			type="number"
+			type="text"
 			[growthree]="true"
 			formControlName="barCode"
 		/>

@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { map, Observable } from 'rxjs';
+import { map, Observable, throwError, catchError, of } from 'rxjs';
 import { CashSessionResponse } from '../../shared/models/cash-session.model';
 
 @Injectable({
@@ -12,19 +12,24 @@ export class CashSessionService {
 
     constructor() { }
 
-    // Abre nova sessão de caixa
     openCashSession(): Observable<CashSessionResponse> {
-        return this.http.post<CashSessionResponse>(`${this.apiUrl}/new`, null).pipe(
-            map(dto => ({
-                ...dto,
-                openingTimestamp: new Date(dto.openingTimestamp),
-                closingTimestamp: dto.closingTimestamp ? new Date(dto.closingTimestamp) : undefined
-            }))
-        );
+		return this.http.post<CashSessionResponse>(`${this.apiUrl}/new`, null).pipe(
+			map(dto => ({
+				...dto,
+				openingTimestamp: new Date(dto.openingTimestamp),
+				closingTimestamp: dto.closingTimestamp ? new Date(dto.closingTimestamp) : undefined
+			}))
+		);
     }
 
-    // Retorna a sessão aberta atual (temporário: tenta criar se não existir)
-    getOrCreateCashSession(): Observable<CashSessionResponse> {
-        return this.openCashSession();
-    }
+	getActiveCashSession(): Observable<number> {
+		return this.http.get<number>(`${this.apiUrl}/active`);
+	}
+
+	hasActiveCashSession(): Observable<boolean> {
+		return this.getActiveCashSession().pipe (
+			map(session => !! session),
+			catchError(() => of(false))
+		);
+	}
 }

@@ -1,39 +1,81 @@
 @use "../../../../styles/variables.scss" as variables;
 
-form{
+form {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 	gap: 24px;
 }
 
-.icon-email{
+.icon-email {
 	width: 25px;
 	margin-top: 2px;
 	user-select: none;
 }
 
-.icon-password{
+.icon-password {
 	width: 24px;
 	margin-top: -4px;
 	margin-left: 1px;
 	user-select: none;
 }
 
-span{
+.forgot-password-wrapper {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: baseline;
+	width: 100%;
+}
+
+span {
 	font-size: 16px;
 	font-weight: 600;
 	text-decoration: none;
 	color: variables.$primary-color;
 	cursor: pointer;
 	text-align: end;
-			text-shadow: 0px 7px 10px rgba(172, 157, 190, 0.486);
+	text-shadow: 0px 7px 10px rgba(172, 157, 190, 0.486);
 }
 
-span:hover{
+span:hover {
 	text-decoration: underline;
 	text-decoration-color: variables.$primary-color;
 	text-decoration-thickness: 2px;
 	text-underline-offset: 5px;
 	font-size: 16.2px;
+}
+
+.login-error {
+	color: #ff4d4f;
+	font-weight: 600;
+	text-align: center;
+	border: 1px solid #ff4d4f;
+	border-radius: 4px;
+	background-color: rgba(255, 77, 79, 0.1);
+	box-shadow: 0 3px 8px rgba(255, 77, 79, 0.2);
+	padding: 5px;
+	width: 250px;
+	height: 32px;
+	margin-top: -12px;
+	margin-bottom: -44px;
+	opacity: 0;
+	transform: translateY(-10px);
+	visibility: hidden;
+	transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease;
+}
+
+.login-error.show {
+	opacity: 1;
+	visibility: visible;
+	transform: translateY(0);
+}
+
+/* Texto do spinner */
+.loading-text {
+	margin-top: 14px;
+	font-size: 16px;
+	font-weight: 600;
+	color: variables.$primary-color;
+	text-align: center;
 }

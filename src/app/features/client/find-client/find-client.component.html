@@ -12,7 +12,7 @@
 
     <ul class="client-list">
         @for (client of filteredClients(); track client.id) {
-            <li class="client-item">
+            <li class="client-item" (click)="editClient(client)">
                 <div class="client-info">
                     <div class="client-id">{{ client.id }}</div>
 
@@ -21,7 +21,7 @@
                         <div class="client-email">{{ client.email }}</div>
                     </div>
                 </div>
-                <button class="edit-button" (click)="editClient(client)">Editar</button>
+                <!--<button class="edit-button" ">Editar</button>-->
             </li>
         }
     </ul>
@@ -146,7 +146,6 @@
 								[(ngModel)]="selectedClient()!.birthDate"
 								name="birthDate"
 								type="date"
-								[growtwo]="true"
 							/>
 						</div>
                     }

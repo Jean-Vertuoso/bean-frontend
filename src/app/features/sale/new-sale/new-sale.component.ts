@@ -1,10 +1,11 @@
-import { Component, inject, signal, WritableSignal, effect } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, inject, signal, WritableSignal, effect, computed, ViewChild, ElementRef } from '@angular/core';
+import { CommonModule, CurrencyPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatTableModule } from '@angular/material/table';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 
+import { CashSessionService } from './../../cash-session/cash-session.service';
 import { ProductService } from './../../product/services/product.service';
 import { ClientService } from '../../client/services/client.service';
 import { SaleService } from '../services/sale.service';
@@ -16,9 +17,11 @@ import { FormUtilitySelectComponent } from "../../../shared/components/form/form
 
 import { ProductResponse } from '../../../shared/models/product.model';
 import { ClientResponse } from '../../../shared/models/client.model';
-import { OrderItem } from '../../../shared/models/order-item.model';
+import { SaleItem } from '../../../shared/models/sale-item.model';
 import { SaleRequest, SaleResponse } from '../../../shared/models/sale.model';
 import Swal from 'sweetalert2';
+import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
+import { take } from 'rxjs';
 
 @Component({
     selector: 'app-new-sale',
@@ -34,14 +37,15 @@ import Swal from 'sweetalert2';
         FormUtilityButtonComponent,
         FormUtilitySelectComponent
     ],
+	providers: [
+		CurrencyPipe,
+		provideNgxMask()
+	],
     templateUrl: './new-sale.component.html',
     styleUrls: ['./new-sale.component.scss'],
 })
 export class NewSaleComponent {
-    private clientService = inject(ClientService);
-    private productService = inject(ProductService);
-    private saleService = inject(SaleService);
-
+	@ViewChild('tableContainer') tableContainer!: ElementRef<HTMLDivElement>;
     public cashSessionId = signal<number | null>(null);
     public clientSearchModel: WritableSignal<string> = signal('');
     public clientResults = signal<ClientResponse[]>([]);
@@ -52,10 +56,11 @@ export class NewSaleComponent {
     public productResults = signal<ProductResponse[]>([]);
     public selectedClient = signal<ClientResponse | null>(null);
     public selectedClientId = signal<number | null>(null);
-    public totalDiscount = signal(0);
+    public totalDiscount = signal<number>(0);
+	public cashReceived = signal<number>(0);
 
-    public orderItems = signal<OrderItem[]>([
-        { productId: undefined, name: '', quantity: 1, unitPrice: 0, subtotal: 0, locked: false }
+    public orderItems = signal<SaleItem[]>([
+        { productId: undefined, name: '', quantity: 1, price: 0, discount: 0, subtotal: 0, locked: false }
     ]);
 
     public paymentMethod = signal('cash');
@@ -67,8 +72,19 @@ export class NewSaleComponent {
         { label: 'Cartão de débito', value: 'debit' },
     ];
 
-    constructor() {
-		this.cashSessionId.set(2);
+    constructor(
+		private cashSessionService: CashSessionService,
+		private clientService: ClientService,
+		private productService: ProductService,
+		private saleService: SaleService,
+		private currencyPipe: CurrencyPipe
+	) {
+		this.cashSessionService = cashSessionService;
+		this.clientService = clientService;
+		this.productService = productService;
+		this.saleService = saleService;
+		this.currencyPipe = currencyPipe;
+
         effect(() => {
             const search = this.clientSearchModel();
             this.productInputs.set(this.orderItems().map(item => item.name));
@@ -97,13 +113,43 @@ export class NewSaleComponent {
         });
     }
 
-    public get total(): string {
-        const totalValue = this.orderItems().reduce(
-            (sum, item) => sum + (item.unitPrice ?? 0) * item.quantity,
-            0
-        );
-        return `R$ ${totalValue.toFixed(2)}`;
-    }
+	ngOnInit(): void {
+		this.cashSessionService.getActiveCashSession().pipe(take(1)).subscribe(sessionId => {
+			if(sessionId != null) {
+				this.cashSessionId.set(sessionId);
+			}
+		});
+
+	}
+
+	totalRaw = computed(() =>
+		this.orderItems().reduce((sum, item) => sum + (item.subtotal ?? 0), 0)
+	);
+
+	totalWithDiscount = computed(() => {
+		const discountStr = this.totalDiscount()?.toString() ?? '0';
+		const discount = parseMaskValue(discountStr);
+
+		const result = this.totalRaw() - discount;
+		return result < 0 ? 0 : result;
+	});
+
+	formattedTotal = computed(() =>
+		this.currencyPipe.transform(
+			this.totalWithDiscount(),
+			'BRL',
+			'symbol',
+			'1.2-2')
+			??
+			'R$ 0,00'
+	);
+
+	public get calculateChange(): string {
+		const received = parseMaskValue(this.cashReceived()?.toString() ?? '0');
+		const total = this.totalWithDiscount();
+		const change = received > total ? received - total : 0;
+		return `R$ ${change.toFixed(2)}`;
+	}
 
     public get clientSearchModelValue(): string {
         return this.clientSearchModel();
@@ -123,10 +169,22 @@ export class NewSaleComponent {
         setTimeout(() => this.focusedInput.set(null), 0);
     }
 
+    public onClientInput(raw: string): void {
+        this.selectedClient.set(null);
+        this.selectedClientId.set(null);
+        this.clientSearchModel.set(raw ?? '');
+    }
+
     public selectClient(client: ClientResponse): void {
         this.selectedClient.set(client);
         this.selectedClientId.set(client.id);
         this.clientSearchModel.set(`${client.id} - ${client.name}`);
+        this.clientResults.set([]);
+        setTimeout(() => {
+            this.focusedInput.set(0);
+            this.productSearchIndex.set(0);
+            this.productSearchModel.set(this.productInputs()[0] ?? '');
+        }, 0);
     }
 
     public clearSelectedClient(): void {
@@ -138,10 +196,16 @@ export class NewSaleComponent {
 
     public addItem(): void {
         this.orderItems.update(items => {
-            const newItems = [...items, { productId: undefined, name: '', quantity: 1, unitPrice: 0, subtotal: 0, locked: false }];
+            const newItems = [...items, { productId: undefined, name: '', quantity: 1, price: 0, discount: 0, subtotal: 0, locked: false }];
             this.productInputs.set(newItems.map(item => item.name));
             return newItems;
         });
+
+		setTimeout(() => {
+			if (this.tableContainer) {
+				this.tableContainer.nativeElement.scrollTop = this.tableContainer.nativeElement.scrollHeight;
+			}
+		}, 0);
     }
 
     public removeItem(index: number): void {
@@ -150,55 +214,74 @@ export class NewSaleComponent {
     }
 
     public updateSubtotal(index: number): void {
-        const items = this.orderItems();
-        const item = items[index];
-        const discount = item.discount ?? 0;
-        item.subtotal = (item.quantity * item.unitPrice) - discount;
-        this.orderItems.set([...items]);
-    }
+		const items = this.orderItems();
+		const item = items[index];
+
+		const quantity = item.quantity ?? 0;
+
+		const unitPrice = typeof item.price === 'string'
+			? parseMaskValue(item.price)
+			: item.price ?? 0;
+
+		const discount = typeof item.discount === 'string'
+			? parseMaskValue(item.discount)
+			: item.discount ?? 0;
+
+		let subtotal = (quantity * unitPrice) - discount;
+		item.subtotal = subtotal > 0 ? subtotal : 0;
+
+		this.orderItems.set([...items]);
+	}
 
     public selectProduct(index: number, product: ProductResponse): void {
-		this.orderItems.update(items => {
-			const quantity = items[index].quantity ?? 1;
-			items[index] = {
-				...items[index],
-				productId: product.id,
-				name: product.name,
-				unitPrice: product.price,
-				subtotal: quantity * product.price,
-				locked: true
-			};
-			return [...items];
-		});
+        this.orderItems.update(items => {
+            const quantity = items[index].quantity ?? 1;
+            items[index] = {
+                ...items[index],
+                productId: product.id,
+                name: product.name,
+                price: product.price,
+                subtotal: quantity * product.price,
+                locked: true
+            };
+            return [...items];
+        });
 
-		this.productInputs.update(inputs => {
-			inputs[index] = product.name;
-			return [...inputs];
-		});
+        this.productInputs.update(inputs => {
+            inputs[index] = product.name;
+            return [...inputs];
+        });
 
-		this.productResults.set([]);
-		this.productSearchIndex.set(null);
-	}
+        this.productResults.set([]);
+        this.productSearchIndex.set(null);
+        this.focusedInput.set(null);
+    }
 
     public onProductInputChange(value: string, index: number): void {
-		this.productSearchIndex.set(index);
-		this.productSearchModel.set(value.trim());
+        this.productSearchIndex.set(index);
+        this.productSearchModel.set(value.trim());
 
-		if (!value.trim()) {
-			this.productResults.set([]);
-			return;
-		}
+        if (!value.trim()) {
+            this.productResults.set([]);
+            return;
+        }
 
-		this.productService.findByNameContainingIgnoreCaseOrBarCode(value.trim())
-			.subscribe(results => {
-				const exactMatch = results.length === 1 && results[0].barCode === value.trim();
-				if (exactMatch) {
-					this.selectProduct(index, results[0]);
-				} else {
-					this.productResults.set(results);
-				}
-			});
-	}
+        this.productService.findByNameContainingIgnoreCaseOrBarCode(value.trim())
+            .subscribe(results => {
+                const exactMatch = results.length === 1 && results[0].barCode === value.trim();
+                if (exactMatch) {
+                    this.selectProduct(index, results[0]);
+                } else {
+                    this.productResults.set(results);
+                }
+            });
+    }
+
+    public onProductFocus(index: number): void {
+        this.focusedInput.set(index);
+        this.productSearchIndex.set(index);
+        this.productSearchModel.set(this.productInputs()[index] ?? '');
+    }
 
     public buildSaleRequest(): SaleRequest {
         if (!this.selectedClientId()) throw new Error('Selecione um cliente');
@@ -206,12 +289,12 @@ export class NewSaleComponent {
 
         const paymentMap: Record<string, number> = { cash: 1, credit: 2, debit: 3 };
         const items = this.orderItems()
-						.filter(item => item.locked && item.productId != null)
-						.map(item => ({
-							productId: item.productId!,
-							quantity: item.quantity,
-							discount: item.discount ?? 0
-						}));
+                        .filter(item => item.locked && item.productId != null)
+                        .map(item => ({
+                            productId: item.productId!,
+                            quantity: item.quantity,
+                            discount: item.discount ?? 0
+                        }));
 
         if (items.length === 0) throw new Error('Adicione pelo menos um produto antes de salvar a venda');
 
@@ -225,57 +308,71 @@ export class NewSaleComponent {
     }
 
     public onSubmit(): void {
-		try {
-			const request = this.buildSaleRequest();
+        try {
+            const request = this.buildSaleRequest();
+			console.log(request);
 
-			Swal.fire({
-				title: 'Finalizar venda?',
-				text: 'Deseja realmente finalizar a venda?',
-				icon: 'question',
-				showCancelButton: true,
-				confirmButtonText: 'Sim',
-				cancelButtonText: 'Não'
-			}).then((result) => {
-				if (result.isConfirmed) {
-					this.saleService.saveSale(request).subscribe({
-						next: (res: SaleResponse) => {
-							Swal.fire({
-								title: 'Venda finalizada!',
-								text: 'A venda foi concluída com sucesso.',
-								icon: 'success',
-								confirmButtonText: 'Ok'
-							});
-							this.resetForm();
-						},
-						error: (err: unknown) => {
-							console.error('Erro ao salvar venda:', err);
-							Swal.fire({
-								title: 'Erro',
-								text: 'Não foi possível finalizar a venda.',
-								icon: 'error',
-								confirmButtonText: 'Ok'
-							});
-						}
-					});
+
+            Swal.fire({
+                title: 'Finalizar venda?',
+                text: 'Deseja realmente finalizar a venda?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Sim',
+                cancelButtonText: 'Não',
+				customClass: {
+					popup: 'swal2-popup-custom'
 				}
-			});
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    this.saleService.saveSale(request).subscribe({
+                        next: (res: SaleResponse) => {
+                            Swal.fire({
+                                title: 'Venda finalizada!',
+                                text: 'A venda foi concluída com sucesso.',
+                                icon: 'success',
+                                confirmButtonText: 'Ok',
+								customClass: {
+									popup: 'swal2-popup-custom'
+								}
+                            });
+                            this.resetForm();
+                        },
+                        error: (err: unknown) => {
+                            console.error('Erro ao salvar venda:', err);
+                            Swal.fire({
+                                title: 'Erro',
+                                text: 'Não foi possível finalizar a venda.',
+                                icon: 'error',
+                                confirmButtonText: 'Ok',
+								customClass: {
+									popup: 'swal2-popup-custom'
+								}
+                            });
+                        }
+                    });
+                }
+            });
 
-		} catch (e) {
-			Swal.fire({
-				title: 'Erro',
-				text: e instanceof Error ? e.message : 'Erro inesperado ao montar a venda.',
-				icon: 'error',
-				confirmButtonText: 'Ok'
-			});
-		}
-	}
+        } catch (e) {
+            Swal.fire({
+                title: 'Erro',
+                text: e instanceof Error ? e.message : 'Erro inesperado ao montar a venda.',
+                icon: 'error',
+                confirmButtonText: 'Ok',
+				customClass: {
+					popup: 'swal2-popup-custom'
+				}
+            });
+        }
+    }
 
     private resetForm(): void {
         this.selectedClient.set(null);
         this.selectedClientId.set(null);
         this.clientSearchModel.set('');
         this.clientResults.set([]);
-        this.orderItems.set([{ productId: undefined, name: '', quantity: 1, unitPrice: 0, subtotal: 0, discount: 0, locked: false }]);
+        this.orderItems.set([{ productId: undefined, name: '', quantity: 1, price: 0, subtotal: 0, discount: 0, locked: false }]);
         this.productInputs.set(['']);
         this.productResults.set([]);
         this.productSearchModel.set('');
@@ -283,5 +380,14 @@ export class NewSaleComponent {
         this.paymentMethod.set('cash');
         this.installments.set(1);
         this.totalDiscount.set(0);
+		this.cashReceived.set(0);
     }
+
+}
+
+function parseMaskValue(value: string): number {
+    if (!value) return 0;
+    const normalized = value.replace(/\./g, '').replace(',', '.');
+    const parsed = parseFloat(normalized);
+    return isNaN(parsed) ? 0 : parsed;
 }
