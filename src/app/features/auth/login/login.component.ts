@@ -1,11 +1,12 @@
 import { PrimaryInputComponent } from '../../../shared/components/form/primary-input/primary-input.component';
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../../core/services/auth.service';
-import { ToastService } from '../../../core/services/toast.service';
 import { Router } from '@angular/router';
 import { DefaultLoginLayoutComponent } from "../../../shared/components/layout/default-login-layout/default-login-layout.component";
+import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
+import Swal from 'sweetalert2';
 
 @Component({
 	selector: 'app-login',
@@ -14,23 +15,13 @@ import { DefaultLoginLayoutComponent } from "../../../shared/components/layout/d
 		CommonModule,
 		ReactiveFormsModule,
 		DefaultLoginLayoutComponent,
-		PrimaryInputComponent
+		PrimaryInputComponent,
+		NgxSpinnerModule
 	],
 	templateUrl: './login.component.html',
 	styleUrls: ['./login.component.scss']
 })
-
 export class LoginComponent {
-
-	private authService: AuthService;
-	private toast : ToastService;
-	private router : Router;
-
-	constructor(authService : AuthService, toast : ToastService, router : Router){
-		this.authService = authService;
-		this.toast = toast;
-		this.router = router;
-	}
 
 	loginForm = new FormGroup({
 		email: new FormControl<string>('', {
@@ -43,23 +34,52 @@ export class LoginComponent {
 		})
 	});
 
+	loginError = signal('');
+
+	constructor(
+		private authService: AuthService,
+		private router: Router,
+		private spinner: NgxSpinnerService
+	) {}
+
 	submit() {
 		if (this.loginForm.invalid) {
-			this.toast.error('Preencha todos os campos corretamente.');
+			this.showError('Preencha todos os campos corretamente.');
 			return;
 		}
 
 		const { email, password } = this.loginForm.getRawValue();
+		this.loginError.set('');
+		this.spinner.show();
 
 		this.authService.login(email, password).subscribe({
 			next: () => {
-				this.toast.success('Login efetuado com sucesso!');
-				this.router.navigate(['/home']);
+				setTimeout(() => {
+					this.spinner.hide();
+					Swal.fire({
+						icon: 'success',
+						title: 'Dados validados!',
+						text: 'Acessando o sistema...',
+						showConfirmButton: false,
+						timer: 1200
+					}).then(() => {
+						this.router.navigate(['/home']);
+					});
+				}, 800);
 			},
 			error: () => {
-				this.toast.error('Email ou senha inválidos!');
-				this.loginForm.reset();
+				this.spinner.hide();
+				this.showError('Email ou senha inválidos!');
 			}
 		});
+	}
+
+	private showError(message: string) {
+		this.loginError.set(message);
+		setTimeout(() => this.loginError.set(''), 3000);
+	}
+
+	onInputChange() {
+		this.loginError.set('');
 	}
 }

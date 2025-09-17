@@ -6,6 +6,7 @@ import { DefaultFormLayoutComponent } from '../../../shared/components/layout/de
 import { ClientRequest } from '../../../shared/models/client.model';
 import { FormUtilitySelectComponent } from "../../../shared/components/form/form-utility-select/form-utility-select.component";
 import { ClientService } from '../services/client.service';
+import Swal from 'sweetalert2';
 
 @Component({
 	standalone: true,
@@ -20,7 +21,6 @@ import { ClientService } from '../services/client.service';
 	templateUrl: './new-client.component.html',
 	styleUrl: './new-client.component.scss',
 })
-
 export class NewClientComponent {
 
 	ufs = [
@@ -77,8 +77,16 @@ export class NewClientComponent {
 	constructor(private clientService: ClientService) {}
 
 	onSubmit() {
+		console.log('Formulário válido?', this.form.valid);
+		console.log('Valores do formulário:', this.form.value);
+
 		if (this.form.invalid) {
-			alert('Preencha todos os campos obrigatórios!');
+			Swal.fire({
+				icon: 'warning',
+				title: 'Campos obrigatórios',
+				text: 'Preencha todos os campos obrigatórios!',
+				confirmButtonColor: '#27ae60'
+			});
 			return;
 		}
 
@@ -113,13 +121,23 @@ export class NewClientComponent {
 		};
 
 		this.clientService.register(client).subscribe({
-			next: (res) => {
-				alert('Cliente cadastrado com sucesso!');
+			next: () => {
+				Swal.fire({
+					icon: 'success',
+					title: 'Cliente cadastrado!',
+					text: 'O cliente foi registrado com sucesso.',
+					confirmButtonColor: '#27ae60'
+				});
 				this.form.reset();
 			},
 			error: (err) => {
 				console.error('Erro ao cadastrar cliente:', err);
-				alert('Erro ao cadastrar cliente');
+				Swal.fire({
+					icon: 'error',
+					title: 'Erro',
+					text: 'Não foi possível cadastrar o cliente.',
+					confirmButtonColor: '#e74c3c'
+				});
 			},
 		});
 	}

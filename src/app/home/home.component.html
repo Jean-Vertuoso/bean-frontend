@@ -14,9 +14,44 @@
 		<button
 			type="button"
 			class="close-cashsession-button"
+			(click)="openModal()"
 		>
 			<img src="svg/padlock-unlocked-icon.svg" alt="">
 			Finalizar Sessão de Caixa
 		</button>
 	</div>
+
+	@if (isOpen()) {
+	<div class="modal-backdrop">
+			<div class="modal-content">
+				<h3>Fechar Sessão de Caixa</h3>
+				<button class="modal-close" (click)="closeModal()">X</button>
+
+				<form #closeForm="ngForm">
+					<div class="closing-amount-input">
+						<app-form-input
+							labelText="Valor de Fechamento"
+							[(ngModel)]="closingAmount"
+							name="closingAmount"
+							required
+						/>
+					</div>
+
+					<div class="edit-input">
+						<app-form-input
+							labelText="Observações"
+							[(ngModel)]="notes"
+							name="notes"
+							type="textarea"
+						/>
+					</div>
+
+					<div class="modal-actions">
+						<button type="submit" (click)="confirmCloseSession()">Confirmar</button>
+					</div>
+				</form>
+			</div>
+	</div>
+	}
+
 </section>
