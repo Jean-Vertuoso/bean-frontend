@@ -1,9 +1,9 @@
 export interface SaleItem {
-    productId?: number;
+    productId: number | undefined;
     name: string;
     quantity: number;
     price: number;
-    discount?: number;
+    discount: number;
     subtotal: number;
     locked: boolean;
 }

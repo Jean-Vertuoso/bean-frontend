@@ -1,12 +1,17 @@
 import { CashSessionService } from './../features/cash-session/cash-session.service';
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { ToastService } from '../core/services/toast.service';
 import Swal from 'sweetalert2';
 import { take } from 'rxjs';
+import { NgForm, FormsModule } from '@angular/forms';
+import { FormInputComponent } from "../shared/components/form/form-input/form-input.component";
 
 @Component({
   selector: 'app-home',
-  imports: [],
+  imports: [
+	FormInputComponent,
+	FormsModule
+],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })
@@ -14,6 +19,10 @@ export class HomeComponent {
 
 	private cashSessionService : CashSessionService;
 	private toast : ToastService;
+	public closingAmount = signal<number>(0);
+    public notes = signal<string>('');
+
+    isOpen = signal(false);
 
 	constructor(cashSessionService : CashSessionService, toast : ToastService){
 		this.cashSessionService = cashSessionService;
@@ -34,7 +43,25 @@ export class HomeComponent {
 		})
 	}
 
-	public confirmOpenSession() {
+	public closeCashSession() {
+            this.cashSessionService.closeCashSession({
+                closingAmount: this.closingAmount(),
+                notes: this.notes()
+            }).subscribe({
+				next: () => Swal.fire('Sucesso!', 'Sessão de caixa fechada.', 'success'),
+				error: () => Swal.fire('Erro!', 'Não foi possível fechar a sessão.', 'error')
+			});
+	}
+
+	openModal() {
+        this.isOpen.set(true);
+    }
+
+    closeModal() {
+        this.isOpen.set(false);
+    }
+
+	protected confirmOpenSession() {
 		Swal.fire({
 			title: 'Abrir sessão de caixa?',
 			text: 'Deseja realmente abrir a sessão de caixa?',
@@ -45,6 +72,22 @@ export class HomeComponent {
 		}).then((result) => {
 			if(result.isConfirmed) {
 				this.openCashSession();
+			}
+		});
+	}
+
+	protected confirmCloseSession() {
+		Swal.fire({
+			title: 'Fechar sessão de caixa?',
+			text: 'Deseja realmente fechar a sessão de caixa?',
+			icon: 'question',
+			showCancelButton: true,
+			confirmButtonText: 'Sim',
+			cancelButtonText: 'Cancelar'
+		}).then((result) => {
+			if(result.isConfirmed) {
+				this.closeCashSession();
+				this.closeModal();
 			}
 		});
 	}

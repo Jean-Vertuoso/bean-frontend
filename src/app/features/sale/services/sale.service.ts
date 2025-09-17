@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, catchError, throwError } from 'rxjs';
-import { SaleRequest, SaleResponse } from '../../../shared/models/sale.model';
+import { Sale } from '../../../shared/models/sale.model';
 
 @Injectable({
 	providedIn: 'root'
@@ -10,19 +10,19 @@ export class SaleService {
 	private readonly http = inject(HttpClient);
 	private readonly baseUrl = 'http://localhost:8080/sales';
 
-	public saveSale(sale: SaleRequest): Observable<SaleResponse> {
-		return this.http.post<SaleResponse>(this.baseUrl, sale).pipe(
+	public saveSale(sale: Sale): Observable<Sale> {
+		return this.http.post<Sale>(this.baseUrl, sale).pipe(
 			catchError(this.handleError)
 		);
 	}
 
-	public findAllSales(): Observable<SaleResponse[]> {
-		return this.http.get<SaleResponse[]>(this.baseUrl).pipe(
+	public findAllSales(): Observable<Sale[]> {
+		return this.http.get<Sale[]>(this.baseUrl).pipe(
 			catchError(this.handleError)
 		);
 	}
-	public findSaleById(id: number): Observable<SaleResponse> {
-		return this.http.get<SaleResponse>(`${this.baseUrl}/${id}`).pipe(
+	public findSaleById(id: number): Observable<Sale> {
+		return this.http.get<Sale>(`${this.baseUrl}/${id}`).pipe(
 			catchError(this.handleError)
 		);
 	}

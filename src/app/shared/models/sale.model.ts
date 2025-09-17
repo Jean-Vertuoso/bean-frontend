@@ -1,34 +1,11 @@
-export interface SaleItemRequest {
-    productId: number;
-    quantity: number;
-    discount?: number;
-}
+import { SaleItem } from "./sale-item.model";
 
-export interface SaleRequest {
+export interface Sale {
     clientId: number;
     cashSessionId: number;
     paymentMethod: number;
-    totalDiscount?: number;
-    items: SaleItemRequest[];
-}
-
-export interface SaleItemResponse {
-    productId: number;
-    name: string;
-    quantity: number;
-    price: number;
-    discount: number;
-    subtotal: number;
-}
-
-export interface SaleResponse {
-    id: number;
-    saleTimestamp: string;
     totalDiscount: number;
-    totalValue: number;
-    paymentMethod: 'CASH' | 'CREDIT' | 'DEBIT';
-    clientId: number;
-    cashSessionId: number;
-    userId: number;
-    items: SaleItemResponse[];
+	amountReceived: number;
+	change: number;
+    items: SaleItem[];
 }

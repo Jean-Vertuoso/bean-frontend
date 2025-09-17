@@ -18,10 +18,11 @@ import { FormUtilitySelectComponent } from "../../../shared/components/form/form
 import { ProductResponse } from '../../../shared/models/product.model';
 import { ClientResponse } from '../../../shared/models/client.model';
 import { SaleItem } from '../../../shared/models/sale-item.model';
-import { SaleRequest, SaleResponse } from '../../../shared/models/sale.model';
 import Swal from 'sweetalert2';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 import { take } from 'rxjs';
+import { Sale } from '../../../shared/models/sale.model';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-new-sale',
@@ -57,9 +58,11 @@ export class NewSaleComponent {
     public selectedClient = signal<ClientResponse | null>(null);
     public selectedClientId = signal<number | null>(null);
     public totalDiscount = signal<number>(0);
+    public amountReceived = signal<number>(0);
+    public change = signal<number>(0);
 	public cashReceived = signal<number>(0);
 
-    public orderItems = signal<SaleItem[]>([
+    public saleItems = signal<SaleItem[]>([
         { productId: undefined, name: '', quantity: 1, price: 0, discount: 0, subtotal: 0, locked: false }
     ]);
 
@@ -67,9 +70,13 @@ export class NewSaleComponent {
     public installments = signal(1);
 
     public paymentMethods = [
-        { label: 'Dinheiro', value: 'cash' },
-        { label: 'Cartão de crédito', value: 'credit' },
-        { label: 'Cartão de débito', value: 'debit' },
+        { label: 'Boleto Bancário', value: 'BANK_SLIP' },
+        { label: 'Dinheiro', value: 'CASH' },
+        { label: 'Cheque', value: 'CHECK' },
+        { label: 'Cartão de Crédito', value: 'CREDIT_CARD' },
+        { label: 'Cartão de Débito', value: 'DEBIT_CARD' },
+        { label: 'Crediário', value: 'INSTALLMENT_PLAN' },
+        { label: 'Pix', value: 'PIX' },
     ];
 
     constructor(
@@ -77,7 +84,8 @@ export class NewSaleComponent {
 		private clientService: ClientService,
 		private productService: ProductService,
 		private saleService: SaleService,
-		private currencyPipe: CurrencyPipe
+		private currencyPipe: CurrencyPipe,
+		private router: Router
 	) {
 		this.cashSessionService = cashSessionService;
 		this.clientService = clientService;
@@ -87,7 +95,7 @@ export class NewSaleComponent {
 
         effect(() => {
             const search = this.clientSearchModel();
-            this.productInputs.set(this.orderItems().map(item => item.name));
+            this.productInputs.set(this.saleItems().map(item => item.name));
 
             if (this.selectedClient()) return;
 
@@ -114,21 +122,15 @@ export class NewSaleComponent {
     }
 
 	ngOnInit(): void {
-		this.cashSessionService.getActiveCashSession().pipe(take(1)).subscribe(sessionId => {
-			if(sessionId != null) {
-				this.cashSessionId.set(sessionId);
-			}
-		});
-
+		this.checkActiveCashSession();
 	}
 
 	totalRaw = computed(() =>
-		this.orderItems().reduce((sum, item) => sum + (item.subtotal ?? 0), 0)
+		this.saleItems().reduce((sum, item) => sum + (item.subtotal ?? 0), 0)
 	);
 
 	totalWithDiscount = computed(() => {
-		const discountStr = this.totalDiscount()?.toString() ?? '0';
-		const discount = parseMaskValue(discountStr);
+		const discount = this.totalDiscount();
 
 		const result = this.totalRaw() - discount;
 		return result < 0 ? 0 : result;
@@ -144,11 +146,10 @@ export class NewSaleComponent {
 			'R$ 0,00'
 	);
 
-	public get calculateChange(): string {
-		const received = parseMaskValue(this.cashReceived()?.toString() ?? '0');
+	public get calculateChange(): number {
+		const received = this.cashReceived();
 		const total = this.totalWithDiscount();
-		const change = received > total ? received - total : 0;
-		return `R$ ${change.toFixed(2)}`;
+		return received > total ? received - total : 0;
 	}
 
     public get clientSearchModelValue(): string {
@@ -195,7 +196,7 @@ export class NewSaleComponent {
     }
 
     public addItem(): void {
-        this.orderItems.update(items => {
+        this.saleItems.update(items => {
             const newItems = [...items, { productId: undefined, name: '', quantity: 1, price: 0, discount: 0, subtotal: 0, locked: false }];
             this.productInputs.set(newItems.map(item => item.name));
             return newItems;
@@ -209,32 +210,28 @@ export class NewSaleComponent {
     }
 
     public removeItem(index: number): void {
-        this.orderItems.update(items => items.filter((_, i) => i !== index));
+        this.saleItems.update(items => items.filter((_, i) => i !== index));
         this.productInputs.update(inputs => inputs.filter((_, i) => i !== index));
     }
 
     public updateSubtotal(index: number): void {
-		const items = this.orderItems();
+		const items = this.saleItems();
 		const item = items[index];
 
 		const quantity = item.quantity ?? 0;
 
-		const unitPrice = typeof item.price === 'string'
-			? parseMaskValue(item.price)
-			: item.price ?? 0;
+		const unitPrice = item.price;
 
-		const discount = typeof item.discount === 'string'
-			? parseMaskValue(item.discount)
-			: item.discount ?? 0;
+		const discount = item.discount ? item.discount : 0;
 
 		let subtotal = (quantity * unitPrice) - discount;
 		item.subtotal = subtotal > 0 ? subtotal : 0;
 
-		this.orderItems.set([...items]);
+		this.saleItems.set([...items]);
 	}
 
     public selectProduct(index: number, product: ProductResponse): void {
-        this.orderItems.update(items => {
+        this.saleItems.update(items => {
             const quantity = items[index].quantity ?? 1;
             items[index] = {
                 ...items[index],
@@ -283,17 +280,29 @@ export class NewSaleComponent {
         this.productSearchModel.set(this.productInputs()[index] ?? '');
     }
 
-    public buildSaleRequest(): SaleRequest {
+    public buildSaleRequest(): Sale {
         if (!this.selectedClientId()) throw new Error('Selecione um cliente');
         if (!this.cashSessionId()) throw new Error('Sessão de caixa não iniciada');
 
-        const paymentMap: Record<string, number> = { cash: 1, credit: 2, debit: 3 };
-        const items = this.orderItems()
+        const paymentMap: Record<string, number> = {
+			BANK_SLIP: 0,
+			CASH: 1,
+			CHECK: 2,
+			CREDIT_CARD: 3,
+			DEBIT_CARD: 4,
+			INSTALLMENT_PLAN: 5,
+			PIX: 6
+		};
+        const items = this.saleItems()
                         .filter(item => item.locked && item.productId != null)
                         .map(item => ({
-                            productId: item.productId!,
+                            productId: item.productId,
+							name: item.name,
                             quantity: item.quantity,
-                            discount: item.discount ?? 0
+							price: item.price,
+                            discount: item.discount ?? 0,
+							subtotal: item.subtotal,
+							locked: item.locked
                         }));
 
         if (items.length === 0) throw new Error('Adicione pelo menos um produto antes de salvar a venda');
@@ -303,6 +312,8 @@ export class NewSaleComponent {
             cashSessionId: this.cashSessionId()!,
             paymentMethod: paymentMap[this.paymentMethod()]!,
             totalDiscount: this.totalDiscount(),
+			amountReceived: this.cashReceived(),
+			change: this.calculateChange,
             items
         };
     }
@@ -310,9 +321,6 @@ export class NewSaleComponent {
     public onSubmit(): void {
         try {
             const request = this.buildSaleRequest();
-			console.log(request);
-
-
             Swal.fire({
                 title: 'Finalizar venda?',
                 text: 'Deseja realmente finalizar a venda?',
@@ -326,7 +334,7 @@ export class NewSaleComponent {
             }).then((result) => {
                 if (result.isConfirmed) {
                     this.saleService.saveSale(request).subscribe({
-                        next: (res: SaleResponse) => {
+                        next: (res: Sale) => {
                             Swal.fire({
                                 title: 'Venda finalizada!',
                                 text: 'A venda foi concluída com sucesso.',
@@ -367,12 +375,51 @@ export class NewSaleComponent {
         }
     }
 
+	private checkActiveCashSession() {
+		this.cashSessionService.getActiveCashSession().subscribe({
+			next: (session) => {
+				if (!session) {
+					this.showNoSessionAlert();
+				} else {
+					this.cashSessionId = signal<number>(session);
+				}
+			},
+			error: (err) => {
+				if (err.status === 404) {
+					this.showNoSessionAlert();
+				} else {
+					Swal.fire({
+						icon: 'error',
+						title: 'Erro',
+						text: 'Não foi possível verificar a Sessão de Caixa.',
+						confirmButtonText: 'OK',
+						allowOutsideClick: false
+					}).then(() => {
+						this.router.navigate(['/home']);
+					});
+				}
+			}
+		});
+	}
+
+	private showNoSessionAlert() {
+		Swal.fire({
+			icon: 'warning',
+			title: 'Sessão de Caixa necessária',
+			html: 'Para criar uma nova venda, você precisa de uma Sessão de Caixa ativa. <br>Por favor <strong>inicie uma nova Sessão de Caixa.</strong>',
+			confirmButtonText: 'OK',
+			allowOutsideClick: false
+		}).then(() => {
+			this.router.navigate(['/home']);
+		});
+	}
+
     private resetForm(): void {
         this.selectedClient.set(null);
         this.selectedClientId.set(null);
         this.clientSearchModel.set('');
         this.clientResults.set([]);
-        this.orderItems.set([{ productId: undefined, name: '', quantity: 1, price: 0, subtotal: 0, discount: 0, locked: false }]);
+        this.saleItems.set([{ productId: undefined, name: '', quantity: 1, price: 0, subtotal: 0, discount: 0, locked: false }]);
         this.productInputs.set(['']);
         this.productResults.set([]);
         this.productSearchModel.set('');
@@ -383,11 +430,4 @@ export class NewSaleComponent {
 		this.cashReceived.set(0);
     }
 
-}
-
-function parseMaskValue(value: string): number {
-    if (!value) return 0;
-    const normalized = value.replace(/\./g, '').replace(',', '.');
-    const parsed = parseFloat(normalized);
-    return isNaN(parsed) ? 0 : parsed;
 }

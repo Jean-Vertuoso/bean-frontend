@@ -55,7 +55,7 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr *ngFor="let item of orderItems(); let i = index">
+							<tr *ngFor="let item of saleItems(); let i = index">
 								<td class="num-item-td">{{ i+1 }}</td>
 								<td class="td-form-input">
 									<div class="input-wrapper"
@@ -66,7 +66,7 @@
 											(focusEvent)="onProductFocus(i)"
 											(blurEvent)="onInputBlur()"
 											placeholder="Digite para procurar"
-											[disabled]="orderItems()[i].locked"
+											[disabled]="saleItems()[i].locked"
 											[growfour]="true"
 											name="productName{{i}}"
 											type="text"
@@ -87,10 +87,6 @@
 								<td>
 									<app-form-input
 										[(ngModel)]="item.quantity"
-										[mask]="'separator.2'"
-										[thousandSeparator]="'.'"
-										[decimalMarker]="','"
-										name="quantity{{i}}"
 										[growtwo]="true"
 										(ngModelChange)="updateSubtotal(i)"
 									/>
@@ -98,9 +94,6 @@
 								<td class="price-td">
 									<app-form-input
 										[(ngModel)]="item.price"
-										[mask]="'separator.2'"
-										[thousandSeparator]="'.'"
-										[decimalMarker]="','"
 										name="unitPrice{{i}}"
 										[growtwo]="true"
 										(ngModelChange)="updateSubtotal(i)"
@@ -110,10 +103,7 @@
 								<td>
 									<app-form-input
 										[(ngModel)]="item.discount"
-										[mask]="'separator.2'"
-										[thousandSeparator]="'.'"
-										[decimalMarker]="','"
-										name="discount{{i}}"
+										placeholder="0,00"
 										[growtwo]="true"
 										(ngModelChange)="updateSubtotal(i)"
 									></app-form-input>
@@ -165,16 +155,13 @@
 					min="1"
 					[value]="installments()"
 					(inputEvent)="installments.set($any($event).target?.valueAsNumber ?? installments())"
-					[disabled]="paymentMethod() !== 'credit'">
+					[disabled]="paymentMethod() !== 'CREDIT_CARD'">
 				</app-form-input>
 
 				<div class="discount-totalValue-wrapper">
 					<app-form-input
 						labelText="Desconto total"
 						[(ngModel)]="totalDiscount"
-						[mask]="'separator.2'"
-						[thousandSeparator]="'.'"
-						[decimalMarker]="','"
 						name="totalDiscount"
 						placeholder="0,00"
 						(ngModelChange)="totalDiscount()">
@@ -189,25 +176,22 @@
 				</div>
 
 				<div class="amounts-wrapper">
-					<div class="amount-field-wrapper" [class.hidden]="paymentMethod() !== 'cash'">
+					<div class="amount-field-wrapper" [class.hidden]="paymentMethod() !== 'CASH'">
 						<app-form-input
 							labelText="Recebido"
 							name="cashReceived"
 							[(ngModel)]="cashReceived"
-							[mask]="'separator.2'"
-							[thousandSeparator]="'.'"
-							[decimalMarker]="','"
 							placeholder="0,00"
-							[hidden]="paymentMethod() !== 'cash'"
+							[hidden]="paymentMethod() !== 'CASH'"
 							>
 						</app-form-input>
 					</div>
 
-					<div class="amount-field-wrapper" [class.hidden]="paymentMethod() !== 'cash'">
+					<div class="amount-field-wrapper" [class.hidden]="paymentMethod() !== 'CASH'">
 						<app-form-input
 							labelText="Troco"
 							[(ngModel)]="calculateChange"
-							[hidden]="paymentMethod() !== 'cash'"
+							[hidden]="paymentMethod() !== 'CASH'"
 							[disabled]="true">
 						</app-form-input>
 					</div>
