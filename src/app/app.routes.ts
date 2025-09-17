@@ -15,7 +15,7 @@ export const routes: Routes = [
 	{
 		path: '',
     	component: MainLayoutComponent,
-		//canActivate: [AuthGuardService],
+		canActivate: [AuthGuardService],
 		children: [
 			{ path: 'home', component: HomeComponent},
 			{ path: 'client/new', component: NewClientComponent},

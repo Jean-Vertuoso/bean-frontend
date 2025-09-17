@@ -7,6 +7,7 @@ import { FormInputComponent } from '../../../shared/components/form/form-input/f
 import { ProductService } from '../services/product.service';
 import { FormUtilityButtonComponent } from "../../../shared/components/form/form-utility-button/form-utility-button.component";
 import { FormUtilitySelectComponent } from "../../../shared/components/form/form-utility-select/form-utility-select.component";
+import Swal from 'sweetalert2';
 
 @Component({
 	standalone: true,
@@ -98,7 +99,12 @@ export class NewProductComponent {
 		const maxSizeInBytes = maxSizeInMB * 1024 * 1024;
 
 		if (file.size > maxSizeInBytes) {
-			alert(`A imagem deve ter no máximo ${maxSizeInMB}MB.`);
+			Swal.fire({
+				icon: 'warning',
+				title: 'Imagem muito grande',
+				text: `A imagem deve ter no máximo ${maxSizeInMB}MB.`,
+				confirmButtonColor: '#27ae60'
+			});
 			input.value = '';
 			return;
 		}
@@ -124,7 +130,6 @@ export class NewProductComponent {
 		}
 	}
 
-
 	onImageUrlChange() {
 		const url = this.getControl('imgUrl').value;
 		if (url && (url.startsWith('http://') || url.startsWith('https://'))) {
@@ -135,19 +140,20 @@ export class NewProductComponent {
 		}
 	}
 
-
 	onSubmit() {
 		if (this.form.invalid) {
-			alert('Preencha todos os campos obrigatórios!');
+			Swal.fire({
+				icon: 'warning',
+				title: 'Campos obrigatórios',
+				text: 'Preencha todos os campos obrigatórios!',
+				confirmButtonColor: '#27ae60'
+			});
 			return;
 		}
 
 		const formValue = this.form.value;
-
 		const rawPrice = formValue.price?.toString() ?? '';
-		const formattedPrice = parseFloat(
-			rawPrice.replace(/\./g, '').replace(',', '.')
-		);
+		const formattedPrice = parseFloat(rawPrice.replace(/\./g, '').replace(',', '.'));
 
 		const baseProduct = {
 			name: formValue.name ?? '',
@@ -160,18 +166,25 @@ export class NewProductComponent {
 		};
 
 		if (formValue.isUrl) {
-			const product = {
-				...baseProduct,
-				imgUrl: formValue.imgUrl ?? ''
-			};
+			const product = { ...baseProduct, imgUrl: formValue.imgUrl ?? '' };
 			this.productService.register(product).subscribe({
-				next: (res) => {
-					alert('Produto cadastrado com sucesso!');
+				next: () => {
+					Swal.fire({
+						icon: 'success',
+						title: 'Produto cadastrado!',
+						text: 'O produto foi registrado com sucesso.',
+						confirmButtonColor: '#27ae60'
+					});
 					this.form.reset();
 					this.previewImage.set(null);
 				},
-				error: (err) => {
-					alert('Erro ao cadastrar produto');
+				error: () => {
+					Swal.fire({
+						icon: 'error',
+						title: 'Erro',
+						text: 'Não foi possível cadastrar o produto.',
+						confirmButtonColor: '#e74c3c'
+					});
 				}
 			});
 		} else {
@@ -182,21 +195,29 @@ export class NewProductComponent {
 			formData.append('barCode', baseProduct.barCode);
 			formData.append('packagingType', baseProduct.packagingType);
 			formData.append('unitOfMeasure', baseProduct.unitOfMeasure);
-			baseProduct.categoryIds.forEach((id: number) => {
-				formData.append('categoryIds', id.toString());
-			});
+			baseProduct.categoryIds.forEach((id: number) => formData.append('categoryIds', id.toString()));
 
 			const blob = this.dataURItoBlob(formValue.imgUrl!);
 			formData.append('image', blob, 'upload.png');
 
 			this.productService.registerUpload(formData).subscribe({
 				next: () => {
-					alert('Produto cadastrado com sucesso!');
+					Swal.fire({
+						icon: 'success',
+						title: 'Produto cadastrado!',
+						text: 'O produto foi registrado com sucesso.',
+						confirmButtonColor: '#27ae60'
+					});
 					this.form.reset();
 					this.previewImage.set(null);
 				},
 				error: () => {
-					alert('Erro ao cadastrar produto');
+					Swal.fire({
+						icon: 'error',
+						title: 'Erro',
+						text: 'Não foi possível cadastrar o produto.',
+						confirmButtonColor: '#e74c3c'
+					});
 				}
 			});
 		}

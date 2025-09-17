@@ -10,7 +10,8 @@
 			type="email"
 			label="Email"
 			placeholder="email@example.com"
-			title="Email">
+			title="Email"
+			(input)="onInputChange()">
 			<img class="icon-email" draggable="false" src="svg/email-icon.svg" alt="Ícone de email"/>
 		</app-primary-input>
 
@@ -19,11 +20,31 @@
 			inputName="password"
 			type="password"
 			label="Senha"
-			title="Senha">
+			title="Senha"
+			autocomplete="new-password"
+			(input)="onInputChange()">
 			<img class="icon-password" draggable="false" src="svg/password-icon.svg" alt="Ícone de senha"/>
 		</app-primary-input>
-		<span>
-			Esqueci minha senha
-		</span>
+
+		<!-- Mensagem de erro inline com animação -->
+		<div class="forgot-password-wrapper">
+			<span>Esqueci minha senha</span>
+			<div *ngIf="loginError()" class="login-error show">
+				{{ loginError() }}
+			</div>
+		</div>
 	</form>
 </app-default-login-layout>
+
+<ngx-spinner
+    bdColor="rgba(0, 0, 0, 0.6)"
+    size="medium"
+    color="#4CAF50"
+    type="ball-spin-clockwise"
+    [fullScreen]="true"
+>
+    <p style="color: white; font-weight: bold; margin-top: 10px">
+        Validando dados, aguarde...
+    </p>
+</ngx-spinner>
+

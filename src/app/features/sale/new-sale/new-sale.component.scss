@@ -1,34 +1,44 @@
 @use '../../../../styles/variables.scss' as variables;
 @use "sass:color";
 
-.new-sale-container {
-	width: 1200px;
-	max-width: 1200px;
+.main-container {
 	display: flex;
 	flex-direction: column;
 	gap: 20px;
+}
+
+.new-sale-container {
+	width: 1400px;
+	max-width: 1400px;
+	height: 50dvh;
+	display: flex;
+	flex-direction: row;
+	gap: 40px;
 	font-family: 'Roboto', sans-serif;
 	color: variables.$primary-color;
 
 	.client-selector {
+		overflow: visible;
 
 		.client-search-wrapper {
 			display: flex;
 			flex-direction: column;
 			position: relative;
+			z-index: 6;
 
 			.cancelBtn {
 				position: absolute;
-				top: 24px;
+				top: 43px;
 				left: 410px;
 			}
 		}
 
-		gap: 8px;
 		max-width: 320px;
 
-		label {
-			font-size: 1rem;
+		::ng-deep label {
+			margin-bottom: 12px;
+			font-size: 26px;
+			font-weight: bold;
 			color: variables.$primary-color;
 		}
 	}
@@ -36,8 +46,7 @@
 	.autocomplete-list {
 		position: absolute;
 		top: 100%;
-		left: 0;
-		z-index: 9999;
+		z-index: 10;
 		margin-top: 4px;
 		border: 1px solid variables.$primary-color;
 		max-height: 180px;
@@ -45,7 +54,7 @@
 		background: white;
 		box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
 		border-radius: 4px;
-		width: 25rem;
+		width: 400px;
 		padding: 0;
 
 		li {
@@ -64,7 +73,8 @@
 
 	.table-wrapper {
 		display: flex;
-		justify-content: space-between;
+		flex-direction: column;
+		gap: 12px;
 
 		.order-items-table {
 			display: flex;
@@ -73,22 +83,86 @@
 			margin-top: 20px;
 			border-radius: 4px;
 			box-shadow: 0 2px 6px rgba(127, 153, 133, 0.25);
-			width: 920px;
-			height: 100%;
+			width: 1100px;
+			height: auto;
+			padding-bottom: 10px;
+			max-height: 350px;
+			overflow-y: auto;
+			scrollbar-width: none;
+			-ms-overflow-style: none;
+
+			&::-webkit-scrollbar {
+				display: none;
+			}
 
 			table {
 				width: 100%;
 				border-collapse: collapse;
 
-				.input-wrapper {
-					position: relative;
-					width: 100%;
+				thead {
+					position: sticky;
+					top: 0;
+					z-index: 2;
+				}
+
+				.num-item-th, .num-item-td {
+					width: 50px;
+				}
+
+				.product-th {
+					width: 400px;
+				}
+
+				.num-item-td {
+					display: flex;
+					justify-content: center;
+					align-items: center;
+				}
+
+				.td-form-input {
+					position: static;
+					width: 400px;
+					z-index: 2;
+					background-color: transparent;
+
+					.input-wrapper {
+						width: 400px;
+					}
+
+					.autocomplete-list {
+						position: fixed;
+						top: auto;
+						left: auto;
+						z-index: 8;
+						margin-top: 4px;
+						border: 1px solid variables.$primary-color;
+						max-height: 180px;
+						overflow-y: auto;
+						background: white;
+						box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+						border-radius: 4px;
+						width: 400px;
+						padding: 0;
+
+						li {
+							list-style: none;
+							padding: 8px 12px;
+							cursor: pointer;
+							font-size: 0.9rem;
+							color: variables.$primary-color;
+
+							&:hover {
+								background-color: color.scale(variables.$background-green, $lightness: 85%);
+								color: variables.$primary-color;
+							}
+						}
+					}
 				}
 
 				th {
 					background-color: color.scale(variables.$background-gray, $lightness: -3%);
 					color: variables.$primary-color;
-					padding: 10px 5px;
+					padding: 10px;
 					width: 100px;
 					font-weight: normal;
 					text-align: center;
@@ -98,101 +172,129 @@
 					background-color: variables.$background-gray;
 					border-bottom: 1px solid variables.$background-gray;
 					position: relative;
-					padding-left: 10px;
-					padding-right: 10px;
+					padding: 10px;
 
 					&.subtotal-cell {
 						color: color.adjust(variables.$primary-color, $lightness: -5%);
 						text-align: center;
-						padding: 5px;
-
+						font-size: 20px;
+						white-space: nowrap;
 					}
 
 					&.actions-cell {
 						display: flex;
 						justify-content: center;
 						align-items: center;
-						height: 64.51px;
-					}
-				}
-			}
-
-			.add-btn {
-				margin-top: 12px;
-				background-color: variables.$primary-color;
-				color: white;
-				border: none;
-				padding: 10px 20px;
-				border-radius: 4px;
-				cursor: pointer;
-				box-shadow: 0px 2px 5px rgba(127, 153, 133, 0.3);
-			}
-
-			.add-item-container {
-				display: flex;
-				justify-content: center;
-				margin: 20px;
-
-				.add-item-button {
-					display: flex;
-					align-items: center;
-					gap: 8px;
-					background-color: color.scale(variables.$primary-color, $lightness: 5%);
-					border: none;
-					color: whitesmoke;
-					padding: 12px 24px;
-					border-radius: 4px;
-					font-size: 16px;
-					cursor: pointer;
-					transition: all 0.2s ease;
-
-					img {
-						height: 25px;
-						width: 25px;
-					}
-
-					&:hover {
-						background-color: variables.$primary-color;
-					}
-
-					&:active {
-						transform: translateY(1px);
-					}
-
-					.add-icon {
-						font-size: 18px;
 					}
 				}
 			}
 		}
 
-		.sidebar {
+		.add-item-container {
 			display: flex;
-			flex-direction: column;
+			justify-content: center;
+			margin: 20px;
+			position: sticky;
+			bottom: 0;
+			padding: 10px 0;
+			z-index: 5;
 
-			h3 {
-				color: variables.$primary-color;
-				font-weight: 700;
-				font-size: 30px;
-				margin-bottom: 15px;
-			}
-
-			.select-wrapper {
+			.add-item-button {
 				display: flex;
-				flex-direction: column;
-				gap: 20px;
+				align-items: center;
+				gap: 8px;
+				background-color: color.scale(variables.$primary-color, $lightness: 5%);
+				border: none;
+				color: whitesmoke;
+				padding: 12px 24px;
+				border-radius: 4px;
+				font-size: 16px;
+				cursor: pointer;
+				transition: all 0.2s ease;
 
-				app-form-input.totalValue {
-					display: flex;
-					flex-direction: row;
-					justify-content: flex-end;
-					font-size: 24px;
+				img {
+					height: 25px;
+					width: 25px;
+				}
 
-					::ng-deep input {
-						text-align: end;
-					}
+				&:hover {
+					background-color: variables.$primary-color;
+				}
+
+				&:active {
+					transform: translateY(1px);
+				}
+
+				.add-icon {
+					font-size: 18px;
 				}
 			}
 		}
 	}
+}
+
+.sidebar {
+	display: flex;
+	flex-direction: column;
+
+	h3 {
+		color: variables.$primary-color;
+		font-weight: 700;
+		font-size: 30px;
+		margin-bottom: 15px;
+	}
+
+	.select-wrapper {
+		display: flex;
+		flex-direction: column;
+		gap: 20px;
+
+		app-form-utility-select {
+			::ng-deep label {
+				font-size: 18px;
+			}
+		}
+
+		app-form-input {
+			width: 120px;
+			font-size: 18px;
+			white-space: nowrap;
+
+			&.totalValue {
+				display: flex;
+				flex-direction: row;
+				justify-content: flex-end;
+			}
+		}
+
+		.discount-totalValue-wrapper {
+			display: flex;
+			flex-direction: row;
+			justify-content: space-between;
+			gap: 20px;
+		}
+
+		.amounts-wrapper {
+			display: flex;
+			flex-direction: row;
+			justify-content: space-between;
+			gap: 20px;
+		}
+	}
+
+	.amounts-wrapper {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		gap: 20px;
+
+		.amount-field-wrapper {
+			width: 120px; // mantém o espaço reservado
+
+			&.hidden {
+				visibility: hidden; // mantém o espaço, mas oculta visualmente
+			}
+		}
+	}
+
 }

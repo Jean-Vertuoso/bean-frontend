@@ -1,34 +1,45 @@
 <div
-	class="form-input-wrapper"
-	[class.grow-one]="growone"
-	[class.grow-two]="growtwo"
-	[class.grow-three]="growthree"
-	[class.grow-four]="growfour"
+    class="form-input-wrapper"
+    [class.grow-one]="growone"
+    [class.grow-two]="growtwo"
+    [class.grow-three]="growthree"
+    [class.grow-four]="growfour"
 >
-	@if (type !== 'radio') {
-		<label class="label-text">{{ labelText }}</label>
-		<input
-			[type]="type"
-			[name]="name"
-			[placeholder]="placeholder"
-			[value]="innerValue"
-			(input)="onInputChange($event)"
-			(blur)="onTouched()"
-			[disabled]="disabled"
-		/>
-	} @else {
-		<label class="label-radio">{{ labelRadio }}</label>
-		<input
+    @if (type !== 'radio') {
+        <label class="label-text">{{ labelText }}</label>
+        <input
+            #inputEl
+            [type]="type"
+            [name]="name"
+            [placeholder]="placeholder"
+            [value]="innerValue"
+            (input)="onInputChange($event)"
+            (focus)="onFocus($event)"
+            (click)="onFocus($event)"
+            (keydown)="onKeydown($event)"
+            (blur)="onBlur($event)"
+            [disabled]="disabled"
+            [attr.autocomplete]="autocomplete"
+			[mask]="mask"
+			[thousandSeparator]="thousandSeparator"
+			[decimalMarker]="decimalMarker"
+			[prefix]="prefix"
+			[dropSpecialCharacters]="dropSpecialCharacters"
+
+        />
+    } @else {
+        <label class="label-radio">{{ labelRadio }}</label>
+        <input
 			type="radio"
 			[name]="name"
-			[value]="value"
+			[value]="radioValue"
 			[checked]="isChecked()"
 			(change)="onRadioChange($event)"
 			(blur)="onTouched()"
 			[disabled]="disabled"
 			style="box-shadow: none;"
 		/>
-	}
+    }
 
-	{{ inputText }}
+    {{ inputText }}
 </div>

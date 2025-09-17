@@ -1,4 +1,4 @@
-export interface CashSessionResponse {
+export interface CashSession {
 	id: number,
 	openingTimestamp: Date;
 	closingTimestamp?: Date;
