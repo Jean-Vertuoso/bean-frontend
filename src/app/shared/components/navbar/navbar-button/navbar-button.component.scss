@@ -1,0 +1,61 @@
+@use '../../../../../styles/variables.scss' as variables;
+@use 'sass:color';
+
+.dropdown-wrapper {
+	align-items: center;
+	display: inline-block;
+	flex-direction: column;
+	font-weight: 450;
+	justify-content: center;
+	position: relative;
+	user-select: none;
+	box-sizing: border-box;
+
+	.dropdown-toggle {
+		align-items: center;
+		background-color: variables.$background-gray;
+		border: 1px inset transparent;
+		border-radius: 2px;
+		box-sizing: border-box;
+		color: variables.$primary-color;
+		cursor: pointer;
+		display: flex;
+		flex-direction: column;
+		gap: 3px;
+		justify-content: center;
+		padding: 10px;
+		text-align: center;
+		text-decoration: none;
+		white-space: nowrap;
+		width: 130px;
+
+		img {
+			height: 20px;
+			width: 20px;
+		}
+
+		label {
+			cursor: pointer;
+			text-decoration: none;
+		}
+
+		&:hover {
+			background-color: color.scale(variables.$background-green, $lightness: 85%);
+		}
+
+		&:hover label {
+			text-decoration: underline;
+			text-decoration-color: variables.$primary-color;
+			text-decoration-thickness: 1px;
+			text-underline-offset: 4px;
+		}
+
+		&.open:hover label {
+			text-decoration: none;
+		}
+
+		&:active {
+			border-color: variables.$background-green;
+		}
+	}
+}

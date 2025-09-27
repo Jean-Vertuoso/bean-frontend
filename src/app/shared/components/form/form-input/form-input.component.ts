@@ -1,161 +1,57 @@
-import { Component, forwardRef, Input, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
-import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
+import { Component, forwardRef, Input, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
+import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
 	selector: 'app-form-input',
 	standalone: true,
 	imports: [
 		CommonModule,
-		NgxMaskDirective
+		FormsModule,
+		ReactiveFormsModule
 	],
 	providers: [
 		{
-			provide: NG_VALUE_ACCESSOR,
-			useExisting: forwardRef(() => FormInputComponent),
-			multi: true
-		},
-		provideNgxMask()
-	],
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => FormInputComponent),
+            multi: true
+        }],
 	templateUrl: './form-input.component.html',
 	styleUrls: ['./form-input.component.scss']
 })
-export class FormInputComponent implements ControlValueAccessor {
+export class FormInputComponent implements ControlValueAccessor{
 
-	@Input() labelText: string = '';
-	@Input() labelRadio: string = '';
-	@Input() type: string = 'text';
+	@Input() label: string = '';
 	@Input() placeholder: string = '';
 	@Input() inputText: string = '';
-	@Input() growone: boolean = false;
-	@Input() growtwo: boolean = false;
-	@Input() growthree: boolean = false;
-	@Input() growfour: boolean = false;
+	@Input() value: string = '';
 	@Input() name: string = '';
+	@Input() width: number = 200;
 	@Input() disabled: boolean = false;
-	@Input() autocomplete: string = 'new-password';
-	@Input() mask?: string;
-	@Input() thousandSeparator: string = '.';
-	@Input() decimalMarker: '.' | ',' | ['.', ','] = ',';
-	@Input() prefix: string = '';
-	@Input() dropSpecialCharacters: boolean = false;
-	@Input() radioValue?: string;
 
-	innerValue: string = '';
-	private _numericValue: number = 0;
+    protected onChange: (val: any) => void = () => {
 
-	@Input()
-	set value(val: string | number) {
-		if (val === null || val === undefined) {
-			this.innerValue = this.isNumericField() ? '0,00' : '';
-			this._numericValue = 0;
-		} else if (typeof val === 'number') {
-			this._numericValue = val;
-			this.innerValue = this.isNumericField() ? val.toFixed(2).replace('.', ',') : val.toString();
-		} else {
-			this.innerValue = val;
-			this._numericValue = this.isNumericField() ? parseFloat(val.replace(/\./g, '').replace(',', '.')) || 0 : 0;
-		}
-	}
+	};
 
-	get value(): string | number {
-		return this.innerValue;
-	}
+    protected onTouched: () => void = () => {
 
-	get numericValue(): number {
-		return this._numericValue;
-	}
+	};
 
-	@Output() valueChange = new EventEmitter<any>();
-	@Output() inputEvent = new EventEmitter<string>();
-	@Output() focusEvent = new EventEmitter<FocusEvent>();
-	@Output() blurEvent = new EventEmitter<FocusEvent>();
-	@Output() keydownEvent = new EventEmitter<KeyboardEvent>();
+    writeValue(value: any): void {
+        this.value = value;
+    }
 
-	@ViewChild('inputEl', { static: false }) inputEl?: ElementRef<HTMLInputElement>;
+    registerOnChange(fn: any): void {
+        this.onChange = fn;
+    }
 
-	onChange: (value: any) => void = () => {};
-	onTouched: () => void = () => {};
+    registerOnTouched(fn: any): void {
+        this.onTouched = fn;
+    }
 
-	writeValue(value: any): void {
-		if (value === null || value === undefined) {
-			this.innerValue = this.isNumericField() ? '0,00' : '';
-			this._numericValue = 0;
-		} else {
-			this.innerValue = value;
-			this._numericValue = this.isNumericField() ? parseFloat(value.toString().replace(/\./g, '').replace(',', '.')) || 0 : 0;
-		}
-	}
-
-	registerOnChange(fn: any): void {
-		this.onChange = fn;
-	}
-
-	registerOnTouched(fn: any): void {
-		this.onTouched = fn;
-	}
-
-	setDisabledState?(isDisabled: boolean): void {
-		this.disabled = isDisabled;
-	}
-
-	onInputChange(event: Event): void {
-		const target = event.target as HTMLInputElement;
-		const val = target.value;
-
-		this.innerValue = val;
-
-		if (this.isNumericField()) {
-			this._numericValue = parseFloat(val.replace(/\./g, '').replace(',', '.')) || 0;
-		}
-
-		this.onChange(val);
-		this.valueChange.emit(val);
-		this.inputEvent.emit(val);
-		this.onTouched();
-	}
-
-	onRadioChange(event: Event): void {
-		const target = event.target as HTMLInputElement;
-		const val = this.radioValue ?? target.value;
-		this.innerValue = val;
-		this.onChange(val);
-		this.valueChange.emit(val);
-		this.onTouched();
-	}
-
-	isChecked(): boolean {
-		return this.innerValue === this.radioValue;
-	}
-
-	onFocus(event?: FocusEvent): void {
-		this.focusEvent.emit(event ?? new FocusEvent('focus'));
-		Promise.resolve().then(() => {
-			this.inputEl?.nativeElement.select();
-		});
-	}
-
-	onBlur(event?: FocusEvent): void {
-		if (this.isNumericField() && this.innerValue) {
-			const cleaned = this.innerValue.replace(/[^\d,]/g, '');
-			const numberValue = parseFloat(cleaned.replace(',', '.')) || 0;
-			this.innerValue = numberValue.toFixed(2).replace('.', ',');
-			this._numericValue = numberValue;
-		}
-		this.blurEvent.emit(event ?? new FocusEvent('blur'));
-		this.onTouched();
-	}
-
-	onKeydown(event: KeyboardEvent): void {
-		this.keydownEvent.emit(event);
-	}
-
-	focus(): void {
-		this.inputEl?.nativeElement.focus();
-	}
-
-	private isNumericField(): boolean {
-		return this.type === 'number' || !!this.mask;
+	handleInput(event: Event): void {
+		const inputValue = (event.target as HTMLInputElement).value;
+		this.value = inputValue;
+		this.onChange(inputValue);
 	}
 }

@@ -1,5 +1,4 @@
 @use 'ngx-toastr/toastr';
-@use '@angular/material' as mat;
 @use 'styles/variables.scss';
 @use "sass:color";
 @use "ngx-spinner/animations/ball-spin-clockwise.css";
@@ -9,18 +8,6 @@
 	src: url('assets/fonts/MMC\ Regular.ttf') format('truetype');
 	font-weight: normal;
 	font-style: normal;
-}
-
-html {
-	@include mat.theme((
-		color: (
-			theme-type: light,
-			primary: mat.$azure-palette,
-			tertiary: mat.$blue-palette,
-		),
-		typography: Roboto,
-		density: 0,
-	));
 }
 
 *{
@@ -81,3 +68,6 @@ input, button {
 .swal2-popup-custom {
     z-index: 99999 !important;
 }
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

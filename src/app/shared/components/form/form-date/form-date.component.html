@@ -1,0 +1,11 @@
+<div class="form-date-wrapper">
+	<label class="label">{{ label }}</label>
+	<input
+		type="date"
+		[name]="name"
+		[value]="value"
+		(input)="handleInput($event)"
+		(blur)="onTouched()"
+	>
+    <img src="svg/calendar-icon.svg" alt="">
+</div>

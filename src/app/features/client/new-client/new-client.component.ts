@@ -1,12 +1,15 @@
+import { UF_OPTIONS } from './../../../shared/enums/uf.enum';
 import { FormInputComponent } from '../../../shared/components/form/form-input/form-input.component';
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormGroup, Validators, ReactiveFormsModule, FormBuilder } from '@angular/forms';
 import { DefaultFormLayoutComponent } from '../../../shared/components/layout/default-form-layout/default-form-layout.component';
 import { ClientRequest } from '../../../shared/models/client.model';
 import { FormUtilitySelectComponent } from "../../../shared/components/form/form-utility-select/form-utility-select.component";
 import { ClientService } from '../services/client.service';
 import Swal from 'sweetalert2';
+import { FormRadioComponent } from "../../../shared/components/form/form-radio/form-radio.component";
+import { FormDateComponent } from "../../../shared/components/form/form-date/form-date.component";
 
 @Component({
 	standalone: true,
@@ -16,69 +19,42 @@ import Swal from 'sweetalert2';
 		DefaultFormLayoutComponent,
 		FormUtilitySelectComponent,
 		FormInputComponent,
-		ReactiveFormsModule
+		ReactiveFormsModule,
+		FormRadioComponent,
+		FormDateComponent,
 	],
 	templateUrl: './new-client.component.html',
 	styleUrl: './new-client.component.scss',
 })
 export class NewClientComponent {
 
-	ufs = [
-		{ label: 'Acre', value: 'AC' },
-		{ label: 'Alagoas', value: 'AL' },
-		{ label: 'Amapá', value: 'AP' },
-		{ label: 'Amazonas', value: 'AM' },
-		{ label: 'Bahia', value: 'BA' },
-		{ label: 'Ceará', value: 'CE' },
-		{ label: 'Distrito Federal', value: 'DF' },
-		{ label: 'Espírito Santo', value: 'ES' },
-		{ label: 'Goiás', value: 'GO' },
-		{ label: 'Maranhão', value: 'MA' },
-		{ label: 'Mato Grosso', value: 'MT' },
-		{ label: 'Mato Grosso do Sul', value: 'MS' },
-		{ label: 'Minas Gerais', value: 'MG' },
-		{ label: 'Pará', value: 'PA' },
-		{ label: 'Paraíba', value: 'PB' },
-		{ label: 'Paraná', value: 'PR' },
-		{ label: 'Pernambuco', value: 'PE' },
-		{ label: 'Piauí', value: 'PI' },
-		{ label: 'Rio de Janeiro', value: 'RJ' },
-		{ label: 'Rio Grande do Norte', value: 'RN' },
-		{ label: 'Rio Grande do Sul', value: 'RS' },
-		{ label: 'Rondônia', value: 'RO' },
-		{ label: 'Roraima', value: 'RR' },
-		{ label: 'Santa Catarina', value: 'SC' },
-		{ label: 'São Paulo', value: 'SP' },
-		{ label: 'Sergipe', value: 'SE' },
-		{ label: 'Tocantins', value: 'TO' },
-	];
+	form: FormGroup;
+	ufOptions = UF_OPTIONS;
 
-	form = new FormGroup({
-		name: new FormControl('', Validators.required),
-		birthDate: new FormControl('', Validators.required),
-		documentType: new FormControl('', Validators.required),
-		documentNumber: new FormControl('', Validators.required),
-		email: new FormControl('', [Validators.required, Validators.email]),
-
-		areaCodePhone: new FormControl(''),
-		mainPhone: new FormControl(''),
-		areaCodeMobile: new FormControl(''),
-		mainMobile: new FormControl(''),
-
-		street: new FormControl('', Validators.required),
-		number: new FormControl('', Validators.required),
-		neighborhood: new FormControl('', Validators.required),
-		city: new FormControl('', Validators.required),
-		postalCode: new FormControl('', Validators.required),
-
-		uf: new FormControl('', Validators.required)
-	});
-
-	constructor(private clientService: ClientService) {}
+	constructor(private clientService: ClientService, private fb: FormBuilder) {
+		this.form = this.fb.group({
+			name: ['', { validators: Validators.required, nonNullable: true } ],
+			birthDate: ['', { validators: Validators.required, nonNullable: true } ],
+			documentType: ['', { validators: Validators.required, nonNullable: true } ],
+			documentNumber: ['', { validators: Validators.required, nonNullable: true } ],
+			email: ['', { validators: [Validators.required, Validators.email], nonNullable: true } ],
+			areaCodePhone: [''],
+			mainPhone: [''],
+			areaCodeMobile: [''],
+			mainMobile: [''],
+			street: ['', { validators: Validators.required, nonNullable: true } ],
+			number: ['', { validators: Validators.required, nonNullable: true } ],
+			complement: [''],
+			neighborhood: ['', { validators: Validators.required, nonNullable: true } ],
+			city: ['', { validators: Validators.required, nonNullable: true } ],
+			postalCode: ['', { validators: Validators.required, nonNullable: true } ],
+			uf: ['', { validators: Validators.required, nonNullable: true } ]
+		});
+	}
 
 	onSubmit() {
-		console.log('Formulário válido?', this.form.valid);
-		console.log('Valores do formulário:', this.form.value);
+		const formValue = this.form.value;
+		console.log(`Valores do formulário: `, this.form.value);
 
 		if (this.form.invalid) {
 			Swal.fire({
@@ -90,14 +66,12 @@ export class NewClientComponent {
 			return;
 		}
 
-		const formValue = this.form.value;
-
 		const client: ClientRequest = {
-			name: formValue.name ?? '',
-			birthDate: formValue.birthDate ?? '',
-			documentType: formValue.documentType ?? '',
-			documentNumber: formValue.documentNumber ?? '',
-			email: formValue.email ?? '',
+			name: formValue.name,
+			birthDate: formValue.birthDate,
+			documentType: formValue.documentType,
+			documentNumber: formValue.documentNumber,
+			email: formValue.email,
 			phones: [
 				{
 					areaCode: formValue.areaCodePhone ?? '',
@@ -110,12 +84,13 @@ export class NewClientComponent {
 			].filter((phone) => phone.areaCode && phone.number),
 			addresses: [
 				{
-					street: formValue.street ?? '',
-					number: formValue.number ?? '',
-					neighborhood: formValue.neighborhood ?? '',
-					city: formValue.city ?? '',
-					state: formValue.uf ?? '',
-					postalCode: formValue.postalCode ?? '',
+					street: formValue.street,
+					number: formValue.number,
+					complement: formValue.complement,
+					neighborhood: formValue.neighborhood,
+					city: formValue.city,
+					state: formValue.uf,
+					postalCode: formValue.postalCode,
 				},
 			],
 		};

@@ -1,0 +1,12 @@
+<div class="form-radio-wrapper">
+	<label>{{ label }}
+		<input
+			type="radio"
+			[value]="value"
+			[name]="name"
+			[checked]="value === currentValue"
+			(change)="onSelect()"
+		/>
+	</label>
+	{{ inputText }}
+</div>

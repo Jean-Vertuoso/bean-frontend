@@ -1,0 +1,19 @@
+@use "../../../../../styles/variables.scss";
+@use "sass:color";
+
+.form-radio-wrapper {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+
+	label {
+		display: flex;
+		flex-direction: column;
+		width: 50px;
+		text-align: center;
+	}
+
+	label, input {
+		cursor: pointer;
+	}
+}

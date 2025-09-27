@@ -18,19 +18,15 @@ label {
 	margin-bottom: 0.3rem;
 }
 
-.doc-type-wrapper{
+.doc-type-group{
 	align-items: center;
 	display: flex;
 	flex-direction: column;
 
-	div{
+	.doc-type-wrapper{
 		align-items: center;
 		display: flex;
 		justify-content: space-between;
-	}
-
-	input{
-		width: 50px;
 	}
 }
 

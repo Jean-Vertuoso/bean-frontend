@@ -72,7 +72,6 @@
 									[(ngModel)]="selectedClient()!.name"
 									name="name"
 									type="text"
-									[growfour]="true"
 									[disabled]="!nameFieldEnabled()"
 									required
 								/>
@@ -88,7 +87,6 @@
 									[(ngModel)]="selectedClient()!.email"
 									name="email"
 									type="email"
-									[growfour]="true"
 									[disabled]="!emailFieldEnabled()"
 									required
 								/>
@@ -195,7 +193,6 @@
 													[(ngModel)]="address.postalCode"
 													name="postalCode{{ $index }}"
 													type="text"
-													[growtwo]="true"
 													placeholder="00000-000"
 													required
 												/>
@@ -205,7 +202,6 @@
 													[(ngModel)]="address.street"
 													name="street{{ $index }}"
 													type="text"
-													[growfour]="true"
 													required
 												/>
                                             </div>
@@ -216,7 +212,6 @@
                                                         [(ngModel)]="address.number"
                                                         name="number{{ $index }}"
                                                         type="text"
-														[growtwo]="true"
                                                         required
                                                     />
 
@@ -225,7 +220,6 @@
                                                         [(ngModel)]="address.complement"
                                                         name="complement{{ $index }}"
                                                         type="text"
-														[growfour]="true"
                                                         placeholder="Apto, sala, etc."
                                                     />
                                             </div>
@@ -237,7 +231,6 @@
 													[(ngModel)]="address.neighborhood"
 													name="neighborhood{{ $index }}"
 													type="text"
-													[growthree]="true"
 													required
 												/>
 
@@ -291,7 +284,6 @@
 										labelText="DDD"
 										[(ngModel)]="phone.areaCode"
 										name="areaCode{{ $index }}"
-										[growone]="true"
 										[disabled]="!isAreaCodeEnabled($index)"
 										required
 										type="text"
@@ -301,7 +293,6 @@
 										labelText="Telefone"
 										[(ngModel)]="phone.number"
 										name="phoneNumber{{ $index }}"
-										[growthree]="true"
 										[disabled]="!isNumberEnabled($index)"
 										required
 										type="text"

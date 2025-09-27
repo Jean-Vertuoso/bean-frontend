@@ -7,7 +7,6 @@
 		<app-form-input
 			labelText="Código de barras"
 			type="text"
-			[growthree]="true"
 			formControlName="barCode"
 		/>
 
@@ -22,13 +21,11 @@
 		<app-form-input
 			labelText="Marca do produto"
 			type="text"
-			[growthree]="true"
 			formControlName="brand"
 		/>
 
 		<app-form-utility-select
 			label="Categorias"
-			[options]="availableCategories"
 			formControlName="categoryIds"
 			[multiple]="true">
 		</app-form-utility-select>
@@ -38,9 +35,6 @@
 				labelText="Preço atual"
 				type="text"
 				placeholder="0,00"
-				mask="separator.2"
-				thousandSeparator="."
-				decimalMarker=","
 				formControlName="price"
 			/>
 
@@ -70,7 +64,6 @@
 				<app-form-input
 					labelText="Insira o link ou carregue a imagem"
 					type="text"
-					[growfour]="true"
 					formControlName="imgUrl"
 					(input)="onImageUrlChange()"
 				></app-form-input>

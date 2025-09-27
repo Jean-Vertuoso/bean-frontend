@@ -1,11 +1,15 @@
 import { Component,	ElementRef,	EventEmitter, forwardRef, HostListener, Input, Output, ViewChild } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import {FormsModule} from '@angular/forms';
 
 @Component({
 	selector: 'app-form-utility-select',
 	standalone: true,
-	imports: [CommonModule],
+	imports: [
+		CommonModule,
+		FormsModule
+	],
 	templateUrl: './form-utility-select.component.html',
 	styleUrls: ['./form-utility-select.component.scss'],
 	providers: [
@@ -18,21 +22,33 @@ import { CommonModule } from '@angular/common';
 })
 export class FormUtilitySelectComponent implements ControlValueAccessor {
 
-	@Input() label: string = 'Campo';
-	@Input() placeholder: string = 'Selecione';
-	@Input() options: { label: string; value: string | number }[] = [];
+	@Input() label: string = '';
+	@Input() placeholder: string = '';
+	@Input() options: { label: string; value: string }[] = [];
 	@Input() multiple: boolean = false;
-	@Output() modelChange = new EventEmitter<any>();
-  	@ViewChild('inputEl', { static: true }) inputEl!: ElementRef<HTMLInputElement>;
-	value: any = this.multiple ? [] : null;
-	open = false;
-	onChange = (_: any) => {};
-	onTouched = () => {};
+	@Input() value: string = '';
+	protected currentValue: string = '';
+	protected open = false;
 
-	constructor(private elementRef: ElementRef) {}
+	constructor() {
 
-	writeValue(obj: any): void {
-		this.value = obj ?? (this.multiple ? [] : null);
+	}
+
+	get displayLabel(): string {
+		const selected = this.options.find(opt => opt.value === this.value);
+		return selected?.label || this.placeholder;
+	}
+
+	protected onChange: (val: any) => void = () => {
+
+	};
+
+    protected onTouched: () => void = () => {
+
+	};
+
+	writeValue(value: string): void {
+		this.currentValue = value ;
 	}
 
 	registerOnChange(fn: any): void {
@@ -43,61 +59,20 @@ export class FormUtilitySelectComponent implements ControlValueAccessor {
 		this.onTouched = fn;
 	}
 
-	setDisabledState?(isDisabled: boolean): void {
-		// implementar
-	}
-
-	get displayLabel(): string {
-		if (this.multiple) {
-			const selected = this.options.filter(opt => this.isSelected(opt.value));
-			return selected.length ? selected.map(opt => opt.label).join(', ') : this.placeholder;
-		}
-		const selected = this.options.find(opt => opt.value === this.value);
-		return selected?.label || this.placeholder;
-	}
-
-	isSelected(value: any): boolean {
-		if (this.multiple) {
-			return Array.isArray(this.value) && this.value.includes(value);
-		}
+	isSelected(value: string): boolean {
 		return this.value === value;
 	}
 
-	onSelect(value: any) {
-		if (this.multiple) {
-			const current = new Set(this.value || []);
-			current.has(value) ? current.delete(value) : current.add(value);
-			this.value = Array.from(current);
-		} else {
-			this.value = value;
-			this.open = false;
-		}
-		this.onChange(this.value);
-		this.modelChange.emit(this.value);
+	onSelect(value: string): void {
+		this.value = value;
+		this.currentValue = value;
+		this.open = false;
+
+		this.onChange(value);
+		this.onTouched();
 	}
 
 	toggle() {
 		this.open = !this.open;
 	}
-
-	@HostListener('document:click', ['$event.target'])
-	onClick(targetElement: any) {
-		const clickedInside = this.elementRef.nativeElement.contains(targetElement);
-		if (!clickedInside) {
-			this.open = false;
-			this.onTouched();
-		}
-	}
-
-	onKeyDown(event: KeyboardEvent) {
-		if (event.key === 'Enter' || event.key === ' ') {
-			event.preventDefault();
-			this.toggle();
-		}
-	}
-
-	focus() {
-		this.elementRef.nativeElement.querySelector('.selected')?.focus();
-	}
-
 }

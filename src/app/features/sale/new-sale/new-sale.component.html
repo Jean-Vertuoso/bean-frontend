@@ -13,9 +13,7 @@
 							placeholder="Digite para procurar"
 							[(ngModel)]="clientSearchModelValue"
 							[disabled]="!!selectedClient()"
-							[growfour]="true"
 							autocomplete="off"
-							(inputEvent)="onClientInput($event)"
 							(focusEvent)="focusedInput.set('client')"
 							(blurEvent)="onInputBlur()"
 						/>
@@ -62,12 +60,10 @@
 										tabindex="0">
 										<app-form-input
 											[(ngModel)]="productInputs()[i]"
-											(inputEvent)="onProductInputChange($event, i)"
 											(focusEvent)="onProductFocus(i)"
 											(blurEvent)="onInputBlur()"
 											placeholder="Digite para procurar"
 											[disabled]="saleItems()[i].locked"
-											[growfour]="true"
 											name="productName{{i}}"
 											type="text"
 											autocomplete="off"
@@ -87,7 +83,6 @@
 								<td>
 									<app-form-input
 										[(ngModel)]="item.quantity"
-										[growtwo]="true"
 										(ngModelChange)="updateSubtotal(i)"
 									/>
 								</td>
@@ -95,7 +90,6 @@
 									<app-form-input
 										[(ngModel)]="item.price"
 										name="unitPrice{{i}}"
-										[growtwo]="true"
 										(ngModelChange)="updateSubtotal(i)"
 										[disabled]="true"
 									/>
@@ -104,7 +98,6 @@
 									<app-form-input
 										[(ngModel)]="item.discount"
 										placeholder="0,00"
-										[growtwo]="true"
 										(ngModelChange)="updateSubtotal(i)"
 									></app-form-input>
 								</td>
@@ -153,7 +146,6 @@
 					matInput
 					type="number"
 					min="1"
-					[value]="installments()"
 					(inputEvent)="installments.set($any($event).target?.valueAsNumber ?? installments())"
 					[disabled]="paymentMethod() !== 'CREDIT_CARD'">
 				</app-form-input>
@@ -170,7 +162,6 @@
 					<app-form-input
 						class="totalValue"
 						labelText="Valor total"
-						[value]="formattedTotal()"
 						[disabled]="true">
 					</app-form-input>
 				</div>

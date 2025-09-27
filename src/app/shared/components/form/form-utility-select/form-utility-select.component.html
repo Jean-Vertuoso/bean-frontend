@@ -1,39 +1,18 @@
 <div class="dropdown-container">
 	<label>{{ label }}</label>
 
-	<div
-		class="selected"
-		tabindex="0"
-		(click)="toggle()"
-		(keydown)="onKeyDown($event)"
-	>
+	<div class="selected" tabindex="0" (click)="toggle()">
 		{{ displayLabel }}
 		<span class="arrow" [class.open]="open">&#9662;</span>
 	</div>
 
-	@if (open) {
-		<ul class="dropdown-list">
-			@for (opt of options; track opt.value) {
-				<li
-					[class.selected]="isSelected(opt.value)"
-					(click)="!multiple && onSelect(opt.value)">
-					@if (multiple) {
-						<label class="checkbox-label">
-							<input
-								type="checkbox"
-								[checked]="isSelected(opt.value)"
-								(change)="onSelect(opt.value)"
-								(click)="$event.stopPropagation()"
-							/>
-							{{ opt.label }}
-						</label>
-					} @else {
-						<span>
-							{{ opt.label }}
-						</span>
-					}
-				</li>
-			}
-		</ul>
-	}
+	<ul class="dropdown-list" [class.open]="open">
+		@for (opt of options; track opt.value) {
+			<li
+				[class.selected]="isSelected(opt.value)"
+				(click)="onSelect(opt.value)">
+				{{ opt.label }}
+			</li>
+		}
+	</ul>
 </div>

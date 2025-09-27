@@ -1,0 +1,43 @@
+@use "../../../../../styles/variables.scss";
+@use "sass:color";
+
+.form-date-wrapper {
+	display: flex;
+	flex-direction: column;
+	position: relative;
+	width: 95%;
+
+	.label {
+		margin-bottom: 0.3rem;
+		color: variables.$primary-color;
+	}
+
+	input {
+		text-align: center;
+    	padding: 5px 5px 5px 10px;
+		color: color.adjust(variables.$primary-color, $lightness: -7%);
+		border: none;
+		background-color: color.scale(variables.$background-gray, $lightness: -2%);
+		border-radius: 4px;
+		font-size: 1rem;
+		accent-color: variables.$primary-color;
+		box-shadow: 0px 2px 5px rgba(127, 153, 133, 0.329);
+
+		&::-webkit-calendar-picker-indicator {
+			opacity: 0;
+			width: 25px;
+			height: 25px;
+			z-index: 10;
+			cursor: pointer;
+		}
+	}
+
+	img {
+		opacity: 1;
+		position: absolute;
+		top: 32px;
+		left: 138px;
+		width: 22px;
+		height: 22px;
+	}
+}

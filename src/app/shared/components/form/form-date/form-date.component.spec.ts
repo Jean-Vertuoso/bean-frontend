@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DropdownComponent } from './dropdown.component';
+import { FormDateComponent } from './form-date.component';
 
-describe('DropdownComponent', () => {
-  let component: DropdownComponent;
-  let fixture: ComponentFixture<DropdownComponent>;
+describe('FormDateComponent', () => {
+  let component: FormDateComponent;
+  let fixture: ComponentFixture<FormDateComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [DropdownComponent]
+      imports: [FormDateComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(DropdownComponent);
+    fixture = TestBed.createComponent(FormDateComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

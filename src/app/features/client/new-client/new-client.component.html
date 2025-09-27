@@ -4,125 +4,112 @@
 >
 	<form class="form-wrapper" [formGroup]="form" autocomplete="off">
 		<app-form-input
-			labelText="Nome"
-			type="text"
-			[growfour]="true"
+			label="Nome"
+			[width]="400"
 			formControlName="name"
 		/>
 
-		<app-form-input
-			labelText="Data de nascimento"
-			type="date"
+		<app-form-date
+			label="Data de nascimento"
 			formControlName="birthDate"
 		/>
 
-		<div class="doc-type-wrapper">
+		<div class="doc-type-group">
 			<label>Tipo do documento</label>
-			<div>
-				<app-form-input
-					name="docType"
-					type="radio"
-					labelRadio="CPF"
-					[radioValue]="'CPF'"
+			<div class="doc-type-wrapper">
+				<app-form-radio
+					label="CPF"
+					name="documentType"
+					value="CPF"
 					formControlName="documentType"
 				/>
-				<app-form-input
-					name="docType"
-					type="radio"
-					labelRadio="RG"
-					[radioValue]="'RG'"
+				<app-form-radio
+					label="CNPJ"
+					name="documentType"
+					value="CNPJ"
 					formControlName="documentType"
 				/>
-				<app-form-input
-					name="docType"
-					type="radio"
-					labelRadio="CNPJ"
-					[radioValue]="'CNPJ'"
+				<app-form-radio
+					label="RG"
+					name="documentType"
+					value="RG"
 					formControlName="documentType"
 				/>
 			</div>
 		</div>
 
 		<app-form-input
-			labelText="Número do documento"
-			type="text"
+			label="Número do documento"
 			formControlName="documentNumber"
 		/>
 
 		<app-form-input
-			labelText="Email"
-			type="text"
-			[growthree]="true"
+			label="Email"
+			[width]="360"
 			formControlName="email"
 		/>
 
 		<div class="phone-wrapper">
 			<app-form-input
-				labelText="DDD"
-				type="text"
-				[growone]="true"
+				label="DDD"
+				[width]="80"
 				formControlName="areaCodePhone"
 			/>
 			<app-form-input
-				labelText="Telefone principal"
-				type="text"
+				label="Telefone principal"
 				formControlName="mainPhone"
 			/>
-		</div>
-
-		<div class="phone-wrapper">
 			<app-form-input
-				labelText="DDD"
-				type="text"
-				[growone]="true"
+				label="DDD"
+				[width]="80"
 				formControlName="areaCodeMobile"
 			/>
 			<app-form-input
-				labelText="Celular principal"
-				type="text"
+				label="Celular principal"
 				formControlName="mainMobile"
 			/>
 		</div>
 
 		<app-form-input
-			labelText="CEP"
-			type="text"
-			[growtwo]="true"
+			label="CEP"
+			[width]="120"
 			formControlName="postalCode"
 		/>
 
 		<app-form-input
-			labelText="Endereço"
-			type="text"
-			[growfour]="true"
+			label="Endereço"
+			[width]="300"
 			formControlName="street"
 		/>
 
 		<app-form-input
-			labelText="Número"
-			type="text"
-			[growtwo]="true"
+			label="Número"
+			[width]="80"
 			formControlName="number"
 		/>
 
 		<app-form-input
-			labelText="Bairro"
-			type="text"
-			[growthree]="true"
+			label="Complemento"
+			[width]="360"
+			formControlName="complement"
+		/>
+
+		<app-form-input
+			label="Bairro"
+			[width]="280"
 			formControlName="neighborhood"
 		/>
 
 		<app-form-input
-			labelText="Cidade"
-			type="text"
-			[growthree]="true"
+			label="Cidade"
+			[width]="280"
 			formControlName="city"
 		/>
 
 		<app-form-utility-select
 			label="UF"
-			[options]="ufs"
-			placeholder="Selecione"
+			[options]="ufOptions"
+			placeholder="Selecione um estado"
 			formControlName="uf"
 		/>
 	</form>
